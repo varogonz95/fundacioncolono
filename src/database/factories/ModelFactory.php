@@ -64,3 +64,20 @@ $factory->define(App\Model\Expediente::class, function (Faker\Generator $faker) 
         'monto' => $faker->randomNumber(6)
     ];
 });
+
+/*
+|--------------------------------------------------------------------------
+| HistoricoExpediente Factory
+|--------------------------------------------------------------------------
+*/
+$factory->define(App\Model\HistoricoExpediente::class, function (Faker\Generator $faker) {
+
+    $es = App\Model\Expediente::all();
+    $ce = count($es)-1;
+    $e = $es[$faker->numberBetween(0,$ce)];
+
+    return [
+        'expediente_fk' => $e->id,
+        'fecha_modificacion' => $faker->dateTimeBetween($e->fecha_creacion, '2025-01-01')
+    ];
+});

@@ -18,10 +18,10 @@ id="recordcreatemodal"
         <div class="form-group col-sm-10 col-sm-push-1">
             <label>Tipo de ayuda:</label>
             <select class="form-control" name="ayuda">
-                <option value="0" disabled>-Seleccionar ayuda-</option>
-                <option value="1">Construcción</option>
-                <option value="2">Medicamentos</option>
-                <option value="3">Equipo médico</option>
+                <option value="" disabled>-Seleccionar ayuda-</option>
+                @foreach(\App\Model\TipoAyuda::all() as $ayuda)
+                <option value="{{ $ayuda->id }}">{{ $ayuda->descripcion }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">

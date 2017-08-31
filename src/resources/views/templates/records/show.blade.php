@@ -5,7 +5,10 @@ id="recordshowmodal"
 @overwrite
 
 @section('modal-title')
-    <h4 class="modal-title"></h4>
+    <h4 class="modal-title">
+        <span class="pull-left">Expediente de @{{ expediente.selected.persona.nombre + ' ' + expediente.selected.persona.apellidos }}</span>
+        <a href="./history?id=@{{ expediente.selected.id }}" target="_blank" class="btn btn-default pull-right"><span class="glyphicon glyphicon-time"></span></a>
+    </h4>
 @overwrite
 
 @section('modal-body')

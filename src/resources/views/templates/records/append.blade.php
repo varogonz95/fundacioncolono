@@ -23,9 +23,9 @@ ng-controller="ExpedienteController"
             <label>Tipo de ayuda:</label>
             <select class="form-control" name="ayuda">
                 <option value="0" disabled>-Seleccionar ayuda-</option>
-                <option value="1">Construcción</option>
-                <option value="2">Medicamentos</option>
-                <option value="3">Equipo médico</option>
+                @foreach(\App\Model\TipoAyuda::all() as $ayuda)
+                <option value="{{ $ayuda->id }}">{{ $ayuda->descripcion }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">

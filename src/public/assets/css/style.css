@@ -113,6 +113,7 @@ a.list-item, .nav-item > a{color:unset}
 .btn-rest.btn-delete{color:#DC5353}
 .btn-rest.btn-edit{color:#428BCA}
 .btn-rest.btn-show{color:#5CB85C}
+.btn-rest.btn-update{color:#F0AD4E}
 .btn.btn-table-header{border-radius: 0;display:block;width:100%;background-color:transparent;font-weight:bold;text-align:inherit;padding-bottom: 0}
 .btn.btn-table-header > span{margin-left: 8px}
 .btn.btn-info-custom{background-color: lightseagreen;border-color: #1DA69F}

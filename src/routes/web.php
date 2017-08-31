@@ -30,6 +30,8 @@ Route::resource('records', 'ExpedienteController',['except'=>['edit','show','cre
 Route::get('records/index', function(){return view('templates.records.index');});
 Route::post('records/{person}','ExpedienteController@append');
 
+Route::resource('history', 'HistoricoController');
+
 Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

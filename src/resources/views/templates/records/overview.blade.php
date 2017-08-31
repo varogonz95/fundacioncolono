@@ -30,8 +30,8 @@
                     </div>
 
                     <div class="controls" ng-show="r.editable">
-                        <button type="button" class="btn btn-warning btn-sm" ng-click="update(r,$event)">Guardar cambios</button>
-                        <button type="button" class="close" ng-click="r.editable = false">&times;</button>
+                        <button type="button" class="btn-rest btn-show" title="Guardar cambios" ng-click="update(r,$event)"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button type="button" class="btn-rest" ng-click="r.editable = false" title="Cancelar edición"><span class="close">&times;</span></button>
                     </div>
                 </div>
 
