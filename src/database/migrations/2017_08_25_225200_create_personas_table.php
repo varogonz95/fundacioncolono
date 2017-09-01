@@ -22,6 +22,7 @@ class CreatePersonasTable extends Migration
             $table->char('ubicacion',6);
             $table->text('direccion',150);
             $table->text('contactos',150);
+            $table->char('esInspector',1);
         });
     }
 

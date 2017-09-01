@@ -4,11 +4,11 @@
         <div class="col-lg-3 dropdown">
             <a data-toggle="dropdown">
                 <div class="col-sm-2">
-                    <img src="http://www.edmilenio.com/media/wysiwyg/no-image.png" height="40" width="40" alt="Profile picture" class="img-circle left">
+                    <img src="../assets/img/UserIcon.png" height="40" width="40" alt="Profile picture" class="img-circle left">
                 </div>
                 <p class="col-sm-8" style="color:#444">
-                    <span class="left"><strong>username</strong></span><br>
-                    <span class="left">(real) name <small>(user role)</small></span>
+                    <span class="left"> <strong>Admin</strong></span><br>
+                    <span class="left"> (Administrador)</span>
                 </p>
             </a>
             <ul class="dropdown-menu">
