@@ -13,23 +13,19 @@ class CreateExpedientesTable extends Migration{
     public function up(){
         Schema::create('expedientes', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('persona_fk', 9);
-            $table->integer('tipo_ayuda_fk')->unsigned();
+
+
             $table->tinyInteger('prioridad');
             $table->tinyInteger('estado');
             $table->text('descripcion');
-            $table->text('recomendaciones');
-            $table->timestamp('fecha_creacion');
-            $table->mediumInteger('monto')
-                  ->unsigned();
+            $table->text('recomendaciones'); 
 
-            $table->foreign('persona_fk')
-                  ->references('cedula')->on('personas')
-                  ->onDelete('cascade');
+            $table->integer('persona_fk')->unsigned();
+            $table->integer('tipoayuda_expedientes_fk')->unsigned();
 
-            $table->foreign('tipo_ayuda_fk')
-                  ->references('id')->on('tipo_ayudas')
-                  ->onDelete('no action');
+            $table->foreign('persona_fk')->references('id')->on('personas')->onDelete('no action');
+
+            $table->foreign('tipoayuda_expedientes_fk')->references('id')->on('tipoayuda_expedientes')->onDelete('no action');
         });
     }
 
