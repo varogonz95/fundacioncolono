@@ -5,8 +5,7 @@
 | Persona Factory
 |--------------------------------------------------------------------------
 */
-
-$factory->define(App\Model\Persona::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Persona::class, function (Faker\Generator $faker) {
 
     $tels = "$faker->tollFreephoneNumber";
     $randomNumbers = $faker->numberBetween(0,2);
@@ -20,64 +19,64 @@ $factory->define(App\Model\Persona::class, function (Faker\Generator $faker) {
         'nombre'=>$faker->firstname,
         'apellidos'=>"{$faker->lastname} {$faker->lastname}",
         'ocupacion'=>$faker->jobTitle,
-        'tels'=>$tels,
+        'telefonos'=>$tels,
         'ubicacion'=>'7/2/1',
         'direccion'=>$faker->address,
         'contactos'=>$faker->text(100)
     ];
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| TipoAyuda Factory
+| Referente Factory
 |--------------------------------------------------------------------------
 */
+$factory->define(App\Models\Referente::class, function (Faker\Generator $faker) {
+    if (App\Models\Referente::count() > 0) {
+        return ['descripcion' => $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}"];
+    }
+    else{
+        return [
+            'descripcion' => 'Otro',
+        ];
+    }
 
-$factory->define(App\Model\TipoAyuda::class, function (Faker\Generator $faker) {
-    return [
-        'descripcion'=>$faker->sentence(3,true)
-    ];
 });
-
 
 /*
 |--------------------------------------------------------------------------
 | Expediente Factory
 |--------------------------------------------------------------------------
 */
-$factory->define(App\Model\Expediente::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Expediente::class, function (Faker\Generator $faker) {
 
-    $p = App\Model\Persona::all();
-    $t = App\Model\TipoAyuda::all();
-    $cp = count($p)-1;
-    $ct = count($t)-1;
+    $hasReferente = $faker->boolean;
+    // $approved = $faker->boolean;
 
-    return [
-        'persona_fk' => $p[$faker->numberBetween(0,$cp)]->cedula,
-        'tipo_ayuda_fk' => $t[$faker->numberBetween(0,$ct)]->id,
-        'prioridad' => $faker->numberBetween(1,3),
-        'estado' => $faker->numberBetween(0,3),
-        'descripcion' => $faker->text(),
-        'recomendaciones' => $faker->text(),
-        'fecha_creacion' => $faker->date('Y-m-d', '2025-01-01')." ".$faker->time('H:i:s', '00:00:00'),
-        'monto' => $faker->randomNumber(6)
-    ];
-});
-
-/*
-|--------------------------------------------------------------------------
-| HistoricoExpediente Factory
-|--------------------------------------------------------------------------
-*/
-$factory->define(App\Model\HistoricoExpediente::class, function (Faker\Generator $faker) {
-
-    $es = App\Model\Expediente::all();
-    $ce = count($es)-1;
-    $e = $es[$faker->numberBetween(0,$ce)];
-
-    return [
-        'expediente_fk' => $e->id,
-        'fecha_modificacion' => $faker->dateTimeBetween($e->fecha_creacion, '2025-01-01')
-    ];
+    if ($hasReferente) {
+        return [
+            'persona_fk' => function(){
+                return factory(App\Models\Persona::class)->create()->cedula;
+            },
+            'referente_fk' => function(){
+                return factory(App\Models\Referente::class)->create()->id;   //  Referente id = 0: 'Otro' option
+            },
+            'referente_otro' => !$hasReferente? $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}" : null,
+            'prioridad' => $faker->numberBetween(1,3),
+            'estado' => $faker->numberBetween(1,3),
+            'descripcion' => $faker->text(),
+        ];
+    }
+    else {
+        return [
+            'persona_fk' => function(){
+                return factory(App\Models\Persona::class)->create()->cedula;
+            },
+            'referente_fk' => 1,   //  Referente id = 0: 'Otro' option
+            'referente_otro' => $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}",
+            'prioridad' => $faker->numberBetween(1,3),
+            'estado' => $faker->numberBetween(1,3),
+            'descripcion' => $faker->text(),
+        ];
+    }
 });
