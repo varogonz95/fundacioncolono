@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Persona;
 use Illuminate\Http\Request;
 
-class HistoricoController extends Controller{
+class PersonasController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        
+    public function index()
+    {
+        //
     }
 
     /**
@@ -64,9 +67,24 @@ class HistoricoController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+
+        $persona = Persona::find($id);
+
+        $persona->nombre    = $request['nombre'];
+        $persona->apellidos = $request['apellidos'];
+        $persona->telefonos = $request['tels'];
+        $persona->ubicacion = "7/2/1";
+        $persona->direccion = $request['direccion'];
+        $persona->contactos = $request['contactos'];
+
+        // $request->flash('status', [
+        //         'type' => $status? 'success' : 'danger',
+        //         'title' => $status? 'Éxito' : 'Error',
+        //         'msg' => $status? 'Msj de éxito' : 'Msj de error',
+        //     ]);
+
+        return response()->json($persona->save());
     }
 
     /**

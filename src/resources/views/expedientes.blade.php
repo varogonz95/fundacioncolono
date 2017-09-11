@@ -27,18 +27,18 @@
 
         <nav class="navbar navbar-default navbar-sm" role="navigation">
             <span class="navbar-text"><b>Columnas visibles</b></span>
-            <form class="navbar-form" style="padding-top:4px">
+            <div class="navbar-form" style="padding-top:4px">
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombre">Nombre</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.referente">Referente</label>
-            </form>
+            </div>
         </nav>
 
-        <div class="controls">
-            <div class="btn-group btn-group-sm">
-                <a class="btn btn-primary" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
-            </div>
+        <div class="controls text-right">
+            <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
+            <form action="{{ route('expedientes.index') }}" method="get">
+            </form>
         </div>
 
         <div class="table-responsive">

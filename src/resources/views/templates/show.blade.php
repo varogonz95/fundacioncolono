@@ -24,20 +24,17 @@ Cosas que se pueden hacer:
         <!-- DATOS DE LA PERSONA -->
         <article class="col-md-4 @{{ (selected.persona.editable)? 'editing' : '' }}">
             <header class="page-header">
-              <h3>
-                  Datos de la persona
-                  <small>
-                      @{{ (selected.persona.editable)? '(en edición)' : '' }}
-                      <div class="btn-group btn-group-sm pull-right">
-                          <button type="button" class="btn-rest btn-edit" ng-click="edit('p')" ng-hide="selected.persona.editable"><span class="glyphicon glyphicon-pencil"></span></button>
-                          <button type="button" class="close" title="Cancelar edición" ng-click="selected.persona.editable = false" ng-show="selected.persona.editable">&times;</button>
-                          <button type="button" class="btn-rest btn-show" ng-click="update('p')" ng-show="selected.persona.editable"><span class="glyphicon glyphicon-ok"></span></button>
-                      </div>
-                  </small>
-              </h3>
+                <h3>Datos de la persona <small class="nowrap">@{{ (selected.persona.editable)? '(en edición)' : '' }}</small></h3>
             </header>
 
             <section class="expediente-info">
+
+                <button type="button" class="btn-rest btn-edit btn-sm" ng-click="edit('p')" ng-hide="selected.persona.editable"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+
+                <div class="controls" ng-show="selected.persona.editable">
+                    <button type="button" class="btn-rest btn-show" ng-click="update('p')"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
+                    <button type="button" class="close" title="Cancelar edición" ng-click="selected.persona.editable = false">&times;</button>
+                </div>
 
                 <div class="expediente-info-item">
                     <label>Cédula: </label>
@@ -117,20 +114,17 @@ Cosas que se pueden hacer:
         <!-- INFORMACION DEL EXPEDIENTE -->
         <article class="col-md-4 @{{ (selected.editable)? 'editing' : '' }}">
             <header class="page-header">
-              <h3>
-                  Detalles del caso
-                  <small>
-                      @{{ (selected.editable)? '(en edición)' : '' }}
-                      <div class="btn-group btn-group-sm pull-right">
-                          <button type="button" class="btn-rest btn-edit" ng-click="edit('e')" ng-hide="selected.editable"><span class="glyphicon glyphicon-pencil"></span></button>
-                          <button type="button" class="close" title="Cancelar edición" ng-click="selected.editable = false" ng-show="selected.editable">&times;</button>
-                          <button type="button" class="btn-rest btn-show" ng-click="update('p')" ng-show="selected.editable"><span class="glyphicon glyphicon-ok"></span></button>
-                      </div>
-                  </small>
-              </h3>
-          </header>
+                <h3>Detalles del caso <small class="nowrap">@{{ (selected.editable)? '(en edición)' : '' }}</small></h3>
+            </header>
 
           <section class="expediente-info">
+
+              <button type="button" class="btn-rest btn-edit btn-sm" ng-click="edit('e')" ng-hide="selected.editable"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
+
+              <div class="controls" ng-show="selected.editable">
+                  <button type="button" class="btn-rest btn-show" ng-click="update('e')"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
+                  <button type="button" class="close" title="Cancelar edición" ng-click="selected.editable = false">&times;</button>
+              </div>
 
               <div class="expediente-info-item">
                   <label>Descripción: </label>
@@ -146,7 +140,7 @@ Cosas que se pueden hacer:
                   <div class="form-group" ng-if="selected.editable">
                       {{-- <input type="text" name="refere" value=""> --}}
                       <label style="font-weight:100">Otro referente: <input type="checkbox" name="hasReferenteOtro" ng-checked="selected.referente_otro !== null" ng-model="selected.hasReferenteOtro" ng-init="selected.hasReferenteOtro = selected.referente_otro !== null"></label>
-                      <input class="form-control" type="text" name="referente_otro" placeholder="Referente" value="@{{ selected.referente_otro }}" ng-show="selected.hasReferenteOtro">
+                      <input class="form-control" type="text" name="referente_otro" placeholder="Nombre del referente o institución" value="@{{ selected.referente_otro }}" ng-show="selected.hasReferenteOtro">
                       <label style="font-weight:100;font-size:12px;text-indent:1.5em;" ng-show="selected.hasReferenteOtro">Agregar a opciones: <input type="checkbox" name="newReferente"></label>
                       <select class="form-control" name="referente" ng-if="!selected.hasReferenteOtro">
                           @foreach (\App\Models\Referente::where('id', '<>', 1)->get() as $r)

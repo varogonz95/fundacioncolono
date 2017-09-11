@@ -20,7 +20,7 @@
                     <label class="control-label col-sm-2" for="cedula">Cédula:</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx">
-                        <p class="help-block"><small>Reemplace las equis (x) por los números de la cédula correspondiente</small></p>
+                        <p class="help-block"><small>Reemplace las equis (x) por los números de la cédula correspondiente.</small></p>
                     </div>
                 </div>
 

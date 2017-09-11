@@ -10,6 +10,7 @@ app.controller('ExpedientesController',function($scope,$http,$location){
     });
 
     $scope.selected = {};
+    $scope.udpate = {};
     $scope.total = 1;
     $scope.page = 1;
     $scope.sort = {
@@ -59,6 +60,18 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         console.log($scope.selected);
     };
 
+    $scope.update = function(){
+
+        var data = {};
+
+        $http.put('./personas', data).then(
+            function(response){
+
+            },
+            function(){}
+        );
+    };
+
     $scope.index();
 
     // var Content = $scope.content,
@@ -93,6 +106,7 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         console.log($scope.selected);
         showModal.show();
     };
+
     $scope.delete = function(){
         if (confirm('¿Realmentemente desea eliminar este expediente?\nEste proceso es irreversible.')) {
 

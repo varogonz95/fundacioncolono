@@ -38,7 +38,7 @@
                 </li> --}}
             </ul>
 
-            @if (Request::is('expedientes'))
+            {{-- @if (Request::is('expedientes'))
                 <form class="navbar-form navbar-left">
                     <div class="input-group">
                         <input type="text" class="form-control" aria-label="...">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </form>
-            @endif
+            @endif --}}
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
