@@ -20,6 +20,12 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::middleware(['auth'])->group(function(){
+
     Route::get('expedientes/all','ExpedientesController@all');
     Route::resource('expedientes','ExpedientesController');
+
+    Route::resource('personas','PersonasController');
+
+    Route::resource('referentes','ReferentesController');
+
 });

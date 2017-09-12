@@ -6,6 +6,9 @@
 .form-control:-moz-placeholder {font-style:italic}
 .form-control::-moz-placeholder {font-style:italic}
 
+.table .active > td {background:#2E64FE !important;color:white;}
+.table .active > td:last-child > *{color:inherit;}
+
 .controls{margin-top:4px; margin-bottom:10px}
 .noresize{resize: none;}
 
@@ -28,6 +31,7 @@
 .record-status.record-status-mid{background-color: #F0AD4E}
 .record-status.record-status-low{background-color: #5CB85C}
 
+.expediente-content{padding: 1em 0}
 .expediente-content article:hover > .expediente-info{border-color:lightgrey;transition:border .3s}
 .expediente-content > article:hover .btn-rest{opacity: 1; transition: opacity .3s}
 .expediente-content .page-header{padding-bottom: 0;margin-bottom:5px}
@@ -35,8 +39,9 @@
 .expediente-content .page-header .controls{margin-top:8px;text-align:center}
 
 .expediente-info > .btn-rest{position: relative;top: -12px;right: -15px;float: right;opacity: 0; transition: opacity .3s}
-.expediente-info .controls{padding-bottom: 1em}
+/*.expediente-info .controls{padding-bottom: .5em;}*/
 .expediente-content .editing .btn-group{opacity: 1}
 .expediente-content .editing > .expediente-info{border-color:lightgrey;}
 .expediente-info{border:2px dashed transparent; border-radius: 6px;overflow: hidden;transition:border .3s;padding: 1em;margin-top: -15px; margin:auto -1em !important}
-.expediente-info-item{margin-bottom:10px}
+.expediente-info-item{margin-bottom:10px;font-size:medium}
+.expediente-info-item p{}

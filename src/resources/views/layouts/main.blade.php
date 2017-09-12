@@ -27,9 +27,9 @@
     @include('partials._navbar')
 
     <main class="container-fluid" style="padding-top:50px" ng-app="App">
-        <section class="row" style="padding: 1em 0">
+        <div class="row" style="padding: 1em 0">
             @yield('content')
-        </section>
+        </div>
     </main>
 
 

@@ -22,7 +22,6 @@ class CreatePersonasTable extends Migration
             $table->char('ubicacion',6);
             $table->text('direccion',150)->nullable();
             $table->text('contactos',150)->nullable();
-            $table->boolean('es_inspector')->default(false);
         });
     }
 

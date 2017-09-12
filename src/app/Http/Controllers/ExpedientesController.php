@@ -46,11 +46,10 @@ class ExpedientesController extends Controller{
         $persona->cedula        =   $request['cedula'];
         $persona->nombre        =   $request['nombre'];
         $persona->apellidos     =   $request['apellidos'];
-        $persona->telefonos     =   $request['tels'];
+        $persona->telefonos     =   $request['telefonos'];
         $persona->ubicacion     =   "7/2/1";
         $persona->direccion     =   $request['direccion'];
         $persona->contactos     =   $request['contactos'];
-        $persona->es_inspector  =   false;
 
         if ($persona->save()) {
             $expediente->descripcion = $request['descripcion'];
@@ -85,7 +84,7 @@ class ExpedientesController extends Controller{
     public function show($id){
         //
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -104,9 +103,15 @@ class ExpedientesController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+
+        $expediente = Expediente::find($id);
+
+        $expediente->descripcion = $request['descripcion'];
+        $expediente->prioridad   = $request['prioridad'];
+        $expediente->estado      = $request['estado'];
+
+        return response()->json($expediente->save());
     }
 
     /**

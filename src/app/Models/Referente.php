@@ -8,7 +8,4 @@ class Referente extends Model{
 
     public $timestamps = false;
 
-    public function expediente(){
-        // return $this->belongsToMany('App\Models\Expediente');
-    }
 }

@@ -63,8 +63,8 @@ $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker)
             },
             'referente_otro' => !$hasReferente? $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}" : null,
             'prioridad' => $faker->numberBetween(1,3),
-            'estado' => $faker->numberBetween(1,3),
-            'descripcion' => $faker->text(),
+            'estado' => $faker->numberBetween(0,2),
+            'descripcion' => $faker->text(500),
         ];
     }
     else {
@@ -75,7 +75,7 @@ $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker)
             'referente_fk' => 1,   //  Referente id = 0: 'Otro' option
             'referente_otro' => $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}",
             'prioridad' => $faker->numberBetween(1,3),
-            'estado' => $faker->numberBetween(1,3),
+            'estado' => $faker->numberBetween(0,2),
             'descripcion' => $faker->text(),
         ];
     }

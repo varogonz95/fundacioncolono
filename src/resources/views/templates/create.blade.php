@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="apellidos">Teléfono(s):</label>
                     <div class="col-sm-10 col-sm-offset-2">
-                        <textarea name="tels" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios"></textarea>
+                        <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios"></textarea>
                     </div>
                 </div>
 

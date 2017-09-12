@@ -9,21 +9,56 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         onBeforeClose: function(){$('body').css('overflow-y','auto');},
     });
 
+    $scope.referentes = [];
+    $scope.referente_selected = {};
+
+    $scope.ayudas = [];
+
     $scope.selected = {};
-    $scope.udpate = {};
+    $scope.update = {
+        persona:{},
+        caso:{},
+        ayudas:{
+            attachs:[],
+            detachs:[]
+        }
+    };
+    $scope.estados = [
+        {id:0, name:'En valoración (por defecto)'},
+        {id:1, name:'Aprobado'},
+        {id:2, name:'No aprobado'}
+    ];
+    $scope.prioridades = [
+        {id:1, name:'Baja'},
+        {id:2, name:'Media'},
+        {id:3, name:'Alta'}
+    ];
+
     $scope.total = 1;
     $scope.page = 1;
+
     $scope.sort = {
         by:'cedula',
         order:true,
         filter: function(){}
     };
+
     $scope.columns = {
         cedula: true,
         nombre: true,
         apellidos: true,
         referente: true
     }
+
+    var getReferentes = function(){
+        $http.get('./referentes').then(
+            function(response){
+                $scope.referentes = response.data;
+            },
+            function(error){}
+        );
+    },
+    getAyudas = function(){};
 
     $scope.index = function(page = 1) {
         $scope.page = (page < 1)? 1 : page;
@@ -46,10 +81,16 @@ app.controller('ExpedientesController',function($scope,$http,$location){
             //Expediente
             case 'e':
             $scope.selected.editable = true;
+            mergeObjs($scope.selected, $scope.update.caso, ['editable','persona','ayudas']);
+            $scope.estado_selected = $scope.estados[$scope.selected.estado];
+            $scope.prioridad_selected = $scope.prioridades[$scope.selected.prioridad - 1];
+            $scope.referente_selected = $scope.referentes[getIndex($scope.referentes, $scope.selected.referente)];
+            console.log($scope.update.caso);
             break;
             //Persona
             case 'p':
             $scope.selected.persona.editable = true;
+            mergeObjs($scope.selected.persona, $scope.update.persona, ['editable']);
             break;
             //Ayudas
             case 'a':
@@ -57,21 +98,66 @@ app.controller('ExpedientesController',function($scope,$http,$location){
             break;
 
         }
-        console.log($scope.selected);
     };
 
-    $scope.update = function(){
+    $scope.updateCaso = function(obj){
 
-        var data = {};
+        console.log('Updating expediente with data:');
+        console.log(obj);
 
-        $http.put('./personas', data).then(
+        $http.put('./expedientes/'+$scope.selected.id, obj).then(
             function(response){
+                if(response.data.status){
+                    $scope.selected.editable = false;
+                }
+                else {
+                    // alert(response.data.msg);
+                }
+            },
+            function(error){
+                alert(error.data.message);
+            }
+        );
+    };
 
+    $scope.updatePersona = function(obj){
+
+        console.log('Updating persona with data:');
+        console.log(obj);
+
+        $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
+            function(response){
+                if(response.data.status){
+                    mergeObjs($scope.update, $scope.selected.persona);
+                    $scope.selected.persona.editable = false;
+                }
+                else {
+                    alert(response.data.msg);
+                }
             },
             function(){}
         );
     };
 
+    $scope.show = function(scope){
+        scope.editable = false;
+        $scope.selected.isSelected = false;
+        scope.isSelected = true;
+        scope.persona.editable = false;
+        // scope.ayudas.editable = false;
+
+        $scope.selected = scope;
+
+        showModal.show();
+    };
+
+    $scope.delete = function(){
+        if (confirm('¿Realmentemente desea eliminar este expediente?\nEste proceso es irreversible.')) {
+
+        }
+    };
+
+    getReferentes();
     $scope.index();
 
     // var Content = $scope.content,
@@ -98,20 +184,6 @@ app.controller('ExpedientesController',function($scope,$http,$location){
     //     );
     // };
     //
-    $scope.show = function(scope){
-        scope.editable = false;
-        scope.persona.editable = false;
-        // scope.ayudas.editable = false;
-        $scope.selected = scope;
-        console.log($scope.selected);
-        showModal.show();
-    };
-
-    $scope.delete = function(){
-        if (confirm('¿Realmentemente desea eliminar este expediente?\nEste proceso es irreversible.')) {
-
-        }
-    };
     //
     // $scope.test = function(a,b){
     //     $scope.expediente.selected = b;

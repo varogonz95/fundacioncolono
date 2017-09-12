@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
-
 @push('scripts_top')
     <script src="{{ asset('app/controllers/ExpedientesController.js') }}"></script>
 @endpush
+
 @push('scripts_bottom')
     <script src="{{ asset('js/animatedModal/animatedModal.js') }}"></script>
     {{-- <script type="text/javascript">
@@ -23,9 +23,10 @@
     @endif
 
     <section id="expedientes" class="col-md-8 col-md-offset-2" ng-controller="ExpedientesController">
+
         @include('templates.show')
 
-        <nav class="navbar navbar-default navbar-sm" role="navigation">
+        <nav class="navbar navbar-default navbar-sm col-md-8 col-md-offset-2" role="navigation">
             <span class="navbar-text"><b>Columnas visibles</b></span>
             <div class="navbar-form" style="padding-top:4px">
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
@@ -35,24 +36,14 @@
             </div>
         </nav>
 
-        <div class="controls text-right">
+        <div class="controls text-right col-lg-12">
             <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
             <form action="{{ route('expedientes.index') }}" method="get">
             </form>
         </div>
 
-        <div class="table-responsive">
-            {{-- <table class="table" style="margin-bottom:0">
-                <thead>
-                    <tr>
-                        <th ng-show="columns.cedula">Cédula</th>
-                        <th ng-show="columns.nombre">Nombre</th>
-                        <th ng-show="columns.apellidos">Apellidos</th>
-                        <th ng-show="columns.referente">Referente</th>
-                    </tr>
-                </thead>
-            </table> --}}
-            <table class="table table-hover table-striped">
+        <div class="table-responsive col-md-12">
+            <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th ng-show="columns.cedula">Cédula</th>
@@ -68,12 +59,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="e in expedientes"ng-click="show(e)">
+                    <tr class="@{{ (e.isSelected)? 'active' : '' }}" ng-repeat="e in expedientes"ng-click="show(e)">
                         <td ng-show="columns.cedula">@{{ e.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>
                         <td ng-show="columns.referente" ng-if="e.referente.id === 1">@{{ e.referente_otro }}</td>
-                        <td ng-show="columns.referente" ng-if="e.referente.id !== 1"><a href="#">@{{ e.referente.descripcion }}</a></td>
+                        <td ng-show="columns.referente" ng-if="e.referente.id !== 1">
+                            <span class="text-primary">@{{ e.referente.descripcion }}</span>
+                            {{--<a href="#">@{{ e.referente.descripcion }}</a>--}}
+                        </td>
                     </tr>
                     {{-- @foreach ($expedientes as $e) --}}
                         {{-- <tr>
@@ -91,7 +85,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-center">
+
+        <div class="text-center col-md-12">
             <ul uib-pagination total-items="total" class="pagination-sm" ng-model="page" items-per-page="16" ng-change="index(page)"></ul>
             {{-- $expedientes->links() --}}
         </div>

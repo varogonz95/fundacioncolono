@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Persona;
+use App\Models\Referente;
 use Illuminate\Http\Request;
 
-class PersonasController extends Controller
+class ReferentesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(){
+        return response()->json(Referente::all());
     }
 
     /**
@@ -67,30 +66,9 @@ class PersonasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
-
-        $persona = Persona::find($id);
-
-        $persona->nombre    = $request['nombre'];
-        $persona->apellidos = $request['apellidos'];
-        $persona->telefonos = $request['telefonos'];
-        $persona->ubicacion = "7/2/1";
-        $persona->direccion = $request['direccion'];
-        $persona->contactos = $request['contactos'];
-
-        // $request->flash('status', [
-        //         'type' => $status? 'success' : 'danger',
-        //         'title' => $status? 'Éxito' : 'Error',
-        //         'msg' => $status? 'Msj de éxito' : 'Msj de error',
-        //     ]);
-
-        $status = $persona->save();
-
-        return response()->json([
-            'status' => $status,
-            'title' => $status? 'Ok' : 'Error',
-            'msg' => $status? 'Everything ok' : 'Baby don\'t worry about nothing, \'cause every little thing is gonna be alright',
-        ]);
+    public function update(Request $request, $id)
+    {
+        //
     }
 
     /**
