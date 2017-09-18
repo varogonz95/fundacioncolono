@@ -1,8 +1,12 @@
 @extends('layouts.main')
 
+@push('scripts_top')
+    <script src="{{ asset('app/controllers/CreateExpedienteController.js') }}" charset="utf-8"></script>
+@endpush
+
 @section('content')
-    <div class="col-md-10 col-md-offset-1">
-        <form id="expedientescreate" class="form-horizontal" action="{{ route('expedientes.store') }}" method="post">
+    <section class="col-md-10 col-md-offset-1" ng-controller="CreateExpedienteController">
+        <form id="expedientescreate" name="newexpediente" class="form-horizontal" action="{{ route('expedientes.store') }}" method="post">
 
             {{ csrf_field() }}
 
@@ -19,7 +23,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="cedula">Cédula:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx">
+                        <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" ng-model="cedula" required>
                         <p class="help-block"><small>Reemplace las equis (x) por los números de la cédula correspondiente.</small></p>
                     </div>
                 </div>
@@ -27,14 +31,14 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="nombre">Nombre:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre">
+                        <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre" ng-model="nombre" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="apellidos">Apellidos:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los apellidos">
+                        <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los apellidos" ng-model="apellidos" required>
                     </div>
                 </div>
 
@@ -75,7 +79,7 @@
                 <div class="form-group">
                     <label class="col-sm-12" for="direccion">Dirección exacta:</label>
                     <div class="col-sm-10 col-sm-offset-2">
-                        <textarea name="direccion" class="noresize form-control" rows="5" cols="50"></textarea>
+                        <textarea name="direccion" class="noresize form-control" rows="5" cols="50" ng-model="direccion" required></textarea>
                     </div>
                 </div>
 
@@ -94,7 +98,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="descripcion">Descripcion:</label>
                     <div class="col-sm-10 col-sm-offset-2">
-                        <textarea name="descripcion" class="noresize form-control" rows="5" cols="50" placeholder="Anote en detalle la descripción del caso"></textarea>
+                        <textarea name="descripcion" class="noresize form-control" rows="5" cols="50" placeholder="Anote en detalle la descripción del caso" ng-model="descripcion" required></textarea>
                     </div>
                 </div>
 
@@ -114,45 +118,47 @@
                 <div class="form-group col-sm-pull-2">
                     <label class="control-label col-sm-4" for="prioridad">Prioridad:</label>
                     <div class="col-sm-8">
-                        <select class="form-control" name="prioridad">
-                            <option disabled selected>-Seleccionar prioridad-</option>
-                            <option value="1">Baja</option>
-                            <option value="2">Media</option>
-                            <option value="3">Alta</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-sm-4" for="ayuda">Ayuda solicitada:</label>
-                    <div class="col-sm-8">
-                        <select class="form-control" name="ayuda">
-                            <option value="0">-Seleccionar tipo de ayuda-</option>
-                            @foreach (\App\Models\Ayuda::all() as $ayuda)
-                                <option value="{{ $ayuda->id }}" >{{ $ayuda->descripcion }}</option>
-                            @endforeach
+                        <select class="form-control" name="prioridad" ng-model="prioridad" ng-options="p.name for p in prioridades track by p.value" convert-to-number required>
+                            <option value="" disabled selected>-Seleccionar prioridad-</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group col-sm-pull-2">
-                    <label class="control-label col-sm-4" for="estado">Estado de aprobación:</label>
+                    <label class="control-label col-sm-4" for="estado" ng-model="estado" required>Estado de aprobación:</label>
                     <div class="col-sm-8">
-                        <select class="form-control" name="estado">
-                            <option value="0">En valoración (por defecto)</option>
-                            <option value="1">Aprobado</option>
-                            <option value="2">No aprobado</option>
-                        </select>
+                        <select class="form-control" name="estado" ng-model="estado" ng-options="e.name for e in estados track by e.value" convert-to-number required></select>
                     </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="ayuda">Ayuda solicitada:</label>
+
+                    <button class="btn-rest btn-show" type="button" ng-click="add()" ng-disabled="checkNullity(ayudas_selected)"><span class="glyphicon glyphicon-plus"></span> Agregar ayuda</button>
+
+                    <div class="col-sm-8 col-sm-offset-4" ng-repeat="as in ayudas_selected">
+
+                        <div class="controls">
+                            <select class="form-control" name="ayuda" ng-model="ayudas_selected[$index]" ng-options="o.descripcion for o in ayudas track by o.id" ng-change="changed(ayudas_selected[$index], $index)" convert-to-number>
+                                <option value="">-Seleccionar tipo de ayuda-</option>
+                            </select>
+                            <p class="help-block" ng-show="ayudas_selected[$index].$invalid"><small class="text-danger">Cada tipo de ayuda debe ser <strong>distinto</strong></small></p>
+                            <button type="button" class="btn btn-primary" ng-click="remove(as)" ng-if="!$first">remove</button>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="center-block btn btn-primary">Guardar expediente</button>
+                        <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
                     </div>
                 </div>
             </fieldset>
 
         </form>
-    </div>
+    </section>
 @endsection

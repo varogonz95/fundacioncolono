@@ -23,6 +23,7 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         );
     },
     init = function(){
+        getAyudas();
         getReferentes();
         $scope.index();
     };

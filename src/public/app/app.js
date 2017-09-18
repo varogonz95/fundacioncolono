@@ -38,12 +38,15 @@ function copy(_this, _into, except){
 }
 
 function getIndex(list, object){
-    var i = 0;
+    var i = 0,
+    found = false;
 
     for (;i < list.length; i++) {
         if (list[i] === object) {
+            found = true;
             break;
         }
     }
-    return i;
+
+    return found? i : -1;
 };

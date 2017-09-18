@@ -28,4 +28,6 @@ Route::middleware(['auth'])->group(function(){
 
     Route::resource('referentes','ReferentesController');
 
+    Route::resource('ayudas','AyudasController');
+
 });
