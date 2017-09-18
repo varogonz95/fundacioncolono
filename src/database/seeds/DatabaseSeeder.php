@@ -9,6 +9,23 @@ class DatabaseSeeder extends Seeder{
      * @return void
      */
     public function run(){
-        factory(App\Models\Expediente::class, 25)->create();
+
+        $faker = Faker\Factory::create();
+
+        $this->call(AyudasSeeder::class);
+        // $ayudas_count = App\Models\Ayuda::count();
+
+        factory(App\Models\Expediente::class, 50)->create()
+        ->each(function($expediente){
+
+            $ayudas = App\Models\Ayuda::all();
+            $ayudas_count = count($ayudas);
+            $number_of_attachs = rand(1,$ayudas_count);
+
+            for ($i=0; $i < $number_of_attachs; $i++) {
+                $expediente->ayudas()->attach($ayudas[rand(0,$ayudas_count-1)]->id,['detalle' => 'Algun detalle']);
+            }
+
+        });
     }
 }

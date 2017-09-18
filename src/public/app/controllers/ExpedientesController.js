@@ -7,22 +7,29 @@ app.controller('ExpedientesController',function($scope,$http,$location){
     var showModal = $('#show_modal').animatedModal({
         onBeforeShow: function(){$('body').css('overflow-y','hidden');},
         onBeforeClose: function(){$('body').css('overflow-y','auto');},
-    });
+    }),
 
-    $scope.referentes = [];
-    $scope.referente_selected = {};
+    // Built-in functions
+    getReferentes = function(){
+        $http.get('./referentes').then(
+            function(response){ $scope.referentes = response.data; },
+            function(error){}
+        );
+    },
+    getAyudas = function(){
+        $http.get('./ayudas').then(
+            function(response){ $scope.ayudas = response.data; },
+            function(error){}
+        );
+    },
+    init = function(){
+        getReferentes();
+        $scope.index();
+    };
 
     $scope.ayudas = [];
-
-    $scope.selected = {};
-    $scope.update = {
-        persona:{},
-        caso:{},
-        ayudas:{
-            attachs:[],
-            detachs:[]
-        }
-    };
+    $scope.referentes = [];
+    $scope.referente_selected = {};
     $scope.estados = [
         {id:0, name:'En valoración (por defecto)'},
         {id:1, name:'Aprobado'},
@@ -33,6 +40,16 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         {id:2, name:'Media'},
         {id:3, name:'Alta'}
     ];
+
+    $scope.selected = {};
+    $scope.update = {
+        persona:{},
+        caso:{},
+        ayudas:{
+            attachs:[],
+            detachs:[]
+        }
+    };
 
     $scope.total = 1;
     $scope.page = 1;
@@ -47,30 +64,18 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         cedula: true,
         nombre: true,
         apellidos: true,
-        referente: true
+        referente: true,
+        ayuda: true
     }
-
-    var getReferentes = function(){
-        $http.get('./referentes').then(
-            function(response){
-                $scope.referentes = response.data;
-            },
-            function(error){}
-        );
-    },
-    getAyudas = function(){};
 
     $scope.index = function(page = 1) {
         $scope.page = (page < 1)? 1 : page;
 
         $http.get('./expedientes/all?page='+page+'&by='+$scope.sort.by+'&order='+($scope.sort.order? 'asc' : 'desc' )).then(
             function(response){
-                // for (var i = 0; i < response.data.expedientes.length; i++) {
-                //     var a = response.data.expedientes[i].persona.ubicacion.split('/');
-                //     response.data.expedientes[i].persona.ubicacion = $scope.location.getInfo(a[0],a[1],a[2]);
-                // }
                 $scope.expedientes = response.data.expedientes;
                 $scope.total = response.data.total;
+                console.log($scope.expedientes);
             },
             function(){}
         );
@@ -81,17 +86,19 @@ app.controller('ExpedientesController',function($scope,$http,$location){
             //Expediente
             case 'e':
             $scope.selected.editable = true;
-            mergeObjs($scope.selected, $scope.update.caso, ['editable','persona','ayudas']);
+            $scope.update.caso = copy($scope.selected, ['editable','persona','ayudas','$$hashKey']);
             $scope.estado_selected = $scope.estados[$scope.selected.estado];
+
             $scope.prioridad_selected = $scope.prioridades[$scope.selected.prioridad - 1];
             $scope.referente_selected = $scope.referentes[getIndex($scope.referentes, $scope.selected.referente)];
-            console.log($scope.update.caso);
             break;
+
             //Persona
             case 'p':
             $scope.selected.persona.editable = true;
-            mergeObjs($scope.selected.persona, $scope.update.persona, ['editable']);
+            $scope.update.persona = copy($scope.selected.persona, ['editable']);
             break;
+
             //Ayudas
             case 'a':
             $scope.selected.ayudas = true;
@@ -102,22 +109,19 @@ app.controller('ExpedientesController',function($scope,$http,$location){
 
     $scope.updateCaso = function(obj){
 
-        console.log('Updating expediente with data:');
+        console.log('Updating caso with data:');
         console.log(obj);
+        // console.log(jQueryToJson($('#selectedexpediente'), 'name'));
 
-        $http.put('./expedientes/'+$scope.selected.id, obj).then(
-            function(response){
-                if(response.data.status){
-                    $scope.selected.editable = false;
-                }
-                else {
-                    // alert(response.data.msg);
-                }
-            },
-            function(error){
-                alert(error.data.message);
-            }
-        );
+        // $http.put('./expedientes/'+$scope.selected.id, obj).then(
+        //     function(response){
+        //         if(response.data.status){
+        //             $scope.selected.editable = false;
+        //         }
+        //         else { alert(response.data.msg); }
+        //     },
+        //     function(error){ alert(error.data.message); }
+        // );
     };
 
     $scope.updatePersona = function(obj){
@@ -128,14 +132,12 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
             function(response){
                 if(response.data.status){
-                    mergeObjs($scope.update, $scope.selected.persona);
+                    $scope.selected.persona = copy($scope.update.persona);
                     $scope.selected.persona.editable = false;
                 }
-                else {
-                    alert(response.data.msg);
-                }
+                else { alert(response.data.msg); }
             },
-            function(){}
+            function(error){alert(error.data.message);}
         );
     };
 
@@ -147,18 +149,33 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         // scope.ayudas.editable = false;
 
         $scope.selected = scope;
-
+        console.log($scope.selected);
         showModal.show();
     };
 
     $scope.delete = function(){
         if (confirm('¿Realmentemente desea eliminar este expediente?\nEste proceso es irreversible.')) {
+            $http.delete('./expedientes/'+$scope.selected.id).then(
+                function(response){
+                    if (response.data.status) {
+                        showModal.close();
+                        $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected),1);
+                        $scope.selected = {};
 
+                        if($scope.page !== response.data.last && $scope.expedientes.length > 0){ $scope.index($scope.page); }
+                        else if ($scope.expedientes.length === 0) { $scope.index($scope.page - 1); }
+
+                        alert('Deleted successfully');
+                    }
+                },
+                function(error) {
+                    alert(error.data.message);
+                }
+            );
         }
     };
 
-    getReferentes();
-    $scope.index();
+    init();
 
     // var Content = $scope.content,
     // Persist = $scope.persist,
@@ -234,7 +251,7 @@ app.controller('ExpedientesController',function($scope,$http,$location){
     //         function(response){
     //             if(response.data.updated){
     //                 data.prioridad = parseInt(data.prioridad);
-    //                 mergeObjs(data, scope);
+    //                 copy(data, scope);
     //                 scope.editable = false;
     //             }
     //             else {

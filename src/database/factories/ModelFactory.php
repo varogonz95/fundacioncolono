@@ -45,38 +45,36 @@ $factory->define(App\Models\Referente::class, function (Faker\Generator $faker) 
 
 /*
 |--------------------------------------------------------------------------
+| Ayuda Factory
+|--------------------------------------------------------------------------
+*/
+$factory->define(App\Models\Ayuda::class, function (Faker\Generator $faker) {
+
+    $first_day = $faker->numberBetween(1, 15);
+    $second_day = $faker->numberBetween($first_day + 1, 30);
+
+    return [
+        'descripcion' => $faker->text(50),
+        'primer_dia_entrega' => $first_day,
+        'segundo_dia_entrega' => $second_day,
+    ];
+});
+
+/*
+|--------------------------------------------------------------------------
 | Expediente Factory
 |--------------------------------------------------------------------------
 */
 $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker) {
 
     $hasReferente = $faker->boolean;
-    // $approved = $faker->boolean;
 
-    if ($hasReferente) {
-        return [
-            'persona_fk' => function(){
-                return factory(App\Models\Persona::class)->create()->cedula;
-            },
-            'referente_fk' => function(){
-                return factory(App\Models\Referente::class)->create()->id;   //  Referente id = 0: 'Otro' option
-            },
-            'referente_otro' => !$hasReferente? $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}" : null,
-            'prioridad' => $faker->numberBetween(1,3),
-            'estado' => $faker->numberBetween(0,2),
-            'descripcion' => $faker->text(500),
-        ];
-    }
-    else {
-        return [
-            'persona_fk' => function(){
-                return factory(App\Models\Persona::class)->create()->cedula;
-            },
-            'referente_fk' => 1,   //  Referente id = 0: 'Otro' option
-            'referente_otro' => $faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}",
-            'prioridad' => $faker->numberBetween(1,3),
-            'estado' => $faker->numberBetween(0,2),
-            'descripcion' => $faker->text(),
-        ];
-    }
+    return [
+        'persona_fk' => function(){ return factory(App\Models\Persona::class)->create()->cedula; },
+        'referente_fk' => $hasReferente? factory(App\Models\Referente::class)->create()->id : 1,   //  Referente id = 1: 'Otro' option
+        'referente_otro' => $hasReferente? null : ($faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}"),
+        'prioridad' => $faker->numberBetween(1,3),
+        'estado' => $faker->numberBetween(0,2),
+        'descripcion' => $faker->text(500),
+    ];
 });

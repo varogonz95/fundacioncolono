@@ -18,33 +18,32 @@ function jQueryToJson(obj, key){
     return data;
 }
 
-function mergeObjs(_this, _into, except){
-    for (var key in _this) {
-        if(except){
-            for (var i = 0; i < except.length; i++) {
-                array[i]
-            }
-            for (var i in except) {
-                if(key !== except[i] || !key){
-                    _into[key]=_this[key];
-                    console.log('key ['+key+'] copied');
-                }
-                else {
-                    console.log('key ['+key+'] not copied');
-                }
-            }
-        }
-        else{
-            _into[key]=_this[key];
+function copy(_this, _into, except){
+
+    var data = {},
+    fails = 0;
+
+    if (except) {
+        for (var key in _this) {
+            for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
+            if (fails === 0) { data[key] = _this[key]; }
+            fails = 0;
         }
     }
-    return _into;
+    else {
+        for (var key in _this) { data[key] = _this[key]; }
+    }
+
+    return data;
 }
 
 function getIndex(list, object){
     var i = 0;
+
     for (;i < list.length; i++) {
-        if (list[i] === object) {break;}
+        if (list[i] === object) {
+            break;
+        }
     }
-    return i-1;
+    return i;
 };

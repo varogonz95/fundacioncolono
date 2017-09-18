@@ -128,6 +128,9 @@
                     <div class="col-sm-8">
                         <select class="form-control" name="ayuda">
                             <option value="0">-Seleccionar tipo de ayuda-</option>
+                            @foreach (\App\Models\Ayuda::all() as $ayuda)
+                                <option value="{{ $ayuda->id }}" >{{ $ayuda->descripcion }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

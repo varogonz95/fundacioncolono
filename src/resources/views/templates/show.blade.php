@@ -18,7 +18,7 @@ Cosas que se pueden hacer:
 
     @slot('header_content')
         <button type="button" class="btn btn-sm btn-default close-animatedModal"><span class="glyphicon glyphicon-remove"></span>Cerrar</button>
-        <button type="button" class="btn btn-sm btn-danger close-animatedModal">Eliminar <span class="glyphicon glyphicon-trash"></span></button>
+        <button type="button" class="btn btn-sm btn-danger" ng-click="delete(selected)">Eliminar <span class="glyphicon glyphicon-trash"></span></button>
     @endslot
 
     @slot('content_classes')
@@ -39,7 +39,7 @@ Cosas que se pueden hacer:
             <button type="button" class="btn-rest btn-edit btn-sm" ng-click="edit('p')" ng-hide="selected.persona.editable"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
 
             <div class="controls" ng-show="selected.persona.editable">
-                <button type="button" class="btn-rest btn-show" ng-click="updatePersona(update)"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
+                <button type="button" class="btn-rest btn-show" ng-click="updatePersona(update.persona)"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
                 <button type="button" class="close" title="Cancelar edición" ng-click="selected.persona.editable = false">&times;</button>
             </div>
 
@@ -47,7 +47,7 @@ Cosas que se pueden hacer:
                 <label>Cédula: </label>
                 <span ng-hide="selected.persona.editable">@{{ selected.persona.cedula }}</span>
                 <div class="form-group" ng-if="selected.persona.editable">
-                    <input class="form-control" type="text" name="cedula" value="@{{ selected.persona.cedula }}" ng-model="update.cedula">
+                    <input class="form-control" type="text" name="cedula" value="@{{ selected.persona.cedula }}" ng-model="update.persona.cedula">
                 </div>
             </div>
 
@@ -58,11 +58,11 @@ Cosas que se pueden hacer:
                 </div>
                 <div class="form-group" ng-if="selected.persona.editable">
                     <label>Nombre: </label>
-                    <input class="form-control" type="text" name="nombre" value="@{{ selected.persona.nombre }}" ng-model="update.nombre">
+                    <input class="form-control" type="text" name="nombre" value="@{{ selected.persona.nombre }}" ng-model="update.persona.nombre">
                 </div>
                 <div class="form-group" ng-if="selected.persona.editable">
                     <label>Apellidos: </label>
-                    <input class="form-control" type="text" name="apellidos" value="@{{ selected.persona.apellidos }}" ng-model="update.apellidos">
+                    <input class="form-control" type="text" name="apellidos" value="@{{ selected.persona.apellidos }}" ng-model="update.persona.apellidos">
                 </div>
             </div>
 
@@ -70,7 +70,7 @@ Cosas que se pueden hacer:
                 <label>Teléfono(s): </label>
                 <span ng-hide="selected.persona.editable">@{{ selected.persona.telefonos }}</span>
                 <div class="form-group" ng-if="selected.persona.editable">
-                    <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios" ng-model="update.telefonos">@{{ selected.persona.telefonos }}</textarea>
+                    <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios" ng-model="update.persona.telefonos">@{{ selected.persona.telefonos }}</textarea>
                 </div>
             </div>
 
@@ -79,7 +79,7 @@ Cosas que se pueden hacer:
                 <span ng-hide="selected.persona.editable">@{{ selected.persona.ubicacion }}</span>
                 <div class="form-group" ng-if="selected.persona.editable">
                     <p class="help-block">Provincia:</p>
-                    <select class="form-control" name="provincia" ng-model="update.provincia">
+                    <select class="form-control" name="provincia" ng-model="update.persona.provincia">
                         <option value="" selected disabled>-Seleccionar provincia-</option>
                         <option value="1">San Jośe</option>
                         <option value="2">Cartago</option>
@@ -103,7 +103,7 @@ Cosas que se pueden hacer:
                 <label>Dirección exacta: </label>
                 <p ng-hide="selected.persona.editable">@{{ selected.persona.direccion }}</p>
                 <div class="form-group" ng-if="selected.persona.editable">
-                    <textarea name="direccion" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.direccion">@{{ selected.persona.direccion }}</textarea>
+                    <textarea name="direccion" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.persona.direccion">@{{ selected.persona.direccion }}</textarea>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@ Cosas que se pueden hacer:
                 <label>Contacto(s): </label>
                 <p ng-hide="selected.persona.editable">@{{ selected.persona.contactos }}</p>
                 <div class="form-group" ng-if="selected.persona.editable">
-                    <textarea name="contactos" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.contactos">@{{ selected.persona.contactos }}</textarea>
+                    <textarea name="contactos" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.persona.contactos">@{{ selected.persona.contactos }}</textarea>
                 </div>
             </div>
 
@@ -134,7 +134,7 @@ Cosas que se pueden hacer:
               <button type="button" class="btn-rest btn-edit btn-sm" ng-click="edit('e')" ng-hide="selected.editable"><span class="glyphicon glyphicon-pencil"></span> Editar</button>
 
               <div class="controls" ng-show="selected.editable">
-                  <button type="button" class="btn-rest btn-show" ng-click="updateUpdate(selected)"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
+                  <button type="button" class="btn-rest btn-show" ng-click="updateCaso(update.caso)"><span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
                   <button type="button" class="close" title="Cancelar edición" ng-click="selected.editable = false">&times;</button>
               </div>
 
@@ -142,7 +142,7 @@ Cosas que se pueden hacer:
                   <label>Descripción: </label>
                   <p ng-hide="selected.editable">@{{ selected.descripcion }}</p>
                   <div class="form-group" ng-if="selected.editable">
-                      <textarea name="contactos" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.caso.descripcion">@{{ selected.descripcion }}</textarea>
+                      <textarea name="descripcion" class="noresize form-control" rows="5" cols="50" placeholder="" ng-model="update.caso.descripcion">@{{ selected.descripcion }}</textarea>
                   </div>
               </div>
 
@@ -168,7 +168,7 @@ Cosas que se pueden hacer:
 
               <div class="expediente-info-item">
                   <label>Estado de aprobación: </label>
-                  <span class="text-@{{ (selected.estado === 0)? 'info' : (selected.estado === 1)? 'success' : (selected.estado === 2)? 'danger' : '' }}" ng-hide="selected.editable">@{{ (selected.estado === 0)? 'En valoración' : (selected.estado === 1)? 'Aprobado' : (selected.estado === 2)? 'No aprobado' : '' }}</span>
+                  <span class="label label-@{{ (selected.estado === 0)? 'info' : (selected.estado === 1)? 'success' : (selected.estado === 2)? 'danger' : '' }}" ng-hide="selected.editable">@{{ (selected.estado === 0)? 'En valoración' : (selected.estado === 1)? 'Aprobado' : (selected.estado === 2)? 'No aprobado' : '' }}</span>
                   <div class="form-group" ng-if="selected.editable">
                       <select class="form-control" name="estado" ng-model="estado_selected" ng-options="o.name for o in estados track by o.id" convert-to-number></select>
                   </div>
@@ -202,7 +202,14 @@ Cosas que se pueden hacer:
           </h3>
       </header>
 
-      <section class="expediente-info">
+      <section class="expediente-info" ng-repeat="ayuda in selected.ayudas">
+
+          <span>Tipo de ayuda:</span><br>
+          <p>@{{ ayuda.descripcion }}</p>
+          <span>Descripcion:</span><br>
+          <p>@{{ ayuda.pivot.detalle }}</p>
+
+          <span></span>
 
       </section>
 

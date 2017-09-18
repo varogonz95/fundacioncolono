@@ -6,7 +6,7 @@
 .form-control:-moz-placeholder {font-style:italic}
 .form-control::-moz-placeholder {font-style:italic}
 
-.table .active > td {background:#2E64FE !important;color:white;}
+.table .active > td {background:#5CACEB !important;color:white;}
 .table .active > td:last-child > *{color:inherit;}
 
 .controls{margin-top:4px; margin-bottom:10px}

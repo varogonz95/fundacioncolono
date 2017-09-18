@@ -18,4 +18,8 @@ class Expediente extends Model{
         return $this->belongsTo('App\Models\Referente', 'referente_fk');
     }
 
+    public function ayudas(){
+        return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot('detalle');
+    }
+
 }

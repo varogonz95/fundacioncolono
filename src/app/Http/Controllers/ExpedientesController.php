@@ -7,7 +7,6 @@ use App\Models\Persona;
 use App\Models\Referente;
 
 use Illuminate\Http\Request;
-use Session;
 
 class ExpedientesController extends Controller{
 
@@ -15,12 +14,18 @@ class ExpedientesController extends Controller{
     const APROBADO = 1;
     const NO_APROBADO = 2;
 
-    public function all(Request $req){
-        $expedientes = Expediente::orderBy(($req['by'] === 'cedula')? 'persona_fk' : $req['by'], $req['order'])->paginate(16);
+    public function all(Request $request){
+
+        $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
+
+        $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
+
+        $expedientes = Expediente::orderBy($by, $request['order'])->paginate(16);
 
         foreach ($expedientes as $e) {
             $e->persona;
             $e->referente;
+            $e->ayudas;
         }
 
         return response()->json([
@@ -66,7 +71,7 @@ class ExpedientesController extends Controller{
             $status = $persona->expediente()->save($expediente);
         }
 
-        Session::flash('status', [
+        $request->session()->flash('status', [
                 'type' => $status? 'success' : 'danger',
                 'title' => $status? 'Éxito' : 'Error',
                 'msg' => $status? 'Msj de éxito' : 'Msj de error',
@@ -111,7 +116,13 @@ class ExpedientesController extends Controller{
         $expediente->prioridad   = $request['prioridad'];
         $expediente->estado      = $request['estado'];
 
-        return response()->json($expediente->save());
+        $status = $expediente->save();
+
+        return response()->json([
+            'status' => $status,
+            'title' => $status? 'Ok' : 'Error',
+            'msg' => $status? 'Everything ok' : 'Baby don\'t worry about nothing, \'cause every little thing is gonna be alright',
+        ]);
     }
 
     /**
@@ -120,8 +131,18 @@ class ExpedientesController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
+
+        // delete Persona, so it can delete in cascade to Expediente
+        $status = Persona::destroy(Expediente::find($id)->persona_fk) > 0;
+
+        return response()->json([
+            'status' => $status,
+            'title' => $status? 'Ok' : 'Error',
+            'msg' => $status? 'Everything ok' : 'Baby don\'t worry about nothing, \'cause every little thing is gonna be alright',
+            // **************** OPTIMIZE THIS **********************
+            // ---- COMPUTE, THEN STORE IN SESSION
+            'last' => Expediente::orderBy(session('sort')['by'], session('sort')['order'])->paginate(16)->lastPage(),
+        ]);
     }
 }
