@@ -20,7 +20,7 @@
             <fieldset class="col-md-5">
                 <legend>Detalles de la persona</legend>
 
-                <div class="form-group">
+                <div class="form-group @{{ newexpediente.cedula.$invalid && newexpediente.cedula.$dirty? 'has-error' : '' }}">
                     <label class="control-label col-sm-2" for="cedula">Cédula:</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" ng-model="cedula" required>
@@ -106,8 +106,16 @@
                     <label class="control-label col-sm-4" for="referente">Referente:</label>
 
                     <div class="col-sm-8">
+                        {{-- <button type="button" name="button"></button> --}}
                         {{-- <p><input type="checkbox"> Otro <input type="text" class="form-control" name="" value="" placeholder="Debug msg: This input should be hidden"></p> --}}
-                        <select class="form-control" name="referente">
+                        <label style="font-weight:100">Otro referente: <input type="checkbox" name="hasReferenteOtro" ng-model="hasReferenteOtro"></label>
+                        <input class="form-control" type="text" name="referente_otro" placeholder="Referente" ng-model="referente_otro" ng-show="hasReferenteOtro">
+                        <label style="font-weight:100;font-size:12px;text-indent:1.5em;" ng-show="hasReferenteOtro">Agregar a opciones: <input type="checkbox" name="newReferente" ng-true-value="true" ng-false-value="false"></label>
+
+                        {{-- THIS IS A TEST --}}
+                        <input type="text" ng-model="referente" uib-typeahead="r.descripcion for r in referentes | filter:$viewValue | limitTo:10" class="form-control" typeahead-show-hint="true">
+
+                        <select class="form-control" name="referente" ng-hide="hasReferenteOtro">
                             @foreach (\App\Models\Referente::where('id', '<>', 1)->get() as $r)
                                 <option value="{{ $r->id }}">{{ $r->descripcion }}</option>
                             @endforeach
@@ -136,15 +144,20 @@
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="ayuda">Ayuda solicitada:</label>
 
-                    <button class="btn-rest btn-show" type="button" ng-click="add()" ng-disabled="checkNullity(ayudas_selected)"><span class="glyphicon glyphicon-plus"></span> Agregar ayuda</button>
+                    <button class="btn-rest btn-show" type="button" ng-click="add()"><span class="glyphicon glyphicon-plus"></span> Agregar ayuda</button>
+                    <span class="text-danger nowrap" ng-show="invalid_add">Debe seleccionar un tipo de ayuda</span>
 
                     <div class="col-sm-8 col-sm-offset-4" ng-repeat="as in ayudas_selected">
 
-                        <div class="controls">
-                            <select class="form-control" name="ayuda" ng-model="ayudas_selected[$index]" ng-options="o.descripcion for o in ayudas track by o.id" ng-change="changed(ayudas_selected[$index], $index)" convert-to-number>
-                                <option value="">-Seleccionar tipo de ayuda-</option>
+                        <div class="controls @{{ ayudas_selected[$index].$invalid? 'has-error' : '' }}">
+                            <select class="form-control danger" name="ayuda[@{{ $index }}]" ng-model="ayudas_selected[$index]" ng-options="ayuda.descripcion for ayuda in ayudas track by ayuda.id" ng-change="changed(ayudas_selected[$index], $index)" convert-to-number required>
+                                <option value="" disabled>-Seleccionar tipo de ayuda-</option>
                             </select>
-                            <p class="help-block" ng-show="ayudas_selected[$index].$invalid"><small class="text-danger">Cada tipo de ayuda debe ser <strong>distinto</strong></small></p>
+
+                            <textarea class="form-control noresize" name="ayuda.detalle[@{{ $index }}]" ng-model="ayudas_selected[$index].detalle" ng-show="ayudas_selected[$index].id && !ayudas_selected[$index].$invalid" rows="5" cols="50"></textarea>
+
+                            <p class="help-block" ng-show="ayudas_selected[$index].$invalid"><small class="text-danger">Cada tipo de ayuda debe ser <strong><u>único</u></strong></small></p>
+
                             <button type="button" class="btn btn-primary" ng-click="remove(as)" ng-if="!$first">remove</button>
                         </div>
 
@@ -154,7 +167,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
+                        <button type="submit" class="center-block btn btn-primary" ng-disabled="{{--newexpediente.$invalid--}}false">Guardar expediente</button>
                     </div>
                 </div>
             </fieldset>

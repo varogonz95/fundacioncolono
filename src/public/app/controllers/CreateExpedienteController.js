@@ -1,5 +1,12 @@
 app.controller('CreateExpedienteController', function($scope, $http) {
 
+    $scope.submit = function() {
+        console.log($scope.ayudas_selected);
+    };
+
+    $scope.invalid_add = false;
+    $scope.submitting = false;
+    $scope.referentes = [];
     $scope.ayudas = [];
     $scope.ayudas_selected = [{}];
     $scope.prioridades = [
@@ -14,36 +21,38 @@ app.controller('CreateExpedienteController', function($scope, $http) {
     ];
     $scope.estado = {value:0, name:'En valoración (por defecto)'};
 
-    $scope.checkNullity = function(arr){
-
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i] === null || arr[i] === copy(arr[i], ['$$hashKey'])) {
-                console.log('yep');
-                return true;
-            }
-        }
-
-        console.log('nope');
-        return false;
-    };
-
     $scope.changed = function(scope, index){
+        $scope.invalid_add = false;
 
         // Revisar en las ayudas seleccionadas
         for (var i = 0; i < $scope.ayudas_selected.length; i++) {
+
+            // Si el elemento de la lista es igual al de la iteracion
+            // entonces que lo salte
             if (i === index) { continue; }
+            // Sino, si el id del objeto seleccionado
+            // es igual al id del elemento de la lista en i
+            // entonces el elemento ya se encuentra seleccionado,
+            // por lo tanto es invalido
             else if (scope.id === $scope.ayudas_selected[i].id) {
-                $scope.newexpediente.$invalid = true;
+                // $scope.newexpediente.$invalid = true;
                 scope.$invalid = true;
                 break;
             }
         }
 
+        console.log(scope);
+
     };
 
     $scope.add = function() {
-        if (!$scope.checkNullity($scope.ayudas_selected)) {
+        /************ POSSIBLE FIX ****************/
+        if ($scope.ayudas_selected[$scope.ayudas_selected.length - 1].id /*&& !$scope.ayudas_selected[$scope.ayudas_selected.length - 1].$invalid*/) {
+            $scope.invalid_add = false;
             $scope.ayudas_selected.push({});
+        }
+        else {
+            $scope.invalid_add = true;
         }
     };
 
@@ -59,7 +68,16 @@ app.controller('CreateExpedienteController', function($scope, $http) {
             },
             function(error){}
         );
-    };
+        $http.get('../referentes').then(
+            function(response){
+                $scope.referentes = response.data;
+                console.log(response.data);
+            },
+            function(error){}
+        );
+    },
+
+    checkValidity = function(array) {};
 
     init();
 

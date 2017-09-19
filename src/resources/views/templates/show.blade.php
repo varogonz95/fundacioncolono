@@ -150,7 +150,6 @@ Cosas que se pueden hacer:
                   <label>Referente: </label>
                   <span ng-hide="selected.editable">@{{ (selected.referente.id === 1)? selected.referente_otro : selected.referente.descripcion }}</span>
                   <div class="form-group" ng-if="selected.editable">
-                      {{-- <input type="text" name="refere" value=""> --}}
                       <label style="font-weight:100">Otro referente: <input type="checkbox" name="hasReferenteOtro" ng-checked="selected.referente_otro !== null" ng-model="selected.hasReferenteOtro" ng-init="selected.hasReferenteOtro = selected.referente_otro !== null"></label>
                       <input class="form-control" type="text" name="referente_otro" placeholder="Referente" ng-model="update.caso.referente_otro" value="@{{ selected.referente_otro }}" ng-show="selected.hasReferenteOtro">
                       <label style="font-weight:100;font-size:12px;text-indent:1.5em;" ng-show="selected.hasReferenteOtro">Agregar a opciones: <input type="checkbox" name="newReferente"></label>
@@ -191,6 +190,8 @@ Cosas que se pueden hacer:
 
         </article>
 
+
+    {{-- INFORMACION DE LAS AYUDAS --}}
     <article id="selectedayuda" class="col-md-8 col-md-offset-2">
 
         <header class="page-header">

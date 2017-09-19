@@ -11,6 +11,7 @@
 
 .controls{margin-top:4px; margin-bottom:10px}
 .noresize{resize: none;}
+.nowrap{white-space: nowrap;}
 
 /*#nav-top{font-family: 'Raleway'}*/
 #nav-top .filters > li:not(:first-child){text-indent: 5px;}
@@ -35,7 +36,6 @@
 .expediente-content article:hover > .expediente-info{border-color:lightgrey;transition:border .3s}
 .expediente-content > article:hover .btn-rest{opacity: 1; transition: opacity .3s}
 .expediente-content .page-header{padding-bottom: 0;margin-bottom:5px}
-.expediente-content .page-header .nowrap{white-space: nowrap;}
 .expediente-content .page-header .controls{margin-top:8px;text-align:center}
 
 .expediente-info > .btn-rest{position: relative;top: -12px;right: -15px;float: right;opacity: 0; transition: opacity .3s}

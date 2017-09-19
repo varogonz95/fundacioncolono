@@ -91,7 +91,7 @@ app.controller('ExpedientesController',function($scope,$http,$location){
             $scope.estado_selected = $scope.estados[$scope.selected.estado];
 
             $scope.prioridad_selected = $scope.prioridades[$scope.selected.prioridad - 1];
-            $scope.referente_selected = $scope.referentes[getIndex($scope.referentes, $scope.selected.referente)];
+            $scope.referente_selected = $scope.selected.referente;
             break;
 
             //Persona
@@ -150,8 +150,8 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         // scope.ayudas.editable = false;
 
         $scope.selected = scope;
-        console.log($scope.selected);
         showModal.show();
+        console.log($scope.selected);
     };
 
     $scope.delete = function(){

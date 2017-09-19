@@ -14,6 +14,10 @@ class ExpedientesController extends Controller{
     const APROBADO = 1;
     const NO_APROBADO = 2;
 
+    private function newReferente(Referente $r){
+        $r->save();
+    }
+
     public function all(Request $request){
 
         $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
@@ -56,19 +60,43 @@ class ExpedientesController extends Controller{
         $persona->direccion     =   $request['direccion'];
         $persona->contactos     =   $request['contactos'];
 
+        // If new Persona insert is successful,
+        // then...
         if ($persona->save()) {
+
+            // Assign Expediente property values
             $expediente->descripcion = $request['descripcion'];
             $expediente->prioridad   = $request['prioridad'];
             $expediente->estado      = $request['estado'];
 
-            // Associate Expediente with a Referente
-            $expediente->referente()->associate(Referente::find($request['referente']));
+            // Check if Referente is 'Otro'.
+            if ($request['hasReferenteOtro'] === 'on') {
 
-            // Check if Referente is 'Otro' (first id).
-            // If so, then asign $request['referente_otro'] to expediente->referente_otro
-            // $expediente->referente_otro = ($request['referente_otro'])? : ;
+                // Create and save new Referente if its new
+                if ($request['newReferente'] === 'on') {
+                    $referente = new Referente;
+                    $referente->descripcion = $request['referente_otro'];
+                    $referente->save();
+                    // Associate that new Referente to this Expediente
+                    $expediente->referente()->associate($referente);
+                }
+                // If not, then associate Expediente with first Referente (Otro)
+                else {
+                    $expediente->referente_otro = $request['referente_otro'];
+                    $expediente->referente()->associate(Referente::first());
+                }
+
+            }
+            // If not, associate Expediente with a Referente
+            else {
+                $expediente->referente()->associate(Referente::find($request['referente']));
+            }
 
             $status = $persona->expediente()->save($expediente);
+        }
+
+        for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
+            $expediente->ayudas()->attach($request['ayuda'][$i], ['detalle' => $request['ayuda_detalle'][$i]]);
         }
 
         $request->session()->flash('status', [
@@ -78,6 +106,7 @@ class ExpedientesController extends Controller{
             ]);
 
         return redirect('expedientes');
+        // return $request->all();
     }
 
     /**
