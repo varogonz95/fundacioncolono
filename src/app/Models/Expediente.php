@@ -19,7 +19,7 @@ class Expediente extends Model{
     }
 
     public function ayudas(){
-        return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot('detalle');
+        return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot(['detalle','monto']);
     }
 
 }

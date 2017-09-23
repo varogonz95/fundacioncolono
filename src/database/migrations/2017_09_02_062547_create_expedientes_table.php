@@ -22,7 +22,6 @@ class CreateExpedientesTable extends Migration{
             $table->tinyInteger('prioridad');
             $table->tinyInteger('estado');
             $table->text('descripcion');
-            $table->unsignedMediumInteger('monto')->default(0);
             $table->timestamp('fecha_creacion');
             $table->date('pago_inicio')->nullable();
             $table->date('pago_final')->nullable();

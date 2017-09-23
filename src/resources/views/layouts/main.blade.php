@@ -14,10 +14,11 @@
     <link rel="stylesheet" href="{{asset('css/animate.min.css')}}">
 
     <script src="{{asset('js/angularjs/angular.1.6.4.min.js')}}"></script>
-    <script src="{{asset('js/angularjs/angular-route.1.6.4.min.js')}}"></script>
-    <script src="{{asset('js/angularjs/angular-sanitize.1.6.4.min.js')}}"></script>
+    <script src="{{asset('js/angularjs/angular-resource.1.6.4.js')}}"></script>
     <script src="{{asset('js/angularjs-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js')}}"></script>
     <script src="{{asset('app/app.js')}}"></script>
+    <script src="{{asset('app/services.js')}}"></script>
+    <script src="{{asset('app/factory.js')}}"></script>
     @stack('scripts_top')
 
     <title>{{ config('app.name') }}</title>

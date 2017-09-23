@@ -13,7 +13,8 @@ class ReferentesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        return response()->json(Referente::all());
+        $first = Referente::first()->id;
+        return response()->json(Referente::where('id','<>',$first)->orderBy('descripcion')->get());
     }
 
     /**

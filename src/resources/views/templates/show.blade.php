@@ -207,6 +207,8 @@ Cosas que se pueden hacer:
 
           <span>Tipo de ayuda:</span><br>
           <p>@{{ ayuda.descripcion }}</p>
+          <span>Monto:</span><br>
+          <p>@{{ ayuda.pivot.monto }}</p>
           <span>Descripcion:</span><br>
           <p>@{{ ayuda.pivot.detalle }}</p>
 

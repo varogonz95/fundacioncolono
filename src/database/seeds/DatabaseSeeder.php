@@ -10,8 +10,9 @@ class DatabaseSeeder extends Seeder{
      */
     public function run(){
 
-        // $this->call(AyudasSeeder::class);
-        // $ayudas_count = App\Models\Ayuda::count();
+        if(App\Models\Ayuda::count() === 0){
+            $this->call(AyudasSeeder::class);
+        }
 
         factory(App\Models\Expediente::class, 50)->create()
         ->each(function($expediente){
@@ -20,10 +21,17 @@ class DatabaseSeeder extends Seeder{
 
             $ayudas = App\Models\Ayuda::all();
             $ayudas_count = count($ayudas);
-            $number_of_attachs = rand(1,$ayudas_count);
+            $number_of_attachs = $faker->numberBetween(1,$ayudas_count);
 
             for ($i=0; $i < $number_of_attachs; $i++) {
-                $expediente->ayudas()->attach($ayudas[rand(0,$ayudas_count-1)]->id,['detalle' => $faker->text(300)]);
+                $expediente->ayudas()
+                           ->attach(
+                               $ayudas[$faker->numberBetween(0,$ayudas_count-1)]->id,
+                               [
+                                   'detalle' => $faker->text(300),
+                                   'monto' => $faker->numberBetween(10000, 1000000)
+                               ]
+                           );
             }
 
         });

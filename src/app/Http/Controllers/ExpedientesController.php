@@ -56,7 +56,7 @@ class ExpedientesController extends Controller{
         $persona->nombre        =   $request['nombre'];
         $persona->apellidos     =   $request['apellidos'];
         $persona->telefonos     =   $request['telefonos'];
-        $persona->ubicacion     =   "7/2/1";
+        $persona->ubicacion     =   "{$request['provincia']}/{$request['canton']}/{$request['distrito']}";
         $persona->direccion     =   $request['direccion'];
         $persona->contactos     =   $request['contactos'];
 
@@ -70,10 +70,12 @@ class ExpedientesController extends Controller{
             $expediente->estado      = $request['estado'];
 
             // Check if Referente is 'Otro'.
-            if ($request['hasReferenteOtro'] === 'on') {
+            // filter hasReferente input value to boolean
+            if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)) {
 
                 // Create and save new Referente if its new
-                if ($request['newReferente'] === 'on') {
+                // filter hasReferente input value to boolean                
+                if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)) {
                     $referente = new Referente;
                     $referente->descripcion = $request['referente_otro'];
                     $referente->save();
@@ -96,7 +98,10 @@ class ExpedientesController extends Controller{
         }
 
         for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
-            $expediente->ayudas()->attach($request['ayuda'][$i], ['detalle' => $request['ayuda_detalle'][$i]]);
+            $expediente->ayudas()->attach($request['ayuda'][$i], [
+                'detalle' => $request['ayuda_detalle'][$i],
+                'monto' => $request['ayuda_monto'][$i]
+            ]);
         }
 
         $request->session()->flash('status', [
