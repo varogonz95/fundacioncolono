@@ -22,7 +22,8 @@ app.controller('CreateExpedienteController', function($scope, Referente, Ayuda, 
     $scope.estados = [
         {value:0, name:'En valoración (por defecto)'},
         {value:1, name:'Aprobado'},
-        {value:2, name:'No aprobado'}
+        {value:2, name:'No aprobado'},
+        {value:3, name:'Pendiente'}
     ];
     $scope.estado = $scope.estados[0];
 

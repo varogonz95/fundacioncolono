@@ -177,6 +177,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Custom Service Providers...
+         */
+        App\Providers\FilterServiceProvider::class,
     ],
 
     /*
@@ -225,6 +229,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        /*
+         * Custom Aliases...
+         */
+        'Filter' => App\Facades\Filter::class,        
 
     ],
 

@@ -2,7 +2,7 @@
 /*
 *   Controller for entity 'Expediente'
 */
-app.controller('ExpedientesController',function($scope,$http,$location){
+app.controller('ExpedientesController',function($scope,$http,Region){
 
     var showModal = $('#show_modal').animatedModal({
         onBeforeShow: function(){$('body').css('overflow-y','hidden');},
@@ -42,6 +42,10 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         {id:3, name:'Alta'}
     ];
 
+    $scope.provincias = Region.getProvincias();
+    $scope.cantones = [];
+    $scope.distritos = [];
+
     $scope.selected = {};
     $scope.update = {
         persona:{},
@@ -69,10 +73,26 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         ayuda: true
     }
 
-    $scope.index = function(page = 1) {
+    $scope.test = function(val) {
+        console.log(val);
+    }
+
+    $scope.index = function(page = 1, params = {}) {
         $scope.page = (page < 1)? 1 : page;
 
-        $http.get('./expedientes/all?page='+page+'&by='+$scope.sort.by+'&order='+($scope.sort.order? 'asc' : 'desc' )).then(
+        paramsString = '';
+
+        for (var key in params) {
+            paramsString += '&'+key+'='+params[key];
+        }
+
+        $http.get(
+            './expedientes/all?'
+            +'page='+page
+            +'&by='+$scope.sort.by
+            +'&order='+($scope.sort.order? 'asc' : 'desc' )
+            +paramsString
+        ).then(
             function(response){
                 $scope.expedientes = response.data.expedientes;
                 $scope.total = response.data.total;
@@ -128,18 +148,18 @@ app.controller('ExpedientesController',function($scope,$http,$location){
     $scope.updatePersona = function(obj){
 
         console.log('Updating persona with data:');
-        console.log(obj);
+        console.log(jQueryToJson($('#selectedpersona'), 'name'));
 
-        $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
-            function(response){
-                if(response.data.status){
-                    $scope.selected.persona = copy($scope.update.persona);
-                    $scope.selected.persona.editable = false;
-                }
-                else { alert(response.data.msg); }
-            },
-            function(error){alert(error.data.message);}
-        );
+        // $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
+        //     function(response){
+        //         if(response.data.status){
+        //             $scope.selected.persona = copy($scope.update.persona);
+        //             $scope.selected.persona.editable = false;
+        //         }
+        //         else { alert(response.data.msg); }
+        //     },
+        //     function(error){alert(error.data.message);}
+        // );
     };
 
     $scope.show = function(scope){
@@ -148,6 +168,17 @@ app.controller('ExpedientesController',function($scope,$http,$location){
         scope.isSelected = true;
         scope.persona.editable = false;
         // scope.ayudas.editable = false;
+
+        var regions = scope.persona.ubicacion.split('/');
+        scope.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
+        Region.getCantones(scope.persona.provincia.cod).then(function(response){
+            $scope.cantones = Region.toList(response.data);
+            scope.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
+            Region.getDistritos(scope.persona.provincia.cod, scope.persona.canton.cod).then(function(response){
+                $scope.distritos = Region.toList(response.data);
+                scope.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
+            });
+        });
 
         $scope.selected = scope;
         showModal.show();
@@ -175,6 +206,21 @@ app.controller('ExpedientesController',function($scope,$http,$location){
             );
         }
     };
+
+    // Update Canton SELECT
+    $scope.updateCantones = function(p){
+        $scope.distritos = [];
+        $scope.update.persona.canton = null;
+
+        Region.getCantones(p)
+        .then(function(response){ $scope.cantones = Region.toList(response.data);});
+    };
+
+    // Update Distrito SELECT
+    $scope.updateDistritos = function(p, c){
+        Region.getDistritos(p, c)
+        .then(function(response){ $scope.distritos = Region.toList(response.data); });
+    }
 
     init();
 

@@ -76,25 +76,25 @@ Cosas que se pueden hacer:
 
             <div class="expediente-info-item">
                 <label>Ubicación: </label>
-                <span ng-hide="selected.persona.editable">@{{ selected.persona.ubicacion }}</span>
+                <span ng-hide="selected.persona.editable">
+                    @{{
+                        selected.persona.provincia.name + ', '
+                        + selected.persona.canton.name + ', '
+                        + selected.persona.distrito.name
+                    }}
+                </span>
                 <div class="form-group" ng-if="selected.persona.editable">
                     <p class="help-block">Provincia:</p>
-                    <select class="form-control" name="provincia" ng-model="update.persona.provincia">
-                        <option value="" selected disabled>-Seleccionar provincia-</option>
-                        <option value="1">San Jośe</option>
-                        <option value="2">Cartago</option>
-                        <option value="3">Alajuela</option>
-                        <option value="4">Heredia</option>
+                    <select class="form-control" name="provincia" ng-model="update.persona.provincia" ng-options="p as p.name for p in provincias track by p.cod" ng-change="updateCantones(update.persona.provincia.cod)" convert-to-number>
+                        <option value="" disabled>-Seleccionar provincia-</option>
                     </select>
-
-                    <p class="help-block">Cantón:</p>
-                    <select class="form-control" name="canton" ng-model="update.canton">
-                        <option value="" selected disabled>-Seleccionar distrito-</option>
+                    <p class="help-block">Cantón</p>
+                    <select class="form-control" name="canton" ng-model="update.persona.canton" ng-options="c as c.name for c in cantones track by c.cod" ng-change="updateDistritos(update.persona.provincia.cod, update.persona.canton.cod)" ng-disabled="cantones.length === 0" convert-to-number>
+                        <option value="" disabled>-Seleccionar cantón-</option>
                     </select>
-
-                    <p class="help-block">Distrito:</p>
-                    <select class="form-control" name="distrito" ng-model="update.distrito">
-                        <option value="" selected disabled>-Seleccionar cantón-</option>
+                    <p class="help-block">Distrito</p>
+                    <select class="form-control" name="distrito" ng-model="update.persona.distrito" ng-options="d as d.name for d in distritos track by d.cod" ng-disabled="distritos.length === 0" convert-to-number>
+                        <option value="" disabled>-Seleccionar distrito-</option>
                     </select>
                 </div>
             </div>

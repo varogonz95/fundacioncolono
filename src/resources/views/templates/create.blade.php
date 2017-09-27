@@ -55,13 +55,6 @@
                         <p class="help-block">Provincia</p>
                         <select class="form-control" name="provincia" ng-model="provincia" ng-options="p.cod as p.name for p in provincias track by p.cod" ng-change="updateCantones(provincia)" convert-to-number>
                             <option value="" disabled>-Seleccionar provincia-</option>
-                            {{-- <option value="1">San José</option>
-                            <option value="2">Alajuela</option>
-                            <option value="3">Cartago</option>
-                            <option value="4">Heredia</option>
-                            <option value="5">Guanacaste</option>
-                            <option value="6">Puntarenas</option>
-                            <option value="7">Limón</option> --}}
                         </select>
                         <p class="help-block">Cantón</p>
                         <select class="form-control" name="canton" ng-model="canton" ng-options="c.cod as c.name for c in cantones track by c.cod" ng-change="updateDistritos(provincia, canton)" ng-disabled="cantones.length === 0">
@@ -104,12 +97,20 @@
                     <label class="control-label col-sm-4" for="referente">Referente:</label>
 
                     <div class="col-sm-8">
-                        <label style="font-weight:100">Otro referente: <input type="checkbox" name="hasReferenteOtro" ng-model="hasReferenteOtro" ng-init="hasReferenteOtro = false"></label>
+                        <label style="font-weight:100">
+                            Otro referente:
+                            <input type="checkbox" ng-model="hasReferenteOtro" ng-init="hasReferenteOtro = false">
+                            <input type="hidden" name="hasReferenteOtro" ng-value="hasReferenteOtro">
+                        </label>
                         <ng-show  ng-show="hasReferenteOtro">
                             <input class="form-control" type="text" name="referente_otro" placeholder="Nombre del referente" ng-model="referente_otro">
-                            <label style="font-weight:100;font-size:12px;text-indent:1.5em;">Agregar a opciones: <input type="checkbox" name="newReferente" ng-model="newReferente" ng-init="newReferente = false"></label>
+                            <label style="font-weight:100;font-size:12px;text-indent:1.5em;">
+                                Agregar a opciones:
+                                <input type="checkbox" ng-model="newReferente" ng-init="newReferente = false">
+                                <input type="hidden" name="newReferente" ng-value="newReferente">
+                            </label>
                         </ng-show>
-                        
+
                         <input type="text" name="referente" placeholder="-Seleccione un referente-" autocomplete="off" ng-model="referente" ng-hide="hasReferenteOtro" uib-typeahead="r.id as r.descripcion for r in referentes | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, referentes, 'id', 'descripcion')">
                         <input type="hidden" name="referente" ng-value="hasReferenteOtro? 1 : referente">
                         {{-- LEGACY INPUT,  BY UI BOOTSTRAP TYPEAHEAD DIRECTIVE --}}

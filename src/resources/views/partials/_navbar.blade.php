@@ -20,7 +20,7 @@
 
             <ul class="nav navbar-nav">
                 {{-- <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li> --}}
-                <li class=""><a href="{{ route('expedientes.index') }}">Expedientes/Casos</a></li>
+                <li class="{{ \Request::is('expedientes*')? 'active' : '' }}"><a href="{{ route('expedientes.index') }}">Expedientes/Casos</a></li>
                 <li class=""><a href="#">Inspectores</a></li>
                 <li class=""><a href="#">Alianzas</a></li>
                 <li class=""><a href="#">Mantenimiento</a></li>

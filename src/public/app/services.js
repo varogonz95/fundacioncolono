@@ -12,13 +12,13 @@ app.service('Typeahead', function(){
 app.service('Region', function($http){
 
     var provincias = [
-        {cod: 1, name: 'San José'},
-        {cod: 2, name: 'Alajuela'},
-        {cod: 3, name: 'Cartago'},
-        {cod: 4, name: 'Heredia'},
-        {cod: 5, name: 'Guanacaste'},
-        {cod: 6, name: 'Puntarenas'},
-        {cod: 7, name: 'Limón'}
+        {cod: '1', name: 'San José'},
+        {cod: '2', name: 'Alajuela'},
+        {cod: '3', name: 'Cartago'},
+        {cod: '4', name: 'Heredia'},
+        {cod: '5', name: 'Guanacaste'},
+        {cod: '6', name: 'Puntarenas'},
+        {cod: '7', name: 'Limón'}
     ];
 
     this.getProvincias = function() {
@@ -32,6 +32,14 @@ app.service('Region', function($http){
     this.getDistritos = function(provincia, canton) {
         return $http.get('https://ubicaciones.paginasweb.cr/provincia/' + provincia + '/canton/' + canton + '/distritos.json');
     };
+
+    this.find = function(array, key, value) {
+        for (var i = 0; i < array.length; i++) {
+            if(array[i][key] === value){
+                return array[i];
+            }
+        }
+    }
 
     this.toList = function(data) {
         var list = [];

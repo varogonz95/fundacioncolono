@@ -74,7 +74,7 @@ class PersonasController extends Controller
         $persona->nombre    = $request['nombre'];
         $persona->apellidos = $request['apellidos'];
         $persona->telefonos = $request['telefonos'];
-        $persona->ubicacion = "7/2/1";
+        $persona->ubicacion = "{$request['provincia']}/{$request['canton']}/{$request['distrito']}";
         $persona->direccion = $request['direccion'];
         $persona->contactos = $request['contactos'];
 

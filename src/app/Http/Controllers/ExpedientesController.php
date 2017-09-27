@@ -7,22 +7,33 @@ use App\Models\Persona;
 use App\Models\Referente;
 
 use Illuminate\Http\Request;
+// use Filter;
+use DB;
 
-class ExpedientesController extends Controller{
+class ExpedientesController extends Controller
+{
 
     const EN_VALORACION = 0;
     const APROBADO = 1;
     const NO_APROBADO = 2;
 
-    private function newReferente(Referente $r){
-        $r->save();
+    private $items;
+    private $total;
+    private $lastPage;
+
+    public function __construct()
+    {
+        $this->items = [];
+        $this->total = 0;
+        $this->lastPage = 0;
     }
 
-    public function all(Request $request){
+    public function all(Request $request)
+    {
 
         $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
 
-        $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
+        $request->session()->put('sort', [ 'by' => $request['by'], 'order' => $request['order'] ]);
 
         $expedientes = Expediente::orderBy($by, $request['order'])->paginate(16);
 
@@ -32,6 +43,8 @@ class ExpedientesController extends Controller{
             $e->ayudas;
         }
 
+        // return Filter::test(Persona::class);
+
         return response()->json([
             'expedientes' => $expedientes->items(),
             'total' => $expedientes->total(),
@@ -39,19 +52,22 @@ class ExpedientesController extends Controller{
         ]);
     }
 
-    public function index(){
+    public function index()
+    {
         return view('expedientes');
     }
 
-    public function create(){
+    public function create()
+    {
         return view('templates.create');
     }
 
     public function store(Request $request){
 
-        $expediente = new Expediente;
-        $persona = new Persona;
+        DB::transaction(function () {});
 
+        $persona = new Persona;
+        // Assign Persona property values
         $persona->cedula        =   $request['cedula'];
         $persona->nombre        =   $request['nombre'];
         $persona->apellidos     =   $request['apellidos'];
@@ -60,43 +76,47 @@ class ExpedientesController extends Controller{
         $persona->direccion     =   $request['direccion'];
         $persona->contactos     =   $request['contactos'];
 
+        $expediente = new Expediente;  
+        // Assign Expediente property values
+        $expediente->descripcion = $request['descripcion'];
+        $expediente->prioridad   = $request['prioridad'];
+        $expediente->estado      = $request['estado'];
+
         // If new Persona insert is successful,
         // then...
-        if ($persona->save()) {
 
-            // Assign Expediente property values
-            $expediente->descripcion = $request['descripcion'];
-            $expediente->prioridad   = $request['prioridad'];
-            $expediente->estado      = $request['estado'];
-
-            // Check if Referente is 'Otro'.
+        $persona->save();
+        
+        // Check if Referente is 'Otro'.
+        // filter hasReferente input value to boolean
+        if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)) {
+            // Create and save new Referente if its new
             // filter hasReferente input value to boolean
-            if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)) {
-
-                // Create and save new Referente if its new
-                // filter hasReferente input value to boolean                
-                if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)) {
-                    $referente = new Referente;
-                    $referente->descripcion = $request['referente_otro'];
-                    $referente->save();
-                    // Associate that new Referente to this Expediente
-                    $expediente->referente()->associate($referente);
-                }
-                // If not, then associate Expediente with first Referente (Otro)
-                else {
-                    $expediente->referente_otro = $request['referente_otro'];
-                    $expediente->referente()->associate(Referente::first());
-                }
-
-            }
-            // If not, associate Expediente with a Referente
+            if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)) {
+                $referente = new Referente(['descripcion' => $request['referente_otro']]);
+                $referente->save();
+                // Associate that new Referente to this Expediente
+                $expediente->referente()->associate($referente);
+            } 
+            // If not, then associate Expediente with first Referente (Otro)
             else {
-                $expediente->referente()->associate(Referente::find($request['referente']));
+                $expediente->referente_otro = $request['referente_otro'];
+                $expediente->referente()->associate(Referente::first());
             }
-
-            $status = $persona->expediente()->save($expediente);
+        } 
+        // If not, associate Expediente with a Referente
+        else {
+            $expediente->referente()->associate(
+                is_null($request['referente'])?
+                    Referente::first()->id :
+                    Referente::find($request['referente'])
+                );
         }
 
+        // Save Persona and Expediente altogether
+        $status = $persona->expediente()->save($expediente);
+
+        // Loop through input ayuda and attaching them to Expediente
         for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
             $expediente->ayudas()->attach($request['ayuda'][$i], [
                 'detalle' => $request['ayuda_detalle'][$i],
@@ -104,6 +124,7 @@ class ExpedientesController extends Controller{
             ]);
         }
 
+        // Flash whole operation status
         $request->session()->flash('status', [
                 'type' => $status? 'success' : 'danger',
                 'title' => $status? 'Éxito' : 'Error',
@@ -120,7 +141,8 @@ class ExpedientesController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
+    public function show($id)
+    {
         //
     }
 
@@ -142,7 +164,8 @@ class ExpedientesController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
         $expediente = Expediente::find($id);
 
@@ -165,7 +188,8 @@ class ExpedientesController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
 
         // delete Persona, so it can delete in cascade to Expediente
         $status = Persona::destroy(Expediente::find($id)->persona_fk) > 0;
