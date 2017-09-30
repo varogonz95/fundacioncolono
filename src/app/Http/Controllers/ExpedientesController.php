@@ -28,22 +28,33 @@ class ExpedientesController extends Controller
         $this->lastPage = 0;
     }
 
+    public function test()
+    {
+        // TEST FILTER FACADE
+    }
+
     public function all(Request $request)
     {
 
+        $expedientes = NULL;
+        
         $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
 
         $request->session()->put('sort', [ 'by' => $request['by'], 'order' => $request['order'] ]);
 
-        $expedientes = Expediente::orderBy($by, $request['order'])->paginate(16);
+        if($request->has('search')){
+            $expedientes = Expediente::where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
+        }
+        else {
+            $expedientes = Expediente::orderBy($by, $request['order'])->paginate(16);
+        }
+
 
         foreach ($expedientes as $e) {
             $e->persona;
             $e->referente;
             $e->ayudas;
         }
-
-        // return Filter::test(Persona::class);
 
         return response()->json([
             'expedientes' => $expedientes->items(),

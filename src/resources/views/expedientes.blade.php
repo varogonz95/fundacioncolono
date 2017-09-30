@@ -33,12 +33,19 @@
 
         <div class="col-lg-12 controls">
 
-            <div class="col-lg-4 col-lg-offset-4">
+            <div class="col-lg-6 col-lg-offset-3">
                 <form ng-submit="index(1,{search: search})">
                     <div class="form-group has-feedback">
                         <input type="text" class="form-control" placeholder="Búsqueda..." ng-model="search" ng-change="index(1,{search:search})"/>
                         <span class="glyphicon glyphicon-search form-control-feedback" style="color:#aaa"></span>
                     </div>
+                    <p class="help-block">
+                        <span class="glyphicon glyphicon-info-sign text-info"></span>
+                        <small>
+                            <strong>Mensaje del desarrollador: </strong>
+                            Por ahora sólo se pueden buscar casos por la cédula de la persona
+                        </small>
+                    </p>
                 </form>
             </div>
 
@@ -51,7 +58,7 @@
             <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th ng-show="columns.cedula">Cédula</th>
+                        <th ng-show="columns.cedula"><button type="button" class="btn btn-table-header @{{ sort.order? 'asc' : 'desc' }}" title="Ordenamiento @{{ sort.order? 'ascendente' : 'descendente' }}" ng-click="doSort('cedula')">Cédula <span class="glyphicon glyphicon-menu-down"></span></button></th>
                         <th ng-show="columns.nombre">Nombre</th>
                         <th ng-show="columns.apellidos">Apellidos</th>
                         <th ng-show="columns.referente">Referente</th>
@@ -75,22 +82,9 @@
                             {{--<a href="#">@{{ e.referente.descripcion }}</a>--}}
                         </td>
                     </tr>
-                    {{-- @foreach ($expedientes as $e) --}}
-                        {{-- <tr>
-                            <td>{{ $e->persona->cedula }}</td>
-                            <td>{{ $e->persona->nombre }}</td>
-                            <td>{{ $e->persona->apellidos }}</td> --}}
-                            {{-- <td>{{ $e->persona->cedula }}</td> --}}
-                            {{-- @if ($e->referente->id === 1) --}}
-                                {{-- <td>{{ $e->referente_otro }}</td> --}}
-                            {{-- @else --}}
-                                {{-- <td><a href="#">{{ $e->referente->descripcion }}</a></td> --}}
-                            {{-- @endif --}}
-                        {{-- </tr> --}}
-                    {{-- @endforeach --}}
                 </tbody>
             </table>
-            <h1 class="text-center" ng-show="expedientes.length === 0">Cargando casos...</h1>
+            <!-- <h1 class="text-center" ng-show="expedientes.length === 0">Cargando casos...</h1> -->
         </div>
 
         <div class="text-center col-md-12">

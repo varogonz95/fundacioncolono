@@ -2,7 +2,7 @@
 /*
 *   Controller for entity 'Expediente'
 */
-app.controller('ExpedientesController',function($scope,$http,Region){
+app.controller('ExpedientesController',function($scope, $http, Region, Referente){
 
     var showModal = $('#show_modal').animatedModal({
         onBeforeShow: function(){$('body').css('overflow-y','hidden');},
@@ -10,12 +10,6 @@ app.controller('ExpedientesController',function($scope,$http,Region){
     }),
 
     // Built-in functions
-    getReferentes = function(){
-        $http.get('./referentes').then(
-            function(response){ $scope.referentes = response.data; },
-            function(error){}
-        );
-    },
     getAyudas = function(){
         $http.get('./ayudas').then(
             function(response){ $scope.ayudas = response.data; },
@@ -24,12 +18,12 @@ app.controller('ExpedientesController',function($scope,$http,Region){
     },
     init = function(){
         getAyudas();
-        getReferentes();
+        // getReferentes();
         $scope.index();
     };
 
     $scope.ayudas = [];
-    $scope.referentes = [];
+    $scope.referentes = Referente().query();
     $scope.referente_selected = {};
     $scope.estados = [
         {id:0, name:'En valoración (por defecto)'},
@@ -45,7 +39,7 @@ app.controller('ExpedientesController',function($scope,$http,Region){
     $scope.provincias = Region.getProvincias();
     $scope.cantones = [];
     $scope.distritos = [];
-
+    
     $scope.selected = {};
     $scope.update = {
         persona:{},
@@ -64,6 +58,13 @@ app.controller('ExpedientesController',function($scope,$http,Region){
         order:true,
         filter: function(){}
     };
+    // Not supported for Location yet
+    $scope.doSort = function(by){
+        $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
+        $scope.sort.by=by;
+    
+        $scope.index();
+    };
 
     $scope.columns = {
         cedula: true,
@@ -78,6 +79,7 @@ app.controller('ExpedientesController',function($scope,$http,Region){
     }
 
     $scope.index = function(page = 1, params = {}) {
+
         $scope.page = (page < 1)? 1 : page;
 
         paramsString = '';
