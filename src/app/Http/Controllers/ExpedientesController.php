@@ -7,7 +7,7 @@ use App\Models\Persona;
 use App\Models\Referente;
 
 use Illuminate\Http\Request;
-// use Filter;
+use Filter;
 use DB;
 
 class ExpedientesController extends Controller
@@ -30,7 +30,12 @@ class ExpedientesController extends Controller
 
     public function test()
     {
-        // TEST FILTER FACADE
+        return Filter::test(
+            Persona::where('nombre', 'like', 'E%')->get(),
+            [
+                'expediente<-persona',
+            ]
+        );
     }
 
     public function all(Request $request)
@@ -40,7 +45,7 @@ class ExpedientesController extends Controller
         
         $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
 
-        $request->session()->put('sort', [ 'by' => $request['by'], 'order' => $request['order'] ]);
+        $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
 
         if($request->has('search')){
             $expedientes = Expediente::where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
@@ -54,6 +59,12 @@ class ExpedientesController extends Controller
             $e->persona;
             $e->referente;
             $e->ayudas;
+
+            $e->monto_total = 0;
+            
+            foreach ($e->ayudas as $ayuda) {
+                $e->monto_total += $ayuda->monto;
+            }
         }
 
         return response()->json([
@@ -65,12 +76,12 @@ class ExpedientesController extends Controller
 
     public function index()
     {
-        return view('expedientes');
+        return view('expediente.index');
     }
 
     public function create()
     {
-        return view('templates.create');
+        return view('expediente.create');
     }
 
     public function store(Request $request){
@@ -146,35 +157,16 @@ class ExpedientesController extends Controller
         // return $request->all();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
 
@@ -193,12 +185,6 @@ class ExpedientesController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
 

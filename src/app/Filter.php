@@ -5,6 +5,7 @@ namespace App;
 class Filter{
 
     private $separator = '|';
+    private $has = '<-';
 
     /*
     * Descripcion: Recibe el modelo Eloquent que se quiere filtar,
@@ -22,39 +23,24 @@ class Filter{
     */
 
     // CURRENTLY WORKING ON ONE-TO-ONE RELATIONSHIPS
-    public function oneToOne($model_class, $expression, $as = [])
+    public function test($model, $as = [])
     {
+
         $data = [];
 
-        // Get filtering terms
-        $term = $this->trim_expression(explode($this->separator, $expression));
-
-        // process query
-        $items = $model_class::where($term[0], $term[1], $term[2])->get();
-
-        foreach ($items as $item) {
+        foreach ($model as $m) {
             
             foreach ($as as $key => $value) {
-                $tmp = $item->$key;
-
-                
-                
-                $data[] = $tmp;
+                // $m->{$as[$i]};
+                $data[] = gettype($value);
             }
+
         }
-        
+
         return $data;
     }
 
-    private function recursion($model, $key, $value){
-        if(gettype($value) === 'array'){
-            return recursion();
-        }
-        else {
-            $model->$value;
-            return $model;
-        }
-
+    private function recursion($key, $value){
     }
 
     private function trim_expression($arr){

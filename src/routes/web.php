@@ -19,9 +19,7 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('test', function(){
-    return Filter::test();
-});
+Route::get('test','ExpedientesController@test');
 
 Route::middleware(['auth'])->group(function(){
 

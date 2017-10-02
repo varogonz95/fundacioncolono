@@ -1,15 +1,3 @@
-{{--
-Cosas que se pueden hacer:
-
-    1) Cambiar los datos de la persona
-    2) Cambiar los datos del expediente
-        2.1) Cuando se cambia el estado a aprobado, se pueden asignar lo meses de ayuda (que a su vez se pueden modificar)
-    3) Eliminar ayudas
-        3.1) No se permiten ayudas repetidas
-        3.2) Solo se permite un mínimo de 1 ayuda relacionada
-    4) Cambiar las recomendaciones de las ayudas
-    5) Eliminar completamente el expediente
---}}
 
 @component('components.animatedModal')
     @slot('id')
@@ -154,12 +142,15 @@ Cosas que se pueden hacer:
                       <input class="form-control" type="text" name="referente_otro" placeholder="Referente" ng-model="update.caso.referente_otro" value="@{{ selected.referente_otro }}" ng-show="selected.hasReferenteOtro">
                       <label style="font-weight:100;font-size:12px;text-indent:1.5em;" ng-show="selected.hasReferenteOtro">Agregar a opciones: <input type="checkbox" name="newReferente"></label>
                       <select class="form-control" name="referente" ng-if="!selected.hasReferenteOtro" ng-model="referente_selected" ng-options="r.descripcion for r in referentes track by r.id"></select>
+                      <!-- <input type="text" name="referente" placeholder="-Seleccione un referente-" autocomplete="off" ng-model="referente_selected" uib-typeahead="r.id as r.descripcion for r in referentes | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" typeahead-append-to="null" typeahead-input-formatter="formatter($model, referentes, 'id', 'descripcion')"> -->
                   </div>
               </div>
 
               <div class="expediente-info-item">
                   <label>Prioridad: </label>
-                  <span class="label label-@{{ (selected.prioridad === 1)? 'info' : (selected.prioridad === 2)? 'warning' : (selected.prioridad === 3)? 'danger' : '' }}" ng-hide="selected.editable">@{{ (selected.prioridad === 1)? 'Baja' : (selected.prioridad === 2)? 'Media' : (selected.prioridad === 3)? 'Alta' : '' }}</span>
+                  <span class="label label-@{{ (selected.prioridad === 1)? 'info' : (selected.prioridad === 2)? 'warning' : (selected.prioridad === 3)? 'danger' : '' }}" ng-hide="selected.editable">
+                      @{{ (selected.prioridad === 1)? 'Baja' : (selected.prioridad === 2)? 'Media' : (selected.prioridad === 3)? 'Alta' : '' }}
+                    </span>
                   <div class="form-group" ng-if="selected.editable">
                       <select class="form-control" name="prioridad" ng-model="prioridad_selected" ng-options="o.name for o in prioridades track by o.id" convert-to-number></select>
                   </div>

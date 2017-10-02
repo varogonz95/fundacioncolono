@@ -10,13 +10,6 @@
 
             {{ csrf_field() }}
 
-            {{-- FIX THIS REDIRECT --}}
-            {{--  @if (URL::previous() !== route('expedientes.index'))
-                <input type="hidden" name="redirects_to" value="{{ URL::previous() }}">
-            @else
-                <input type="hidden" name="redirects_to" value="{{ route('expedientes.index') }}">
-            @endif  --}}
-
             <fieldset class="col-md-5">
                 <legend>Detalles de la persona</legend>
 
@@ -167,7 +160,7 @@
 
                             <p class="help-block" ng-show="ayudas_selected[$index].$invalid"><small class="text-danger">Cada tipo de ayuda debe ser <strong><u>único</u></strong></small></p>
 
-                            <button type="button" class="btn btn-primary" ng-click="removeAyuda(as)" ng-if="!$first">remove</button>
+                            <button type="button" class="btn btn-danger" ng-click="removeAyuda(as)" ng-if="!$first"><span class="glyphicon glyphicon-ban-circle"></span> Quitar</button>
                         </div>
                     </div>
 

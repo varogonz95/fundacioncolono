@@ -2,27 +2,14 @@
 /*
 *   Controller for entity 'Expediente'
 */
-app.controller('ExpedientesController',function($scope, $http, Region, Referente){
+app.controller('ExpedientesController',function($scope, $http, Referente, Ayuda, Region){
 
     var showModal = $('#show_modal').animatedModal({
         onBeforeShow: function(){$('body').css('overflow-y','hidden');},
         onBeforeClose: function(){$('body').css('overflow-y','auto');},
-    }),
+    });
 
-    // Built-in functions
-    getAyudas = function(){
-        $http.get('./ayudas').then(
-            function(response){ $scope.ayudas = response.data; },
-            function(error){}
-        );
-    },
-    init = function(){
-        getAyudas();
-        // getReferentes();
-        $scope.index();
-    };
-
-    $scope.ayudas = [];
+    $scope.ayudas = Ayuda().query();
     $scope.referentes = Referente().query();
     $scope.referente_selected = {};
     $scope.estados = [
@@ -70,6 +57,7 @@ app.controller('ExpedientesController',function($scope, $http, Region, Referente
         cedula: true,
         nombre: true,
         apellidos: true,
+        prioridad: true,
         referente: true,
         ayuda: true
     }
@@ -136,53 +124,58 @@ app.controller('ExpedientesController',function($scope, $http, Region, Referente
         console.log(obj);
         // console.log(jQueryToJson($('#selectedexpediente'), 'name'));
 
-        // $http.put('./expedientes/'+$scope.selected.id, obj).then(
-        //     function(response){
-        //         if(response.data.status){
-        //             $scope.selected.editable = false;
-        //         }
-        //         else { alert(response.data.msg); }
-        //     },
-        //     function(error){ alert(error.data.message); }
-        // );
+        $http.put('./expedientes/'+$scope.selected.id, obj).then(
+            function(response){
+                if(response.data.status){
+                    $scope.selected = copy($scope.update.caso);
+                    $scope.selected.editable = false;
+                }
+                else { alert(response.data.msg); }
+            },
+            function(error){ alert(error.data.message); }
+        );
     };
 
     $scope.updatePersona = function(obj){
 
         console.log('Updating persona with data:');
-        console.log(jQueryToJson($('#selectedpersona'), 'name'));
+        console.log(obj);
 
-        // $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
-        //     function(response){
-        //         if(response.data.status){
-        //             $scope.selected.persona = copy($scope.update.persona);
-        //             $scope.selected.persona.editable = false;
-        //         }
-        //         else { alert(response.data.msg); }
-        //     },
-        //     function(error){alert(error.data.message);}
-        // );
+        $http.put('./personas/'+$scope.selected.persona.cedula, obj).then(
+            function(response){
+                if(response.data.status){
+                    $scope.selected.persona = copy($scope.update.persona);
+                    $scope.selected.persona.editable = false;
+                }
+                else { alert(response.data.msg); }
+            },
+            function(error){alert(error.data.message);}
+        );
     };
 
-    $scope.show = function(scope){
-        scope.editable = false;
+    $scope.show = function(obj){
+        obj.editable = false;
+        obj.isSelected = true;
+        obj.persona.editable = false;
         $scope.selected.isSelected = false;
-        scope.isSelected = true;
-        scope.persona.editable = false;
         // scope.ayudas.editable = false;
 
-        var regions = scope.persona.ubicacion.split('/');
-        scope.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
-        Region.getCantones(scope.persona.provincia.cod).then(function(response){
+        var regions = obj.persona.ubicacion.split('/');
+
+        // Get Provincia from list and set to persona
+        obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
+
+        Region.getCantones(obj.persona.provincia.cod).then(function(response){
             $scope.cantones = Region.toList(response.data);
-            scope.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
-            Region.getDistritos(scope.persona.provincia.cod, scope.persona.canton.cod).then(function(response){
+            obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
+            
+            Region.getDistritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function(response){
                 $scope.distritos = Region.toList(response.data);
-                scope.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
+                obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
             });
         });
 
-        $scope.selected = scope;
+        $scope.selected = obj;
         showModal.show();
         console.log($scope.selected);
     };
@@ -224,7 +217,7 @@ app.controller('ExpedientesController',function($scope, $http, Region, Referente
         .then(function(response){ $scope.distritos = Region.toList(response.data); });
     }
 
-    init();
+    $scope.index();
 
     // var Content = $scope.content,
     // Persist = $scope.persist,

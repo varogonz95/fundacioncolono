@@ -23,10 +23,14 @@ app.provider('AppResource', function() {
             extras = this.extras || '',
 
 
-        getUrl = function() { return protocol+'://'+host + ':' +port+'/'+extras; };
+        getUrl = function () { return protocol + '://' + host + ':' + port + '/' + extras; },
+        extend = function() {
+
+        };
 
         return {
-            getUrl : getUrl
+            getUrl : getUrl,
+            extends : extend
         };
     }
 });

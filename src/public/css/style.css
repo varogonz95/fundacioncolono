@@ -11,12 +11,11 @@
 
 .controls{margin-top:4px; margin-bottom:10px}
 .noresize{resize: none;}
-.nowrap{white-space: nowrap;}
+/* .nowrap{white-space: nowrap;} */
 
 /*#nav-top{font-family: 'Raleway'}*/
 #nav-top .filters > li:not(:first-child){text-indent: 5px;}
 #nav-top .filters > li:not(:first-child) input{margin: 4px 10px}
-
 #show_modal{display: none;height: calc(100% - 50px)}
 
 .btn-rest{border:none;background-color:transparent;}
@@ -28,10 +27,10 @@
 .btn.btn-table-header > span{margin-left: 8px; transition: transform .5s}
 .btn.btn-table-header.desc > span{transform: rotateX(180deg)}
 
-.record-status{margin: 0 10px;border-radius:50%;height: 10px;width: 10px;display: inline-block;vertical-align: middle}
-.record-status.record-status-hi{background-color: #D9534F}
-.record-status.record-status-mid{background-color: #F0AD4E}
-.record-status.record-status-low{background-color: #5CB85C}
+.status{margin: 0 10px;border-radius:50%;height: 10px;width: 10px;display: inline-block;vertical-align: middle}
+.status-hi{background-color: #D9534F}
+.status-mid{background-color: #F0AD4E}
+.status-low{background-color: #5CB85C}
 
 .expediente-content{padding: 1em 0}
 .expediente-content article:hover > .expediente-info{border-color:lightgrey;transition:border .3s}
@@ -40,9 +39,9 @@
 .expediente-content .page-header .controls{margin-top:8px;text-align:center}
 
 .expediente-info > .btn-rest{position: relative;top: -12px;right: -15px;float: right;opacity: 0; transition: opacity .3s}
-/*.expediente-info .controls{padding-bottom: .5em;}*/
 .expediente-content .editing .btn-group{opacity: 1}
 .expediente-content .editing > .expediente-info{border-color:lightgrey;}
 .expediente-info{border:2px dashed transparent; border-radius: 6px;overflow: hidden;transition:border .3s;padding: 1em;margin-top: -15px; margin:auto -1em !important}
 .expediente-info-item{margin-bottom:10px;font-size:medium}
-.expediente-info-item p{}
+/*.expediente-info .controls{padding-bottom: .5em;}*/
+/* .expediente-info-item p{} */

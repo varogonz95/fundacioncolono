@@ -22,4 +22,9 @@ class Expediente extends Model{
         return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot(['detalle','monto']);
     }
 
+    // public function getMontoTotalAttribute($value)
+    // {
+    //     return $this->;
+    // }
+
 }

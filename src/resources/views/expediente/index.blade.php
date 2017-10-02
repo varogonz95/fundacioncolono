@@ -17,10 +17,12 @@
         </div>
     @endif
 
-    <section id="expedientes" class="col-md-8 col-md-offset-2" ng-controller="ExpedientesController">
+    <section id="expedientes" class="col-md-10 col-md-offset-1" ng-controller="ExpedientesController">
 
-        @include('templates.show')
+        <!-- MODAL PARA MOSTRAR EL DETALLE DE CADA CASO -->
+        @include('expediente.show')
 
+        <!-- COLUMNAS VISIBLES -->
         <nav class="navbar navbar-default navbar-sm col-md-8 col-md-offset-2" role="navigation">
             <span class="navbar-text"><b>Columnas visibles</b></span>
             <div class="navbar-form" style="padding-top:4px">
@@ -28,11 +30,12 @@
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombre">Nombre</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.referente">Referente</label>
+                <label class="checkbox-inline"><input type="checkbox" ng-model="columns.prioridad">Prioridad</label>
             </div>
         </nav>
 
+        <!-- BUSQUEDA -->
         <div class="col-lg-12 controls">
-
             <div class="col-lg-6 col-lg-offset-3">
                 <form ng-submit="index(1,{search: search})">
                     <div class="form-group has-feedback">
@@ -49,11 +52,13 @@
                 </form>
             </div>
 
+            <!-- LINK AGREGAR NUEVO CASO -->
             <div class="text-right">
                 <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
             </div>
         </div>
 
+        <!-- TABLA DE CASOS -->
         <div class="table-responsive col-md-12">
             <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
@@ -61,10 +66,9 @@
                         <th ng-show="columns.cedula"><button type="button" class="btn btn-table-header @{{ sort.order? 'asc' : 'desc' }}" title="Ordenamiento @{{ sort.order? 'ascendente' : 'descendente' }}" ng-click="doSort('cedula')">Cédula <span class="glyphicon glyphicon-menu-down"></span></button></th>
                         <th ng-show="columns.nombre">Nombre</th>
                         <th ng-show="columns.apellidos">Apellidos</th>
+                        <th ng-show="columns.prioridad">Prioridad</th>
                         <th ng-show="columns.referente">Referente</th>
                         {{-- <th>Tipo de Ayuda</th>
-                        <th>Prioridad</th>
-                        <th>Ocupación</th>
                         <th>Teléfono(s)</th>
                         <th>Zona</th>
                         <th>Dirección</th> --}}
@@ -75,12 +79,18 @@
                         <td ng-show="columns.cedula">@{{ e.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>
+                        <td ng-show="columns.prioridad">
+                            <span class="status-@{{ (e.prioridad === 1)? 'low' : (e.prioridad === 2)? 'med' : (e.prioridad === 3)? 'hi' : '' }}"></span>
+                            @{{ (e.prioridad === 1)? 'Baja' : (e.prioridad === 2)? 'Media' : (e.prioridad === 3)? 'Alta' : '' }}
+                        </td>
+                        <!-- POST RENDERIZADO DE FILA PARA REFERENTES -->
                         <td ng-show="columns.referente" ng-if="e.referente.id === 1 && e.referente_otro">@{{ e.referente_otro }}</td>
                         <td ng-show="columns.referente" ng-if="!e.referente_otro && e.referente.id === 1">Ninguno</td>
                         <td ng-show="columns.referente" ng-if="e.referente.id !== 1">
                             <span class="text-primary">@{{ e.referente.descripcion }}</span>
                             {{--<a href="#">@{{ e.referente.descripcion }}</a>--}}
                         </td>
+                        <!-- ------------------------------------------ -->
                     </tr>
                 </tbody>
             </table>
@@ -89,7 +99,6 @@
 
         <div class="text-center col-md-12">
             <ul uib-pagination total-items="total" class="pagination-sm" ng-model="page" items-per-page="16" ng-change="index(page)"></ul>
-            {{-- $expedientes->links() --}}
         </div>
     </section>
 @endsection
