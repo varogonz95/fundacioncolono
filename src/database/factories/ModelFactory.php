@@ -74,7 +74,7 @@ $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker)
         'referente_fk' => $hasReferente? factory(App\Models\Referente::class)->create()->id : 1,   //  Referente id = 1: 'Otro' option
         'referente_otro' => $hasReferente? null : ($faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}"),
         'prioridad' => $faker->numberBetween(1,3),
-        'estado' => $faker->numberBetween(0,2),
+        'estado' => $faker->numberBetween(0,3),
         'descripcion' => $faker->text(500),
     ];
 });

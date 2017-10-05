@@ -1,48 +1,40 @@
-app.controller('CreateExpedienteController', function($scope, Referente, Ayuda, Region, Typeahead) {
-
+app.controller('Expedientes_EditController', function ($scope, Referente, Ayuda, Region, Typeahead) {
 
     $scope.invalid_add = false;
 
     $scope.formatter = Typeahead.formatter;
-
-    $scope.referentes = Referente().query();
-    $scope.ayudas = Ayuda().query();
     $scope.ayudas_selected = [{}];
 
-    $scope.provincias = Region.getProvincias();
     $scope.cantones = [];
     $scope.distritos = [];
 
-    $scope.prioridades = [
-        {value:1, name:'Baja'},
-        {value:2, name:'Media'},
-        {value:3, name:'Alta'}
-    ];
-
-    $scope.estados = [
-        {value:0, name:'En valoración (por defecto)'},
-        {value:1, name:'Aprobado'},
-        {value:2, name:'No aprobado'},
-        {value:3, name:'Pendiente'}
-    ];
     $scope.estado = $scope.estados[0];
+    
+    $scope.edit = function (){
+        $scope.selected.editable = true;
+        $scope.update.caso = copy($scope.selected, ['editable','persona','ayudas','$$hashKey']);
+        $scope.estado_selected = $scope.estados[$scope.selected.estado];
+
+        $scope.prioridad_selected = $scope.prioridades[$scope.selected.prioridad - 1];
+        $scope.referente_selected = $scope.selected.referente;
+    };
 
     // Update Canton SELECT
-    $scope.updateCantones = function(p){
+    $scope.updateCantones = function (p) {
         $scope.distritos = [];
-        $scope.canton = null;
+        // $scope.canton = null;
 
         Region.getCantones(p)
-        .then(function(response){ $scope.cantones = Region.toList(response.data);});
+            .then(function (response) { $scope.cantones = Region.toList(response.data); });
     };
 
     // Update Distrito SELECT
-    $scope.updateDistritos = function(p, c){
+    $scope.updateDistritos = function (p, c) {
         Region.getDistritos(p, c)
-        .then(function(response){ $scope.distritos = Region.toList(response.data); });
+            .then(function (response) { $scope.distritos = Region.toList(response.data); });
     }
 
-    $scope.ayudaChanged = function(scope, index){
+    $scope.ayudaChanged = function (scope, index) {
         $scope.invalid_add = false;
 
         // Revisar en las ayudas seleccionadas
@@ -63,7 +55,7 @@ app.controller('CreateExpedienteController', function($scope, Referente, Ayuda, 
         }
     };
 
-    $scope.addAyuda = function() {
+    $scope.addAyuda = function () {
         if ($scope.ayudas_selected[$scope.ayudas_selected.length - 1].id && !$scope.ayudas_selected[$scope.ayudas_selected.length - 1].$invalid) {
             $scope.invalid_add = false;
             $scope.ayudas_selected.push({});
@@ -73,8 +65,8 @@ app.controller('CreateExpedienteController', function($scope, Referente, Ayuda, 
         }
     };
 
-    $scope.removeAyuda = function(scope){
-        $scope.ayudas_selected.splice(getIndex($scope.ayudas_selected, scope),1);
+    $scope.removeAyuda = function (scope) {
+        $scope.ayudas_selected.splice(getIndex($scope.ayudas_selected, scope), 1);
     };
 
 });

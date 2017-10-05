@@ -28,7 +28,7 @@ app.service('Region', function($http){
     this.getCantones = function(provincia) {
         return $http.get('https://ubicaciones.paginasweb.cr/provincia/'+provincia+'/cantones.json');
     };
-
+    
     this.getDistritos = function(provincia, canton) {
         return $http.get('https://ubicaciones.paginasweb.cr/provincia/' + provincia + '/canton/' + canton + '/distritos.json');
     };

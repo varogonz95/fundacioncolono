@@ -1,15 +1,19 @@
-
-app.factory('Referente', function($resource, AppResource){
-    return function (params = '') {
-        params = (params[0] === '/')? params.substring(1, params.length) : params;
-        return $resource(AppResource.getUrl()+'/referentes'+params);
-    }
+app.factory('Expediente', function (AppResource) {
+    return function (optional) {
+        if (optional) return AppResource.extends('expedientes' + (optional[0] === '/'? optional : '/' + optional ));
+        else return AppResource.extends('expedientes');
+    };
 });
 
-app.factory('Ayuda', function($resource, AppResource){
-    return AppResource.extend('/ayudas');
-    // return function (params = '') {
-    //     params = (params[0] === '/')? params.substring(1, params.length) : params;
-    //     return $resource(AppResource.getUrl()+'/ayudas'+params);
-    // }
+app.factory('Persona', function (AppResource) {
+    return AppResource.extends('personas');
 });
+
+app.factory('Referente', function(AppResource){
+    return AppResource.extends('referentes');
+});
+
+app.factory('Ayuda', function(AppResource){
+    return AppResource.extends('ayudas');
+});
+

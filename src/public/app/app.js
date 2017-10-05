@@ -10,31 +10,6 @@ app.config(['uibPaginationConfig',function(conf){
     conf.forceEllipses=true;
 }]);
 
-app.provider('AppResource', function() {
-
-    // THIS EXISTS AT CONFIG TIME
-
-    // THIS DOES NOT
-    this.$get = function($location) {
-
-        var protocol = this.protocol || $location.protocol(),
-            host = this.host || $location.host(),
-            port = this.port || $location.port(),
-            extras = this.extras || '',
-
-
-        getUrl = function () { return protocol + '://' + host + ':' + port + '/' + extras; },
-        extend = function() {
-
-        };
-
-        return {
-            getUrl : getUrl,
-            extends : extend
-        };
-    }
-});
-
 app.config(function(AppResourceProvider){
     AppResourceProvider.extras = 'fundacioncolono';
 });
