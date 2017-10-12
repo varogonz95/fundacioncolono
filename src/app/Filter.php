@@ -4,67 +4,96 @@ namespace App;
 
 class Filter{
 
-    private $separator = '|';
-    private $has = '<-';
+    const ASC = 'asc';
+    const DESC = 'desc';
+
+    public $cachedQuery;
 
     /*
-    * Descripcion: Recibe el modelo Eloquent que se quiere filtar,
-                    el atributo de busqueda, y una funcion
-    * Params: 
-    *       $model_class <string>: The class to filter
-    *
-    *       $expression <string>: The expression in which to filter,
-    *                    defined by a string '<attribute> [separator] <operator> [separator] <value>'
-    *                    Example: 'age | > | 20' (age greater than 20)
-    *                    Note: The expression string is by default trimmed
-    *
-    *       $as <array>: The way in which to get the processed query
+    * Description:
+    * Params:
     *
     */
-
-    // CURRENTLY WORKING ON ONE-TO-ONE RELATIONSHIPS
-    public function test($model, $as = [])
-    {
-
-        $data = [];
-
-        foreach ($model as $m) {
-            
-            foreach ($as as $key => $value) {
-                // $m->{$as[$i]};
-                $data[] = gettype($value);
-            }
-
-        }
-
-        return $data;
-    }
-
-    private function recursion($key, $value){
-    }
-
-    private function trim_expression($arr){
-        $arr[0] = trim($arr[0]);
-        $arr[1] = trim($arr[1]);
-        $arr[2] = trim($arr[2]);
-
-        return $arr;
-    }
-
-    private function post_query_processor($as){
+    public function badassFunction($model, $with = null, $filter = [], $input = [], $order = []){
+    
+        $table_name = (new $model)->getTable();
+    
+        $builder = !is_null($with)? $model::query()->with($with) : $model::query();
         
-        foreach ($as as $key => $value) {
-            $as[$key];
+        /* 
+         *  FOR FILTER...
+         *
+         */
+        if (!empty($filter)) {
+            if($table_name === $filter['relationship']){
+                $builder = $builder->where($filter['property'], $filter['comparator'], $filter['value']);
+            }
+            else{
+                $builder = $builder->whereHas(
+                    $filter['relationship'], 
+                    function($query) use ($filter){
+                        $query->where($filter['property'], $filter['comparator'], $filter['value']);
+                    }
+                );
+            }
         }
 
+        /* 
+         *  FOR INPUT...
+         *
+         */
+        if (!empty($input)) {
+            if($table_name === $input['relationship']){
+                 $builder = $builder->where($input['property'], $input['comparator'], $input['value']);
+            }
+            else{
+                $builder = $builder->whereHas(
+                    $input['relationship'], 
+                    function($query) use ($input){
+                        $query->where($input['property'], $input['comparator'], $input['value']);
+                    }
+                );
+            }
+        }
+
+        /* 
+         *  FOR ORDER...
+         *
+         */
+        if (!empty($order)) {
+            if($table_name === $order['relationship']){
+                 $builder = $builder->orderBy($order['property'], $order['order']);
+            }
+            else{
+                $this->cachedQuery = $builder->get();
+                return $this;
+            }
+        }
+        else {
+            $this->cachedQuery = $builder->get();
+            return $this;
+        }
+
+        return $builder;
     }
 
-    public function setSeparator($str){
-        $this->separator = $str;
+    public function sortBy($by, $order){
+        if ($order === self::ASC) {
+            return $this->cachedQuery->sortBy(
+                function($array, $key) use($by) {
+                    return $array[$by[0]][$by[1]];
+                }
+            );
+        }
+        else if ($order === self::DESC){
+            return $this->cachedQuery->sortByDesc(
+                function($array, $key) use($by) {
+                    return $array[$by[0]][$by[1]];
+                }
+            );
+        }
+        
     }
-
-    public function getSeparator($str){
-        return $this->separator;
-    }
-
+        
 }
+    

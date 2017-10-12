@@ -28,17 +28,16 @@ class ExpedientesController extends Controller
         $this->lastPage = 0;
     }
 
-    public function test($id)
-    {
+    public function test(Request $r){
 
-        return \App\Models\Ayuda::find($id);
+        $expedientes = Filter::badassFunction(
+            Expediente::class,
+            'persona'           // -> Better performance, since it uses eager loading
+        )
+        // ->get();
+        ->sortBy(['persona','nombre'], 'asc');
 
-        // return Filter::test(
-        //     Persona::where('nombre', 'like', 'E%')->get(),
-        //     [
-        //         'expediente<-persona',
-        //     ]
-        // );
+        return $expedientes->pluck('persona')->pluck('nombre');
     }
 
     public function all(Request $request)
@@ -63,11 +62,7 @@ class ExpedientesController extends Controller
             $e->referente;
             $e->ayudas;
 
-            $e->monto_total = 0;
-
-            foreach ($e->ayudas as $ayuda) {
-                $e->monto_total += $ayuda->monto;
-            }
+            $e->montoTotal = $e->getMontoTotal();
         }
 
         return response()->json([
