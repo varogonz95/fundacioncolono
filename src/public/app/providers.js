@@ -37,7 +37,7 @@ app.provider('AppResource', function () {
                     },
 
                     // Get list of resources
-                    query: function (data = {}) {
+                    query: function (success = function(){}, data = {}) {
                         var params = '';
 
                         if (!angular.equals(data, {})) {
@@ -46,7 +46,7 @@ app.provider('AppResource', function () {
                             }
                             params = '?' + params.substring(1, params.length);
                         }
-                        return $resource(getUrl() + route, data).query();
+                        return $resource(getUrl() + route, data).query(success);
                     },
 
                     // update a model by passing its id and model itself

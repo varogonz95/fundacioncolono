@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('test', 'ExpedientesController@test');
-
 Auth::routes();
+
+Route::get('expedientes/test', 'ExpedientesController@test');
 
 Route::get('/', 'HomeController@index')->name('home');
 

@@ -33,7 +33,7 @@
                 </small>
                 <small>Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
                 <small>
-                    <button class="btn-rest btn-show">
+                    <button class="btn-rest btn-show btn-outline">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
                 </small>
@@ -43,10 +43,10 @@
         <section class="expediente-info col-md-4" ng-repeat="ayuda in selected.ayudas">
 
             <div class="controls">
-                <button type="button" class="btn-rest btn-delete" ng-click="">
+                <button type="button" class="btn-rest btn-delete btn-outline" ng-click="">
                     <span class="glyphicon glyphicon-minus"></span>
                 </button>
-                <button class="btn-edit btn-rest">
+                <button class="btn-edit btn-rest btn-outline">
                     <span class="glyphicon-pencil glyphicon"></span>
                 </button>
             </div>

@@ -22,8 +22,11 @@ class Expediente extends Model{
         return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot(['detalle','monto']);
     }
 
-    public function getMontoTotal()
-    {
+    public function getFechaCreacionAttribute($value){
+        return (new \DateTime($value))->format('d-m-Y');
+    }
+
+    public function getMontoTotal(){
         $monto = 0;
 
         foreach ($this->ayudas as $a) { $monto += $a->pivot->monto; }

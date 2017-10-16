@@ -28,16 +28,24 @@ class ExpedientesController extends Controller
         $this->lastPage = 0;
     }
 
-    public function test(Request $r){
+    public function test(Request $request){
 
         $expedientes = Filter::badassFunction(
             Expediente::class,
-            'persona'           // -> Better performance, since it uses eager loading
+            ['persona', 'referente', 'ayudas'],           // -> Better performance, since it uses eager loading
+            [
+                'relationship' => $request['relationship'], 
+                'property' => $request['property'],
+                'comparator' => $request['comparator'], 
+                'value' => $request['value']
+            ]
         )
-        // ->get();
-        ->sortBy(['persona','nombre'], 'asc');
+        ->paginate(16);
 
-        return $expedientes->pluck('persona')->pluck('nombre');
+        return response()->json([
+            'expedientes' => $expedientes->items(),
+            'total' => $expedientes->total(),
+        ]);
     }
 
     public function all(Request $request)
@@ -68,7 +76,6 @@ class ExpedientesController extends Controller
         return response()->json([
             'expedientes' => $expedientes->items(),
             'total' => $expedientes->total(),
-            'last' => $expedientes->lastPage(),
         ]);
     }
 

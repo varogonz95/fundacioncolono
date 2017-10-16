@@ -11,6 +11,7 @@ a{cursor:pointer}
 .table .active > td {background:#5CACEB !important;color:white;}
 .table .active > td:last-child > *{color:inherit;}
 
+.caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
 /* .nowrap{white-space: nowrap;} */
@@ -41,7 +42,7 @@ a{cursor:pointer}
     border-radius: 4px;
 }
 
-.btn-outline{border:thin solid transparent;background-color:white; margin-top:2px; transition: border .3s}
+.btn-outline{border:thin solid transparent;background-color:transparent; margin-top:2px; transition: border .3s}
 .btn-outline.btn-delete{color:#DC5353;}
 .btn-outline.btn-edit{color:#428BCA;}
 .btn-outline.btn-show{color:#5CB85C;}

@@ -32,10 +32,10 @@
         <input type="hidden" name="referente" ng-value="{{ $hasReferenteOtro_model }}? 1 : {{ $referente_model }}">
         {{-- LEGACY INPUT,  BY UI BOOTSTRAP TYPEAHEAD DIRECTIVE --}}
         {{-- <select class="form-control" name="referente" ng-hide="hasReferenteOtro">
-        @foreach (\App\Models\Referente::where('id', '<>', 1)->get() as $r)
-        <option value="{{ $r->id }}">{{ $r->descripcion }}</option>
-    @endforeach
-</select> --}}
+                @foreach (\App\Models\Referente::where('id', '<>', 1)->get() as $r)
+                    <option value="{{ $r->id }}">{{ $r->descripcion }}</option>
+                @endforeach
+            </select> --}}
 </div>
 </div>
 

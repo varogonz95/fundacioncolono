@@ -2,15 +2,39 @@
 /*
 *   Controller for entity 'Expediente'
 */
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead) {
 
     var showModal = $('#show_modal').animatedModal({
         onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
 
+    $scope.formatter = Typeahead.formatter;
+    
     $scope.selected = {};
+    
     $scope.expedientes = [];
+    // $scope.referentes = Referente.query(function(response){
+    //     $scope.referente_filter = response[0];
+    // });
+    // $scope.ayudas = Ayuda.query(function(response){
+    //     $scope.ayuda_filter = response[0];
+    // });
+    
+    $scope.filter_data = {
+        active: false,
+        filter: null,
+        filtered: false,
+        prioridad: $scope.prioridades[0],
+        estado: $scope.estados[0],
+        referente: [],
+        ayuda: [],
+        fecha_creacion: null,
+        relationship: '',
+        property: '',
+        comparator: '',
+        value: ''
+    };
 
     $scope.total = 1;
     $scope.page = 1;
@@ -28,6 +52,15 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         $scope.index();
     };
 
+    $scope.filter_init = function(){
+        if (!$scope.filter_data.active) {
+            $scope.filter_data.referente = $scope.referentes[0];
+            console.log($scope.referentes);
+            $scope.filter_data.ayuda = $scope.ayudas[0];
+            $scope.filter_data.active = true;
+        }
+    };
+
     $scope.columns = {
         cedula: true,
         nombre: true,
@@ -35,7 +68,8 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         prioridad: true,
         estado: true,
         referente: true,
-        ayuda: true
+        ayuda: true,
+        fecha_creacion: true
     };
 
     $scope.index = function (page = 1, params = {}) {
@@ -98,6 +132,30 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 },
                 function (error) {alert(error.message);} 
             );
+    }
+
+    var filter_selector = function () {
+        var data = {};
+
+        // Code here...
+
+        return data;  
+    };
+
+    $scope.filter_pichudo = function () {
+
+        var data = jQueryToJson($('#filter'), 'name');
+
+        Expediente('test').get(
+            data,
+            true,
+            function (response) {
+                $scope.filter_data.filtered = true;
+                // $scope.filter_data.filter = null;
+                $scope.expedientes = response.expedientes;
+                $scope.total = response.total;
+            }
+        );
     }
 
     $scope.index();

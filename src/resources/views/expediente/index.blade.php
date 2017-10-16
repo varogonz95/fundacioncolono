@@ -28,8 +28,8 @@
         <!-- IMPLEMENTACION DEL COMPONENTE 'animatedModal' -->
         @include('expediente.$overview')
         
-        <!-- COLUMNAS VISIBLES -->
-        <nav class="navbar navbar-default navbar-sm col-md-8 col-md-offset-2" role="navigation">
+            <!-- COLUMNAS VISIBLES -->
+        <nav class="navbar navbar-default navbar-sm col-md-10 col-md-offset-1" role="navigation">
             <span class="navbar-text"><b>Columnas visibles</b></span>
             <div class="navbar-form" style="padding-top:4px">
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
@@ -37,7 +37,7 @@
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.referente">Referente</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.estado">Estado</label>
-                <label class="checkbox-inline"><input type="checkbox" ng-model="columns.prioridad">Prioridad</label>
+                <label class="checkbox-inline"><input type="checkbox" ng-model="columns.fecha_creacion">Fecha de creación</label>
             </div>
         </nav>
         
@@ -49,7 +49,7 @@
                         <input type="text" class="form-control" placeholder="Búsqueda..." ng-model="search" ng-change="index(1,{search:search})"/>
                         <span class="glyphicon glyphicon-search form-control-feedback" style="color:#aaa"></span>
                     </div>
-                     {{-- <p class="help-block">
+                    {{-- <p class="help-block">
                         <span class="glyphicon glyphicon-info-sign text-info"></span>
                         <small>
                             <strong>Mensaje del desarrollador: </strong>
@@ -58,19 +58,35 @@
                     </p> --}}
                 </form>
             </div>
-        
+            
+            <!-- FILTRAR RESULTADOS -->
             <div class="col-lg-2 row">
-                <button class="btn-outline btn-rest btn-none" style="margin: 0 4px">
-                    <span class="glyphicon glyphicon-filter"></span> Filtrar
-                </button>
-            </div>
-
-            <!-- LINK AGREGAR NUEVO CASO -->
-            <div class="col-lg-2 text-right">
-                <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
-            </div>
+                <button class="btn-outline btn-rest btn-none"
+                ng-init="filter_active = false"
+                ng-click="filter_active = !filter_active; filter_init()"
+                style="margin: 0 4px" 
+                type="button" 
+                data-toggle="collapse" 
+                data-target="#filter">
+                <!-- <span class="glyphicon glyphicon-filter"></span> -->
+                Filtrar 
+                <span class="caret @{{ !filter_active? 'caret-right' : '' }}"></span>
+            </button>
+            
+            <button class="btn-outline btn-rest btn-edit" type="button" ng-show="filter_data.filtered" ng-click="index(); filter_data.filtered = false">Ver todos</button>
         </div>
-
+        
+        <!-- LINK AGREGAR NUEVO CASO -->
+        <div class="col-lg-2 text-right">
+            <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
+        </div>
+    </div>
+    
+        <!-- FILTRO DE BUSQUEDA -->
+        <div class="collapse col-md-10 col-md-offset-1" id="filter" style="border: thin solid #ddd; border-radius: 4px">
+            @include('partials._filter')
+        </div>
+        
         <!-- TABLA DE CASOS -->
         <div class="table-responsive col-md-12">
             <table id="expedientesindex" class="table table-hover table-striped">
@@ -82,10 +98,7 @@
                         <th ng-show="columns.referente">Referente</th>
                         <th ng-show="columns.estado">Estado</th>
                         <th ng-show="columns.prioridad"><button type="button" class="btn btn-table-header @{{ sort.order? 'asc' : 'desc' }}" {{-- title="Ordenamiento @{{ sort.order? 'ascendente' : 'descendente'}}"--}} ng-click="doSort('prioridad')">Prioridad<span class="glyphicon @{{ sort.by === 'prioridad'? 'glyphicon-menu-down' : '' }}"></span></button></th>
-                        {{-- <th>Tipo de Ayuda</th>
-                        <th>Teléfono(s)</th>
-                        <th>Zona</th>
-                        <th>Dirección</th> --}}
+                        <th ng-show="columns.fecha_creacion">Fecha de creación</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,7 +114,6 @@
                         </td>
                         <!-- ------------------------------------------ -->
                         <td ng-show="columns.estado">
-                            {{-- <span class="status status-@{{ (e.estado === 0)? 'default' : (e.estado === 1)? 'approbed' : (e.estado === 2)? 'not-approbed' : (e.estado === 3)? 'pending' : '' }}"></span> --}}
                             <span class="label label-@{{ (e.estado === 0)? 'info' : (e.estado === 1)? 'success' : (e.estado === 2)? 'danger' : (e.estado === 3)? 'warning' : ''}}">
                                 @{{
                                     (e.estado === 0)? 'En valoración' :
@@ -112,9 +124,9 @@
                             </span>
                         </td>
                         <td ng-show="columns.prioridad">
-                            {{-- <span class="status priority-@{{ (e.prioridad === 1)? 'low' : (e.prioridad === 2)? 'mid' : (e.prioridad === 3)? 'hi' : '' }}"></span> --}}
                             <span class="label label-@{{ (e.prioridad === 1)? 'success' : (e.prioridad === 2)? 'warning' : (e.prioridad === 3)? 'danger' : '' }}">@{{ (e.prioridad === 1)? 'Baja' : (e.prioridad === 2)? 'Media' : (e.prioridad === 3)? 'Alta' : '' }}</span>
                         </td>
+                        <td ng-show="columns.fecha_creacion">@{{ e.fecha_creacion }}</td>
                     </tr>
                 </tbody>
             </table>

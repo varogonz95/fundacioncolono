@@ -70,8 +70,8 @@ class Filter{
             }
         }
         else {
-            $this->cachedQuery = $builder->get();
-            return $this;
+            // $this->cachedQuery = $builder->get();
+            // return $this;
         }
 
         return $builder;
