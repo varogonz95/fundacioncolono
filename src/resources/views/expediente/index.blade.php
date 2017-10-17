@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @push('scripts_top')
+    <script src="{{ asset('app/controllers/ayudas/MainController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/MainController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/IndexController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/EditController.js') }}"></script>
@@ -49,13 +50,6 @@
                         <input type="text" class="form-control" placeholder="Búsqueda..." ng-model="search" ng-change="index(1,{search:search})"/>
                         <span class="glyphicon glyphicon-search form-control-feedback" style="color:#aaa"></span>
                     </div>
-                    {{-- <p class="help-block">
-                        <span class="glyphicon glyphicon-info-sign text-info"></span>
-                        <small>
-                            <strong>Mensaje del desarrollador: </strong>
-                            Por ahora sólo se pueden buscar casos por la cédula de la persona
-                        </small>
-                    </p> --}}
                 </form>
             </div>
             
@@ -83,7 +77,7 @@
     </div>
     
         <!-- FILTRO DE BUSQUEDA -->
-        <div class="collapse col-md-10 col-md-offset-1" id="filter" style="border: thin solid #ddd; border-radius: 4px">
+        <div class="collapse col-md-12" id="filter" style="background-color: #fafafa;">
             @include('partials._filter')
         </div>
         

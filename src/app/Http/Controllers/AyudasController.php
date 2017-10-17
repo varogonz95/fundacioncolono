@@ -60,15 +60,20 @@ class AyudasController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
+    public function updatePivot(Request $request, $id){
+        Ayuda::find($id)->expedientes()
+        ->updateExistingPivot(
+            $expedienteId, 
+            ['detalle' => $request['detalle'], 'monto' => $request['monto']]
+        );
+
+        return response()->json([
+            'status' => true,
+            'msg' => ''
+        ]);
+    }
+
+    public function update(Request $request, $id){
         //
     }
 

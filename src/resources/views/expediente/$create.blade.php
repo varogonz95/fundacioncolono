@@ -27,10 +27,10 @@
     <div class="form-group">
         <label class="control-label col-sm-4" for="ayuda">Ayuda solicitada:</label>
 
-        <button class="btn-rest btn-show" type="button" ng-click="addAyuda()"><span class="glyphicon glyphicon-plus"></span> Agregar ayuda</button>
+        <button class="btn-rest btn-outline btn-show" type="button" ng-click="addAyuda()"><span class="glyphicon glyphicon-plus"></span> Agregar ayuda</button>
         <span class="text-danger text-nowrap" ng-show="invalid_add">Debe seleccionar un tipo de ayuda</span>
 
-        <div class="col-sm-8 col-sm-offset-4" ng-repeat="as in ayudas_selected">
+        <div class="col-sm-10 col-sm-offset-2" ng-repeat="as in ayudas_selected">
 
             <hr ng-hide="$first">
 
@@ -44,7 +44,7 @@
                     <textarea class="form-control noresize" name="ayuda.detalle[@{{ $index }}]" ng-model="ayudas_selected[$index].detalle" rows="5" cols="50" required></textarea>
                 </ng-show>
 
-                <ng-show ng-show="estado_model.value === 1 && ayudas_selected[$index].id && !invalid_add">
+                <ng-show ng-show="estado.id === 1 && ayudas_selected[$index].id && !invalid_add">
                     <p class="help-block">Monto:</p>
                     <input class="form-control" type="text" name="ayuda.monto[@{{ $index }}]" placeholder="Monto en colones" required>
                 </ng-show>

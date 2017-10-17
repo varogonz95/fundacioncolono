@@ -30,7 +30,7 @@ class ExpedientesController extends Controller
 
     public function test(Request $request){
 
-        $expedientes = Filter::badassFunction(
+        $pagination = Filter::badassFunction(
             Expediente::class,
             ['persona', 'referente', 'ayudas'],           // -> Better performance, since it uses eager loading
             [
@@ -42,34 +42,35 @@ class ExpedientesController extends Controller
         )
         ->paginate(16);
 
+        $expedientes = $pagination->items();
+        $total = $pagination->total();
+
+        foreach ($expedientes as $e) {
+            $e->montoTotal = $e->getMontoTotal();
+        }
+
         return response()->json([
-            'expedientes' => $expedientes->items(),
-            'total' => $expedientes->total(),
+            'expedientes' => $expedientes,
+            'total' => $total,
         ]);
     }
 
-    public function all(Request $request)
-    {
+    public function all(Request $request){
 
-        $expedientes = NULL;
+        $expedientes = Expediente::with(['persona', 'referente', 'ayudas']);
 
         $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
 
         $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
 
         if($request->has('search')){
-            $expedientes = Expediente::where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
+            $expedientes = $expedientes->where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
         }
         else {
-            $expedientes = Expediente::orderBy($by, $request['order'])->paginate(16);
+            $expedientes = $expedientes->orderBy($by, $request['order'])->paginate(16);
         }
 
-
         foreach ($expedientes as $e) {
-            $e->persona;
-            $e->referente;
-            $e->ayudas;
-
             $e->montoTotal = $e->getMontoTotal();
         }
 

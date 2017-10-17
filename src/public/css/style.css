@@ -2,6 +2,8 @@
 @charset "UTF-8";*/
 
 a{cursor:pointer}
+a.btn-rest, a.btn-outline{text-decoration: none !important}
+hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
 .form-control:-ms-.form-control-placeholder {font-style:italic}
@@ -14,6 +16,7 @@ a{cursor:pointer}
 .caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
+.text-collapsed{max-height: calc(3 * 1.42857143em + 20px);min-height: calc(3 * 1.42857143em + 20px);}
 /* .nowrap{white-space: nowrap;} */
 
 /*#nav-top{font-family: 'Raleway'}*/
@@ -70,26 +73,33 @@ a{cursor:pointer}
 .status.priority-mid{background-color: #F0AD4E}
 .status.priority-low{background-color: #5CB85C}
 
-.expediente-content{padding: 1em 0}
-.expediente-content article:hover > .expediente-info{border-color:lightgrey;transition:border .3s}
-.expediente-content > article:hover .btn-rest{opacity: 1; transition: .3s}
-.expediente-content .page-header{padding-bottom: 0;margin-bottom:5px}
-.expediente-content .page-header .controls{margin-top:8px;text-align:center}
-
-.expediente-info > .btn-rest{position: relative;top: -8px;right: -8px;float: right;opacity: 0; transition: .3s}
-.expediente-content .editing .btn-group{opacity: 1}
-.expediente-content .editing > .expediente-info{border-color:lightgrey;}
 .expediente-info{
     border:2px dashed transparent; 
     border-radius: 6px;
     overflow: hidden;
     transition:border .3s;
     padding: 1em;
-    /*! margin-top: -15px; */
     margin-bottom: 15px;
-    /* margin-left: 15px;
-    margin-right: 15px */;
 }
+.expediente-info:hover{border-color:lightgrey;transition:border .3s}
+.expediente-info:hover .btn-rest, .expediente-info:hover .btn-group{opacity: 1; transition: .3s}
+
+.expediente-info > .btn-rest, .expediente-info > .btn-group{position: relative;top: -8px;right: -8px;float: right;opacity: 0; transition: .3s}
+.expediente-content .editing .btn-group{opacity: 1}
+.expediente-content .editing > .expediente-info{padding: 4px 1em;}
+.expediente-content .editing > .expediente-info, .expediente-info.editing{border-color:lightgrey;}
+.expediente-info.removed{opacity: .4}
 .expediente-info-item{margin-bottom:10px;font-size:medium}
-/*.expediente-info .controls{padding-bottom: .5em;}*/
-/* .expediente-info-item p{} */
+
+.animatedModal-header{
+    padding: .5em;
+    border-bottom: thin solid #efefef;
+    background: #f9f9f9;
+    max-height: 50px;
+    min-height: 50px;
+}
+
+.animatedModal-content{
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+}

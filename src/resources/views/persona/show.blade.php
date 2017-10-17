@@ -1,9 +1,10 @@
 <article id="selectedpersona" class="col-md-4 col-md-offset-1 @{{ (selected.persona.editable)? 'editing' : '' }}" ng-controller="Personas_EditController">
-    <header class="page-header">
+    <header>
         <h3>
             Datos de la persona
             <small>@{{ (selected.persona.editable)? '(en edición)' : '' }}</small>
         </h3>
+        <hr>
     </header>
 
     <section class="expediente-info form-horizontal" ng-if="selected.persona.editable">

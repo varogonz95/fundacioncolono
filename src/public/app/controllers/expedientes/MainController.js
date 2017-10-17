@@ -10,7 +10,8 @@ app.controller('Expedientes_MainController', function ($scope, Expediente, Refer
         caso: {},
         ayudas: {
             attachs: [],
-            detachs: []
+            detachs: [],
+            updates: []
         }
     };
 

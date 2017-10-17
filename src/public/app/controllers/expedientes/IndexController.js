@@ -5,6 +5,7 @@
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead) {
 
     var showModal = $('#show_modal').animatedModal({
+        style:{'overflow-y':'hidden'},
         onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });

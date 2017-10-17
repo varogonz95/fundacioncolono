@@ -1,4 +1,4 @@
-<div class="row" style="background-color: #f9f9f9; padding: 15px 0">
+<div class="row" style="padding: 15px 0">
     <form ng-submit="filter_pichudo()">
         <div class="col-lg-2">
             <div class="form-group-sm form-group">
