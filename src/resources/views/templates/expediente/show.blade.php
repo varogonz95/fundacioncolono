@@ -17,14 +17,14 @@
         </div>
 
         {{-- INCLUDE EXPEDIENTE FORM COMPONENT --}}
-        @include('expediente.$edit')
+        @include('templates.expediente.$edit')
     </section>
 
     <section class="expediente-info" ng-hide="selected.editable">
 
         <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()">
             <span class="glyphicon glyphicon-pencil"></span> 
-            Editar
+            <span class="hidden-xs">Editar</span>
         </button>
 
         <div class="expediente-info-item">

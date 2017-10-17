@@ -9,20 +9,20 @@
 
     <section class="expediente-info form-horizontal" ng-if="selected.persona.editable">
         <div class="controls">
-            <button type="button" class="btn-outline btn-rest btn-show" ng-click="update()">
+            <button type="button" class="btn-outline btn-rest btn-show" ng-click="updatePersona()">
                 <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
             <button type="button" class="close" title="Cancelar edición" ng-click="selected.persona.editable = false">&times;</button>
         </div>
 
         {{-- INCLUDE PERSONA FORM COMPONENT --}}
-        @include('persona.$edit')
-
+        @include('templates.persona.$edit')
     </section>
 
     <section class="expediente-info" ng-hide="selected.persona.editable">
 
         <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()">
-            <span class="glyphicon glyphicon-pencil"></span> Editar
+            <span class="glyphicon glyphicon-pencil"></span> 
+            <span class="hidden-xs">Editar</span>
         </button>
 
         <div class="expediente-info-item">

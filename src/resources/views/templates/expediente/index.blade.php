@@ -27,7 +27,7 @@
 
         <!-- MODAL PARA MOSTRAR EL DETALLE DE CADA CASO -->
         <!-- IMPLEMENTACION DEL COMPONENTE 'animatedModal' -->
-        @include('expediente.$overview')
+        @include('templates.expediente.$overview')
         
             <!-- COLUMNAS VISIBLES -->
         <nav class="navbar navbar-default navbar-sm col-md-10 col-md-offset-1" role="navigation">

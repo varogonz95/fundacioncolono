@@ -32,15 +32,29 @@ function copy(_this, _into, except){
     if (except) {
         for (var key in _this) {
             for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
-            if (fails === 0) { data[key] = _this[key]; }
+            if (fails === 0) { 
+                data[key] = _this[key];
+                // _into[key] = _this[key];
+            }
             fails = 0;
         }
     }
     else {
-        for (var key in _this) { data[key] = _this[key]; }
+        for (var key in _this) { 
+            data[key] = _this[key];
+            // _into[key] = _this[key];
+        }
     }
 
     return data;
+}
+
+function find(key, value, array) {
+    for (var i = 0; i < array.length; i++) {
+        if(array[i][key] === value){
+            return array[i];
+        }
+    }
 }
 
 function getIndex(list, object){

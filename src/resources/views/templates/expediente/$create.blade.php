@@ -54,12 +54,15 @@
                 <button type="button" class="btn btn-danger" ng-click="removeAyuda(as)" ng-if="!$first"><span class="glyphicon glyphicon-ban-circle"></span> Quitar</button>
             </div>
         </div>
-
     </div>
 
+    {{-- FINALLY, THE SUBMIT BUTTTON --}}
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
         </div>
     </div>
+
+    {{-- @include('templates.ayuda.$add_pivot') --}}
+
 @endcomponent

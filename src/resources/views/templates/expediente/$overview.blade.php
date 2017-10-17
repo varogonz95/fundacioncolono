@@ -21,12 +21,12 @@
     @slot('content_classes', 'expediente-content')
 
     <!-- DATOS DE LA PERSONA -->
-    @include('persona.show')
+    @include('templates.persona.show')
 
     <!-- INFORMACION DEL EXPEDIENTE -->
-    @include('expediente.show')
+    @include('templates.expediente.show')
 
     <!-- INFORMACION DE LAS AYUDAS -->
-    @include('ayuda.show')
+    @include('templates.ayuda.show')
     
 @endcomponent

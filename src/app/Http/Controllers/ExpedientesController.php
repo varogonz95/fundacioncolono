@@ -82,12 +82,12 @@ class ExpedientesController extends Controller
 
     public function index()
     {
-        return view('expediente.index');
+        return view('templates.expediente.index');
     }
 
     public function create()
     {
-        return view('expediente.create_all');
+        return view('templates.expediente.create_all');
     }
 
     public function store(Request $request){

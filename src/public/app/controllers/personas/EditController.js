@@ -35,7 +35,7 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
         .then(function(response){ $scope.distritos = Region.toList(response.data); });
     }
 
-    $scope.update = function () {
+    $scope.updatePersona = function () {
 
         Persona.update($scope.selected.persona.cedula, $scope.update.persona,
             function (response) {

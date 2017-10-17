@@ -16,6 +16,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
+.text-length-toggle{max-height: 20px; min-height: 20px}
 .text-collapsed{max-height: calc(3 * 1.42857143em + 20px);min-height: calc(3 * 1.42857143em + 20px);}
 /* .nowrap{white-space: nowrap;} */
 
@@ -80,15 +81,17 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
     transition:border .3s;
     padding: 1em;
     margin-bottom: 15px;
+    /* max-height: 50vh;
+    overflow-y: auto; */
 }
-.expediente-info:hover{border-color:lightgrey;transition:border .3s}
+.expediente-info:hover{border-color:lightgrey; transition:border .3s}
 .expediente-info:hover .btn-rest, .expediente-info:hover .btn-group{opacity: 1; transition: .3s}
 
-.expediente-info > .btn-rest, .expediente-info > .btn-group{position: relative;top: -8px;right: -8px;float: right;opacity: 0; transition: .3s}
+.expediente-info > .btn-rest{position: relative;top: -10px;right: -8px;float: right;opacity: 0; transition: .3s;}
+.expediente-info > .btn-group{position: absolute;top: 8px;right: 24px;float: right;opacity: 0; transition: .3s;}
 .expediente-content .editing .btn-group{opacity: 1}
-.expediente-content .editing > .expediente-info{padding: 4px 1em;}
-.expediente-content .editing > .expediente-info, .expediente-info.editing{border-color:lightgrey;}
-.expediente-info.removed{opacity: .4}
+.expediente-content .editing > .expediente-info, .expediente-info.editing{border-color:lightgrey;padding: 4px 1em;}
+.expediente-content .removed{opacity: .4;border-color:lightgrey;}
 .expediente-info-item{margin-bottom:10px;font-size:medium}
 
 .animatedModal-header{

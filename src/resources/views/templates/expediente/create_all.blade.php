@@ -17,7 +17,7 @@
             <fieldset class="col-md-5">
                 <legend>Detalles de la persona</legend>
                 {{-- IMPORT FORM COMPONENT FOR PERSONA --}}
-                @include('persona.$create')
+                @include('templates.persona.$create')
             </fieldset>
 
             <div class="col-md-1 hidden-xs hidden-sm"></div>
@@ -26,8 +26,14 @@
             <fieldset class="col-md-5">
                 <legend>Detalles del caso</legend>
                 {{-- IMPORT FORM COMPONENT FOR PERSONA --}}
-                @include('expediente.$create')
+                @include('templates.expediente.$create')
             </fieldset>
+            
+            {{-- AYUDAS --}}
+            {{--<fieldset class="col-md-5 col-md-offset-1">
+                    <legend>Ayudas solicitadas</legend>
+                    @include('templates.ayuda.$add_pivot')
+                </fieldset>--}}
 
         </form>
     </section>

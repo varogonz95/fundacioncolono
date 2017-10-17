@@ -94,7 +94,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         obj.editable = false;
         obj.isSelected = true;
         obj.persona.editable = false;
-        $scope.selected.isSelected = false;
+        $scope.selected.isSelected = obj === $scope.selected;
         // scope.ayudas.editable = false;
 
         var regions = obj.persona.ubicacion.split('/');
