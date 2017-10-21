@@ -38,6 +38,7 @@
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.referente">Referente</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.estado">Estado</label>
+                <label class="checkbox-inline"><input type="checkbox" ng-model="columns.prioridad">Prioridad</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.fecha_creacion">Fecha de creación</label>
             </div>
         </nav>

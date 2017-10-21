@@ -17,3 +17,9 @@ app.factory('Ayuda', function(AppResource){
     return AppResource.extends('ayudas');
 });
 
+app.factory('Inspector', function (AppResource) {
+    return function (optional) {
+        if (optional) return { get: AppResource.extends('inspectores' + (optional[0] === '/' ? optional : '/' + optional)).get};
+        else return AppResource.extends('inspectores');
+    };
+});

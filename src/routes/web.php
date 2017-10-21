@@ -17,6 +17,9 @@ Route::get('expedientes/test', 'ExpedientesController@test');
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('inspectores/all', 'InspectoresController@all');
+Route::resource('inspectores', 'InspectoresController');
+
 Route::middleware(['auth'])->group(function(){
 
     Route::get('expedientes/all','ExpedientesController@all');
