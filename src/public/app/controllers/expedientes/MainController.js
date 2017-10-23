@@ -15,8 +15,8 @@ app.controller('Expedientes_MainController', function ($scope, Expediente, Refer
         }
     };
 
-    $scope.ayudas = Ayuda.query();
-    $scope.referentes = Referente.query();
+    $scope.ayudas = Ayuda.all();
+    $scope.referentes = Referente.all();
 
     $scope.estados = [
         { id: 0, name: 'En valoración' },

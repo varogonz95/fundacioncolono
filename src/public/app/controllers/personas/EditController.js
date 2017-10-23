@@ -37,7 +37,9 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
 
     $scope.updatePersona = function () {
 
-        Persona.update($scope.selected.persona.cedula, $scope.update.persona,
+        Persona.save(
+            $scope.update.persona,
+            $scope.selected.persona.cedula,
             function (response) {
                 if (response.status) {
                     $scope.selected.persona = copy($scope.update.persona);
