@@ -13,14 +13,14 @@
     <div class="col-sm-8">
         <label style="font-weight:100">
             Otro referente:
-            <input type="checkbox" ng-model="{{ $hasReferenteOtro_model }}" ng-init="{{ $hasReferenteOtro_model }} = false">
+            <input type="checkbox" ng-model="{{ $hasReferenteOtro_model }}" ng-init="{{ $hasReferenteOtro_init_expression }}">
             <input type="hidden" name="hasReferenteOtro" ng-value="{{ $hasReferenteOtro_value }}">
         </label>
         <ng-show ng-show="{{ $hasReferenteOtro_model }}">
             <input class="form-control" type="text" name="referente_otro" placeholder="Nombre del referente" ng-model="{{ $referente_otro_model }}">
             <label style="font-weight:100;font-size:12px;text-indent:1.5em;">
                 Agregar a opciones:
-                <input type="checkbox" ng-model="{{ $newReferente_model }}" ng-init="{{ $newReferente_model }} = false">
+                <input type="checkbox" ng-model="{{ $newReferente_model }}" ng-init="{{ $newReferente_init_expression }}">
                 <input type="hidden" name="newReferente" ng-value="{{ $newReferente_value }}">
             </label>
         </ng-show>
@@ -30,7 +30,8 @@
             uib-typeahead="r.id as r.descripcion for r in {{ $referentes_list }} | filter:$viewValue | limitTo:{{ $referentes_limit }}"
             typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, {{ $referentes_list }}, 'id', 'descripcion')">
         <input type="hidden" name="referente" ng-value="{{ $hasReferenteOtro_model }}? 1 : {{ $referente_model }}">
-</div>
+    </div>
+    
 </div>
 
 <div class="form-group col-sm-pull-2">
@@ -50,3 +51,12 @@
 </div>
 
 {{ $slot }}
+
+@if(isset($hasSubmitButton) && $hasSubmitButton)
+{{-- FINALLY, THE SUBMIT BUTTTON --}}
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
+    </div>
+</div>
+@endif

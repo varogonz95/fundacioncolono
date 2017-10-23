@@ -9,7 +9,7 @@
 
 @section('content')
     <section class="col-md-10 col-md-offset-1" ng-controller="Expedientes_CreateController">
-        <form name="newexpediente" class="form-horizontal" action="{{ route('expedientes.store') }}" method="post">
+        <form name="newexpediente" class="form-horizontal" action="{{ route('expedientes.store') }}" method="POST">
 
             {{ csrf_field() }}
 

@@ -11,7 +11,7 @@
 
     <section class="expediente-info form-horizontal" ng-if="selected.editable" style="overflow-y: auto">
         <div class="controls" ng-show="selected.editable">
-            <button type="button" class="btn-rest btn-outline btn-show" ng-click="updateCaso(update.caso)">
+            <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit()">
                 <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
             <button type="button" class="close" title="Cancelar edición" ng-click="selected.editable = false">&times;</button>
         </div>
@@ -20,7 +20,15 @@
         @include('templates.expediente.$edit')
     </section>
 
-    <section class="expediente-info" ng-hide="selected.editable">
+    <section class="expediente-info @{{ update.cache ? 'cached' : '' }}" ng-hide="selected.editable">
+
+        <div class="row change-state" ng-show="update.cache">
+            <strong>Marcado para actualizar</strong>
+            <button class="btn-rest btn-outline btn-show btn-sm" ng-click="revert()">
+                <span class="glyphicon glyphicon-repeat" style="transform: rotateY(180deg)"></span> 
+                <span class="hidden-xs">Revertir cambios</span>
+            </button>
+        </div>
 
         <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()">
             <span class="glyphicon glyphicon-pencil"></span> 
@@ -34,7 +42,7 @@
 
         <div class="expediente-info-item">
             <label>Referente: </label>
-            <span>@{{ (selected.referente.id === 1)? selected.referente_otro : selected.referente.descripcion }}</span>
+            <span>@{{ selected.referente_otro !== null? selected.referente_otro : selected.referente.descripcion }}</span>
         </div>
 
         <div class="expediente-info-item">
@@ -47,8 +55,8 @@
         <div class="expediente-info-item">
             <label>Estado de aprobación: </label>
             <br class="visible-xs">
-            <span class="label label-@{{ (selected.estado === 0)? 'info' : (selected.estado === 1)? 'success' : (selected.estado === 2)? 'danger' : '' }}">
-                @{{ (selected.estado === 0)? 'En valoración' : (selected.estado === 1)? 'Aprobado' : (selected.estado === 2)?'No aprobado' : '' }}
+            <span class="label label-@{{  selected.estado === 0 ? 'info' :  selected.estado === 1 ? 'success' :  selected.estado === 2 ? 'danger' : selected.estado === 3 ? 'warning' : '' }}">
+                @{{ selected.estado === 0 ? 'En valoración' : selected.estado === 1 ? 'Aprobado' : selected.estado === 2 ? 'No aprobado' : selected.estado === 3 ? 'Pendiente' : '' }}
             </span>
             {{-- <p class="help-block" ng-show="selected.estado !== 1">
                 <small>Para mostrar el campo de

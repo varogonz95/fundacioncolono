@@ -10,6 +10,11 @@ app.config(['uibPaginationConfig',function(conf){
     conf.forceEllipses=true;
 }]);
 
+app.config(function ($resourceProvider) {
+    $resourceProvider.defaults.actions.save.method = 'PATCH';
+    $resourceProvider.defaults.actions.update = { method: 'PUT'};
+});
+
 app.config(function(AppResourceProvider){
     AppResourceProvider.extras = 'fundacioncolono';
 });
@@ -34,7 +39,7 @@ function copy(_this, _into, except){
             for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
             if (fails === 0) { 
                 data[key] = _this[key];
-                // _into[key] = _this[key];
+                _into[key] = _this[key];
             }
             fails = 0;
         }
@@ -42,7 +47,7 @@ function copy(_this, _into, except){
     else {
         for (var key in _this) { 
             data[key] = _this[key];
-            // _into[key] = _this[key];
+            _into[key] = _this[key];
         }
     }
 
@@ -51,7 +56,7 @@ function copy(_this, _into, except){
 
 function find(key, value, array) {
     for (var i = 0; i < array.length; i++) {
-        if(array[i][key] === value){
+        if(array[i][key] == value){
             return array[i];
         }
     }

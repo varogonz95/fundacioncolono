@@ -1,4 +1,4 @@
-app.controller('Expedientes_EditController', function ($scope, Referente, Ayuda, Region, Typeahead) {
+app.controller('Expedientes_EditController', function ($scope, Expediente, Region, Typeahead) {
 
     $scope.invalid_add = false;
 
@@ -11,12 +11,61 @@ app.controller('Expedientes_EditController', function ($scope, Referente, Ayuda,
     $scope.estado = $scope.estados[0];
     
     $scope.edit = function (){
-        $scope.selected.editable = true;
-        $scope.update.caso = copy($scope.selected, ['editable','persona','ayudas','$$hashKey']);
-        $scope.estado_selected = $scope.estados[$scope.selected.estado];
+        copy($scope.selected, $scope.update.caso, ['editable','persona','ayudas','$$hashKey']);
+        
+        $scope.update.caso.estado_selected = find('id', $scope.update.caso.estado, $scope.estados);
+        $scope.update.caso.prioridad_selected = find('id', $scope.update.caso.prioridad, $scope.prioridades);
+        $scope.update.caso.referente_selected = $scope.selected.referente.id;
 
-        $scope.prioridad_selected = $scope.prioridades[$scope.selected.prioridad - 1];
-        $scope.referente_selected = $scope.selected.referente;
+        $scope.selected.editable = true;
+    };
+
+    $scope.commit = function(){
+
+        // Save current state
+        $scope.update.cache = $scope.update.cache ? $scope.update.cache : angular.copy($scope.selected);
+
+        // Set Expediente with new data
+        
+        // parse attributes...
+        $scope.update.caso.prioridad = $scope.update.caso.prioridad_selected.id;
+        $scope.update.caso.estado = $scope.update.caso.estado_selected.id;
+        
+        if ($scope.update.caso.hasReferenteOtro) {$scope.update.caso.referente = { id: 1, descripcion: 'Otro o ninguno' };}
+        else {
+            $scope.update.caso.referente = find('id', $scope.update.caso.referente_selected, $scope.referentes);
+            $scope.update.caso.referente_otro = null;
+        }
+
+        copy($scope.update.caso, $scope.selected);
+
+        $scope.selected.editable = false;
+    }
+
+    $scope.revert = function(){
+        copy($scope.update.cache, $scope.selected);
+
+        delete $scope.update.cache;
+
+        $scope.selected.editable = false;
+    }
+
+    $scope.updateCaso = function(){
+
+        if (confirm('¿Desea incluir los cambios al histórico?')) {
+        }
+        else{
+            
+            Expediente().update(
+                $scope.update.caso,
+                function (response) {
+                    console.log(response);
+                    copy($scope.update.caso, $scope.selected);
+                },
+                function (error) {},
+            );
+
+        }
     };
 
     // Update Canton SELECT

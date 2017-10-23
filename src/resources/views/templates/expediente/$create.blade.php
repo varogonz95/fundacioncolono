@@ -1,15 +1,17 @@
 
-@component('components.forms.expediente')
+@component('components.forms.expediente', ['hasSubmitButton' => true])
 
     @slot('descripcion_model', 'descripcion')
-    @slot('descripcion_value', '')
+    @slot('descripcion_value', 'descripcion')
 
     @slot('hasReferenteOtro_model', 'hasReferenteOtro')
+    @slot('hasReferenteOtro_init_expression', 'hasReferenteOtro = false')
     @slot('hasReferenteOtro_value', 'hasReferenteOtro')
 
     @slot('referente_otro_model', 'referente_otro')
     @slot('newReferente_model', 'newReferente')
     @slot('newReferente_value', 'newReferente')
+    @slot('newReferente_init_expression', 'newReferente = false')
 
     @slot('referente_model', 'referente')
     @slot('referentes_list', 'referentes')
@@ -46,20 +48,13 @@
 
                 <ng-show ng-show="estado.id === 1 && ayudas_selected[$index].id && !invalid_add">
                     <p class="help-block">Monto:</p>
-                    <input class="form-control" type="text" name="ayuda.monto[@{{ $index }}]" placeholder="Monto en colones" required>
+                    <input class="form-control" type="text" name="ayuda.monto[@{{ $index }}]" placeholder="Monto en colones" value="0" ng-required="estado.id === 1">
                 </ng-show>
 
                 <p class="help-block" ng-show="ayudas_selected[$index].$invalid"><small class="text-danger">Cada tipo de ayuda debe ser <strong><u>único</u></strong></small></p>
 
                 <button type="button" class="btn btn-danger" ng-click="removeAyuda(as)" ng-if="!$first"><span class="glyphicon glyphicon-ban-circle"></span> Quitar</button>
             </div>
-        </div>
-    </div>
-
-    {{-- FINALLY, THE SUBMIT BUTTTON --}}
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
         </div>
     </div>
 

@@ -2,15 +2,15 @@
     <header>
         <h3>
             Ayudas solicitadas
-            <small>
-                @{{ (selected.editable)? '(en edición)' : '' }}
-            </small>
+            {{-- <small>
+                @{{ ()? '(en edición)' : '' }}
+            </small> --}}
             <small class="text-nowrap">Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
             <button class="btn-rest btn-sm btn-show btn-outline">
                 <span class="glyphicon glyphicon-plus"></span>
                 Agregar ayuda
             </button>
-            <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="update()">
+            <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAll()">
                 Guardar cambios
             </button>
             <button class="btn-rest btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
@@ -30,15 +30,26 @@
 
             <div class="expediente-info @{{ ayuda.editable? 'editing' : '' }}" ng-if="ayuda.editable">
                 <div class="controls" ng-show="ayuda.editable">
-                    <button type="button" class="btn-rest btn-outline btn-show" ng-click="updateAyuda(ayuda)">
+                    <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit(ayuda)">
                         <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
-                    <button type="button" class="close" title="Cancelar edición" ng-click="cancel()">&times;</button>
+                    <button type="button" class="close" title="Cancelar edición" ng-click="cancel(ayuda)">&times;</button>
                 </div>
                 @include('templates.ayuda.$edit_pivot')
             </div>
 
-            <div class="expediente-info @{{ ayuda.removed? 'removed' : '' }}" ng-hide="ayuda.editable">
-                <div class="btn-group" ng-hide="ayuda.removed">
+            <div class="expediente-info @{{ ayuda.removed || ayuda.cache? 'cached' : '' }}" ng-hide="ayuda.editable">
+
+                <div class="row change-state" ng-show="ayuda.removed || ayuda.cache">
+                    <strong>
+                        Marcado para @{{ ayuda.removed ? 'eliminar' : ayuda.cache ? 'actualizar' : '' }}
+                    </strong>
+                    <button class="btn-rest btn-outline btn-show btn-sm" ng-click="revert(ayuda)">
+                        <span class="glyphicon glyphicon-repeat" style="transform: rotateY(180deg)"></span>
+                        <span class="hidden-xs">Revertir cambios</span>
+                    </button>
+                </div>
+
+                <div class="btn-group" ng-hide="ayuda.removed || ayuda.cache">
                     <button class="btn-edit btn-rest btn-outline btn-sm" ng-click="edit(ayuda)">
                         <span class="glyphicon-pencil glyphicon"></span>
                         <span class="hidden-xs">Editar</span>

@@ -15,12 +15,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     $scope.selected = {};
     
     $scope.expedientes = [];
-    // $scope.referentes = Referente.query(function(response){
-    //     $scope.referente_filter = response[0];
-    // });
-    // $scope.ayudas = Ayuda.query(function(response){
-    //     $scope.ayuda_filter = response[0];
-    // });
     
     $scope.filter_data = {
         active: false,
@@ -42,8 +36,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
     $scope.sort = {
         by: 'cedula',
-        order: true,
-        filter: function () { }
+        order: true
     };
     // Not supported for Location yet
     $scope.doSort = function (by) {
@@ -56,7 +49,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     $scope.filter_init = function(){
         if (!$scope.filter_data.active) {
             $scope.filter_data.referente = $scope.referentes[0];
-            console.log($scope.referentes);
             $scope.filter_data.ayuda = $scope.ayudas[0];
             $scope.filter_data.active = true;
         }
@@ -83,7 +75,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 by: $scope.sort.by,
                 order: ($scope.sort.order ? 'asc' : 'desc')},
                 params),
-            true,
             function(response){
                 $scope.expedientes = response.expedientes;
                 $scope.total = response.total;

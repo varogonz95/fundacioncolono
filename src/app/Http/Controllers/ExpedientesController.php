@@ -82,7 +82,12 @@ class ExpedientesController extends Controller
 
     public function index()
     {
-        return view('templates.expediente.index');
+        return view(
+            'templates.expediente.index', 
+            // Pass first Referente id into template
+            // to prevent 'hard coding'
+            ['first_referente' => Referente::first()->id]
+        );
     }
 
     public function create()
@@ -116,22 +121,23 @@ class ExpedientesController extends Controller
         $persona->save();
 
         // Check if Referente is 'Otro'.
-        // filter hasReferente input value to boolean
         if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)) {
-            // Create and save new Referente if its new
-            // filter hasReferente input value to boolean
+            
+            // Create and save new Referente
             if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)) {
                 $referente = new Referente(['descripcion' => $request['referente_otro']]);
-                $referente->save();
+                
                 // Associate that new Referente to this Expediente
-                $expediente->referente()->associate($referente);
+                $expediente->referente()->save($referente);
             }
+            
             // If not, then associate Expediente with first Referente (Otro)
             else {
                 $expediente->referente_otro = $request['referente_otro'];
                 $expediente->referente()->associate(Referente::first());
             }
         }
+        
         // If not, associate Expediente with a Referente
         else {
             $expediente->referente()->associate(
@@ -144,7 +150,7 @@ class ExpedientesController extends Controller
         // Save Persona and Expediente altogether
         $status = $persona->expediente()->save($expediente);
 
-        // Loop through input ayuda and attaching them to Expediente
+        // Loop through input ayuda and attach them to Expediente
         for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
             $expediente->ayudas()->attach($request['ayuda'][$i], [
                 'detalle' => $request['ayuda_detalle'][$i],
@@ -165,7 +171,7 @@ class ExpedientesController extends Controller
 
     public function show($id)
     {
-        //
+        return response()->json(Expediente::find($id));
     }
 
     public function edit($id)
@@ -173,16 +179,16 @@ class ExpedientesController extends Controller
         //
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
 
-        $expediente = Expediente::find($id);
+        // $expediente = Expediente::find($id);
 
-        $expediente->descripcion = $request['descripcion'];
-        $expediente->prioridad   = $request['prioridad'];
-        $expediente->estado      = $request['estado'];
+        // $expediente->descripcion = $request['descripcion'];
+        // $expediente->prioridad   = $request['prioridad'];
+        // $expediente->estado      = $request['estado'];
 
-        $status = $expediente->save();
+        // $status = $expediente->save();
+        $status = true;
 
         return response()->json([
             'status' => $status,

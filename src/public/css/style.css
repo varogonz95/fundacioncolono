@@ -10,9 +10,10 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .form-control:-moz-placeholder {font-style:italic}
 .form-control::-moz-placeholder {font-style:italic}
 
+.nogutter-left{margin-left: -15px;}
+.nogutter-right{margin-right: -15px;}
 .table .active > td {background:#5CACEB !important;color:white;}
 .table .active > td:last-child > *{color:inherit;}
-
 .caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
@@ -84,6 +85,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
     /* max-height: 50vh;
     overflow-y: auto; */
 }
+.expediente-info.cached{border:thin solid #dfdfdf}
 .expediente-info:hover{border-color:lightgrey; transition:border .3s}
 .expediente-info:hover .btn-rest, .expediente-info:hover .btn-group{opacity: 1; transition: .3s}
 
@@ -106,3 +108,15 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
     overflow-y: auto;
     height: calc(100vh - 100px);
 }
+
+.change-state {
+    min-height: 30px;
+    margin-bottom: 15px;
+    margin-top: -15px;
+    background-color: rgba(221,221,221,.5);
+    vertical-align: middle;
+    padding: 0.5em 1em;
+    text-align: center;
+}
+
+.change-state > *{color: grey}

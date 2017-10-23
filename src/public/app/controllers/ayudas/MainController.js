@@ -2,7 +2,7 @@
 /*
 *   Controller for entity 'Expediente'
 */
-app.controller('Ayudas_MainController', function ($scope, Ayuda) {
+app.controller('Ayudas_MainController', function ($scope, $http, AyudaExpediente) {
     
     $scope.remove = function(ayuda){
         ayuda.removed = true;
@@ -17,7 +17,7 @@ app.controller('Ayudas_MainController', function ($scope, Ayuda) {
 
     $scope.cancel = function (ayuda) {
         ayuda.editable = false;
-        ayuda.update = null;
+        delete ayuda.update;
     };
 
     $scope.cancelAll = function() {
@@ -29,7 +29,7 @@ app.controller('Ayudas_MainController', function ($scope, Ayuda) {
         $scope.update.ayudas.detachs = [];
         $scope.update.ayudas.updates = [];
 
-        // Reset editable and removed state for all 'ayudas'
+        // Reset 'editable' and 'removed' state for all 'ayudas'
         console.log($scope.selected.ayudas);
         for (var i = 0; i < $scope.selected.ayudas.length; i++) {
             $scope.selected.ayudas[i] = $scope.selected.ayudas[i].cache || $scope.selected.ayudas[i];
@@ -38,12 +38,33 @@ app.controller('Ayudas_MainController', function ($scope, Ayuda) {
         }
     };
 
-    $scope.updateAyuda = function(ayuda){
+    $scope.commit = function(ayuda){
         ayuda.pivot = ayuda.update.pivot;
         ayuda.pivot.detalle_tmp = ayuda.update.pivot.detalle;
 
         ayuda.editable = false;
         $scope.update.ayudas.updates.push(ayuda);
+    };
+
+    $scope.revert = function (ayuda){
+        
+        console.log(find('id', ayuda.id, ayuda.removed ? $scope.update.ayudas.detachs : ayuda.cache ? $scope.update.ayudas.updates : []));
+        ayuda = ayuda.cache;
+        delete ayuda.cache;
+    }
+
+    $scope.updateAll= function(){
+
+        AyudaExpediente.update(
+            {
+                expediente: $scope.selected.id,
+                ayudas: $scope.update.ayudas
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
+
     };
 
 });

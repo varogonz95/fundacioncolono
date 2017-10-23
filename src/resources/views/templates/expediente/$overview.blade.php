@@ -15,6 +15,12 @@
                 <span class="glyphicon glyphicon-time"></span>
                 <span class="hidden-xs">Historial de cambios</span>
             </a>
+            <span style="border-left: thin solid #ccc; padding: 0 4px" ng-show="update.cache || (update.cache && (update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0))">
+                <button type="button" class="btn-rest btn-outline btn-update" title="Guardar cambios">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <span class="hidden-xs">Guardar todo</span>
+                </button>
+            </span>
         </div>
     @endslot
     

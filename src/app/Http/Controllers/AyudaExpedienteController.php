@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Referente;
+use \App\Models\Ayuda;
+use \App\Models\Expediente;
+
 use Illuminate\Http\Request;
 
-class ReferentesController extends Controller
+class AyudaExpedienteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $first = Referente::first()->id;
-        return response()->json(Referente::where('id','<>',$first)->get());
+    public function index()
+    {
+        //
     }
 
     /**
@@ -67,9 +69,21 @@ class ReferentesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+        
+        for ($i=0, $count = count($request['ayudas']['updates']); $i < $count; $i++) { 
+            Expediente::find($id)
+            ->ayudas()
+            ->updateExistingPivot(
+                $request['ayudas']['updates'][$i]['id'], 
+                [
+                    'detalle' => $request['ayudas']['updates'][$i]['pivot']['detalle'],
+                    'monto' => $request['ayudas']['updates'][$i]['pivot']['monto']
+                ]
+            );
+        }
+
+        return response()->json(['text' => 'Ok']);
     }
 
     /**
@@ -78,8 +92,7 @@ class ReferentesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Request $request, $id){
+        return $request->all();
     }
 }

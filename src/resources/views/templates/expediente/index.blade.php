@@ -101,9 +101,9 @@
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>
                         <!-- POST RENDERIZADO DE FILA PARA REFERENTES -->
-                        <td ng-show="columns.referente" ng-if="e.referente.id === 1 && e.referente_otro">@{{ e.referente_otro }}</td>
-                        <td ng-show="columns.referente" ng-if="!e.referente_otro && e.referente.id === 1">Ninguno</td>
-                        <td ng-show="columns.referente" ng-if="e.referente.id !== 1">
+                        <td ng-show="columns.referente" ng-if="e.referente_otro !== null">@{{ e.referente_otro }}</td>
+                        <td class="text-muted" ng-show="columns.referente" ng-if="e.referente_otro === null && e.referente.id === {{ $first_referente }}">Ninguno</td>
+                        <td ng-show="columns.referente" ng-if="e.referente_otro === null && e.referente.id !== {{ $first_referente }}">
                             <span class="text-primary glyphicon glyphicon-file"></span> @{{ e.referente.descripcion }}
                         </td>
                         <!-- ------------------------------------------ -->
