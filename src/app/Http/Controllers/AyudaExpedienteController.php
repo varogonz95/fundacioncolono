@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use \App\Models\Ayuda;
 use \App\Models\Expediente;
 
+use DB;
 use Illuminate\Http\Request;
 
-class AyudaExpedienteController extends Controller
-{
+class AyudaExpedienteController extends Controller{
     /**
      * Display a listing of the resource.
      *
@@ -71,19 +71,51 @@ class AyudaExpedienteController extends Controller
      */
     public function update(Request $request, $id){
         
-        for ($i=0, $count = count($request['ayudas']['updates']); $i < $count; $i++) { 
-            Expediente::find($id)
-            ->ayudas()
-            ->updateExistingPivot(
-                $request['ayudas']['updates'][$i]['id'], 
-                [
-                    'detalle' => $request['ayudas']['updates'][$i]['pivot']['detalle'],
-                    'monto' => $request['ayudas']['updates'][$i]['pivot']['monto']
-                ]
-            );
+        $expediente = Expediente::find($id);
+        $status = true;
+
+        DB::beginTransaction();
+        
+        try{
+
+            // Process attachs
+            for ($i=0, $count = count($request['ayudas']['attachs']); $i < $count; $i++)
+                 $expediente->ayudas()
+                 ->attach(
+                     $request['ayudas']['attachs'][$i]['id'],
+                     []
+                 );
+    
+            // Process detachs
+            for ($i=0, $count = count($request['ayudas']['detachs']); $i < $count; $i++)
+                $expediente->ayudas()->detach($request['ayudas']['detachs'][$i]['id']);
+    
+            // Process updates
+            for ($i=0, $count = count($request['ayudas']['updates']); $i < $count; $i++)
+                $expediente->ayudas()
+                ->updateExistingPivot(
+                    $request['ayudas']['updates'][$i]['id'], 
+                    [
+                        'detalle' => $request['ayudas']['updates'][$i]['pivot']['detalle'],
+                        'monto' => $request['ayudas']['updates'][$i]['pivot']['monto']
+                    ]
+                );
+
+            // All good to commit
+            DB::commit();
         }
 
-        return response()->json(['text' => 'Ok']);
+        catch(\Exception $e){
+            // Something went wrong
+            $status = false;
+        }
+
+        return response()->json([
+            'status' => $status,
+            'title' => $status? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+            'msg' => $status? 'Se realizaron los cambios correctamente' : 'Es posible que los datos ingresados no sean los correctos.',
+        ]);
+
     }
 
     /**
