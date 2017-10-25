@@ -45,7 +45,9 @@ app.provider('AppResource', function () {
 
                 return {
 
-                    // Get one resource
+                    $service: service,
+
+                    // Get resource object
                     get: function (data = {}, success = function () { }, error = function () { }) {
                         return service.get(data, success, error);
                     },
