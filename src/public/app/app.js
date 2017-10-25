@@ -12,7 +12,8 @@ app.config(['uibPaginationConfig',function(conf){
 
 app.config(function ($resourceProvider) {
     $resourceProvider.defaults.actions.save.method = 'PATCH';
-    $resourceProvider.defaults.actions.update = { method: 'PUT'};
+    $resourceProvider.defaults.actions.update = { method: 'PUT' };
+    $resourceProvider.defaults.actions.post = { method: 'POST'};
 });
 
 app.config(function(AppResourceProvider){
@@ -60,6 +61,8 @@ function find(key, value, array) {
             return array[i];
         }
     }
+
+    return false;
 }
 
 function getIndex(list, object){
@@ -67,7 +70,8 @@ function getIndex(list, object){
     found = false;
 
     for (;i < list.length; i++) {
-        if (list[i] === object) {
+
+        if (angular.equals(list[i], object)) {
             found = true;
             break;
         }

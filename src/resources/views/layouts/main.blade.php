@@ -12,6 +12,7 @@
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 
     <!-- Scripts top -->
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular.1.6.4.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular-resource.1.6.4.js') }}"></script>
     <script src="{{ asset('js/angularjs-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js') }}"></script>

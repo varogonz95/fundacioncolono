@@ -2,9 +2,6 @@
     <header>
         <h3>
             Ayudas solicitadas
-            {{-- <small>
-                @{{ ()? '(en edición)' : '' }}
-            </small> --}}
             <small class="text-nowrap">Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
             <button class="btn-rest btn-sm btn-show btn-outline">
                 <span class="glyphicon glyphicon-plus"></span>
@@ -17,11 +14,6 @@
                 Cancelar
             </button>
         </h3>
-        <!-- <h5>
-            Leyenda:
-            <small>lnd 1</small>
-            <small>lnd2</small>
-        </h5> -->
         <hr>
     </header>
 
@@ -37,11 +29,11 @@
                 @include('templates.ayuda.$edit_pivot')
             </div>
 
-            <div class="expediente-info @{{ ayuda.removed || ayuda.cache? 'cached' : '' }}" ng-hide="ayuda.editable">
+            <div class="expediente-info @{{ ayuda.removed || ayuda.changed? 'cached' : '' }}" ng-hide="ayuda.editable">
 
-                <div class="row change-state" ng-show="ayuda.removed || ayuda.cache">
+                <div class="row change-state" ng-show="ayuda.removed || ayuda.changed">
                     <strong>
-                        Marcado para @{{ ayuda.removed ? 'eliminar' : ayuda.cache ? 'actualizar' : '' }}
+                        Marcado para @{{ ayuda.removed ? 'eliminar' : ayuda.changed ? 'actualizar' : '' }}
                     </strong>
                     <button class="btn-rest btn-outline btn-show btn-sm" ng-click="revert(ayuda)">
                         <span class="glyphicon glyphicon-repeat" style="transform: rotateY(180deg)"></span>
@@ -49,12 +41,12 @@
                     </button>
                 </div>
 
-                <div class="btn-group" ng-hide="ayuda.removed || ayuda.cache">
+                <div class="btn-group" ng-hide="ayuda.removed">
                     <button class="btn-edit btn-rest btn-outline btn-sm" ng-click="edit(ayuda)">
                         <span class="glyphicon-pencil glyphicon"></span>
                         <span class="hidden-xs">Editar</span>
                     </button>
-                    <button type="button" class="btn-rest btn-sm btn-delete btn-outline" ng-click="remove(ayuda)">
+                    <button type="button" class="btn-rest btn-sm btn-delete btn-outline" ng-hide="ayuda.changed" ng-click="remove(ayuda)">
                         <span class="glyphicon glyphicon-minus"></span>
                         <span class="hidden-xs">Quitar</span>
                     </button>
