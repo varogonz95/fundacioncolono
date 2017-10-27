@@ -1,8 +1,5 @@
 
-/*
-*   Controller for entity 'Expediente'
-*/
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert) {
 
     var showModal = $('#show_modal').animatedModal({
         style:{'overflow-y':'hidden'},
@@ -38,6 +35,18 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         by: 'cedula',
         order: true
     };
+    
+    $scope.columns = {
+        cedula: true,
+        nombre: true,
+        apellidos: true,
+        prioridad: true,
+        estado: true,
+        referente: true,
+        ayuda: true,
+        fecha_creacion: true
+    };
+
     // Not supported for Location yet
     $scope.doSort = function (by) {
         $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
@@ -52,17 +61,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
             $scope.filter_data.ayuda = $scope.ayudas[0];
             $scope.filter_data.active = true;
         }
-    };
-
-    $scope.columns = {
-        cedula: true,
-        nombre: true,
-        apellidos: true,
-        prioridad: true,
-        estado: true,
-        referente: true,
-        ayuda: true,
-        fecha_creacion: true
     };
 
     $scope.index = function (page = 1, params = {}) {
@@ -107,33 +105,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         showModal.show();
     };
 
-    $scope.delete = function () {
-        if (confirm('¿Realmente desea eliminar este expediente?\nEsta acción es irreversible.'))
-            Expediente().delete({id: $scope.selected.persona.cedula},
-                function (response) {
-                    if (response.status) {
-                        showModal.close();
-                        $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
-                        $scope.selected = {};
-
-                        if ($scope.page !== response.last && $scope.expedientes.length > 0) { $scope.index($scope.page); }
-                        else if ($scope.expedientes.length === 0) { $scope.index($scope.page - 1); }
-
-                        alert('Deleted successfully');
-                    }
-                },
-                function (error) {alert(error.message);} 
-            );
-    }
-
-    var filter_selector = function () {
-        var data = {};
-
-        // Code here...
-
-        return data;  
-    };
-
     $scope.filter_pichudo = function () {
 
         var data = jQueryToJson($('#filter'), 'name');
@@ -148,7 +119,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 $scope.total = response.total;
             }
         );
-    }
+    };
 
     $scope.index();
 });

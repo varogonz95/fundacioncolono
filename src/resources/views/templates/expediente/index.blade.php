@@ -4,6 +4,7 @@
     <script src="{{ asset('app/controllers/ayudas/MainController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/MainController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/IndexController.js') }}"></script>
+    <script src="{{ asset('app/controllers/expedientes/OverviewController.js') }}"></script>
     <script src="{{ asset('app/controllers/expedientes/EditController.js') }}"></script>
     <script src="{{ asset('app/controllers/personas/EditController.js') }}"></script>
 @endpush

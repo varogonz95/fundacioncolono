@@ -100,3 +100,40 @@ app.provider('AppResource', function () {
         };
     }
 });
+
+app.provider('AlertProvider', function () {
+
+    this.$get = function () {
+
+        var buttons = this.buttons || {
+                cancel: {
+                    text: 'Cancelar',
+                    value: false,
+                    visible: true,
+                    closeModal: true
+                },
+                confirm: {
+                    text: 'Confirmar',
+                    value: true,
+                    visible: true,
+                    closeModal: true
+                },
+                // close: {
+                //     text: 'x',
+                //     value: null,
+                //     visible: true,
+                //     closeModal: true,
+                //     className: 'swal-close'
+                // }
+            },
+            promptContent = this.promptContent || {
+                element: 'input',
+                attributes: {type: 'text'},
+            };
+
+        return {
+            buttons: buttons,
+            promptContent: promptContent
+        }
+    }
+});

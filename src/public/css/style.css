@@ -5,6 +5,8 @@ a{cursor:pointer}
 a.btn-rest, a.btn-outline{text-decoration: none !important}
 hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
+.swal-close{position: relative; top: -14em; border:thin solid; background-color: transparent; color: grey; right: -10px; padding: 0; margin: 0}
+
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
 .form-control:-ms-.form-control-placeholder {font-style:italic}
 .form-control:-moz-placeholder {font-style:italic}
