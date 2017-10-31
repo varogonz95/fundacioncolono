@@ -97,7 +97,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="@{{ (e.isSelected)? 'active' : '' }}" ng-repeat="e in expedientes" ng-click="show(e)" ng-cloak>
+                    <tr class="@{{ (e.isSelected)? 'active' : '' }} @{{ (e.archivado)? 'archived progress-bar-striped' : '' }}" ng-repeat="e in expedientes" ng-click="show(e)" ng-cloak>
                         <td ng-show="columns.cedula">@{{ e.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>

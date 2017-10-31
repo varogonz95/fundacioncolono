@@ -13,6 +13,7 @@ app.config(['uibPaginationConfig',function(conf){
 app.config(function ($resourceProvider) {
     $resourceProvider.defaults.actions.save.method = 'PATCH';
     $resourceProvider.defaults.actions.update = { method: 'PUT' };
+    $resourceProvider.defaults.actions.create = { method: 'POST' };
     $resourceProvider.defaults.actions.post = { method: 'POST'};
 });
 

@@ -51,3 +51,29 @@ app.service('Region', function($http){
         return list;
     };
 });
+
+app.service('Modal', function(){
+
+    var instance;
+
+    this.init = function(selector, settings){
+        instance = $(selector).animatedModal({
+            style: { 'overflow-y': 'hidden' },
+            onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
+            onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
+            // settings
+        });
+        return instance;
+    };
+
+    this.close = function(){
+        instance.close();
+    };
+
+    // etc...
+
+    this.getInstance = function(){
+        return instance;
+    };
+
+});

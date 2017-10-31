@@ -18,7 +18,7 @@ app.factory('Ayuda', function(AppResource){
 });
 
 app.factory('AyudaExpediente', function (AppResource) {
-    return AppResource.extends('expedientes/:expedienteId/ayudas/:ayudaId', { expedienteId: '@expedienteId', ayudaId: '@ayudaId' });
+    return AppResource.extends('expedientes/:id/ayudas', { id: '@id'});
 });
 
 app.factory('Alert', function (AlertProvider) {
@@ -26,10 +26,11 @@ app.factory('Alert', function (AlertProvider) {
     return {
         notify: function(title, text, type = 'success', timer = 2500){
             swal({
-                title: !text ? null : title,
-                text: !text ? title : text,
+                title: title,
+                text: text,
                 icon: type,
                 buttons: false,
+                content: AlertProvider.close,
                 timer: timer,
             });
         },
@@ -39,8 +40,10 @@ app.factory('Alert', function (AlertProvider) {
             return swal({
                 title: !text ? null : title,
                 text: !text ? title : text,
+                content: AlertProvider.close,
                 icon: type,
-                buttons: !buttons ? AlertProvider.buttons : buttons,
+                closeOnClickOutside: false,
+                buttons: !buttons ? (type === 'error' ? AlertProvider.dangerbtn : AlertProvider.buttons) : buttons,
             });
         },
 

@@ -5,7 +5,21 @@ a{cursor:pointer}
 a.btn-rest, a.btn-outline{text-decoration: none !important}
 hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
-.swal-close{position: relative; top: -14em; border:thin solid; background-color: transparent; color: grey; right: -10px; padding: 0; margin: 0}
+.swal-close{
+    position: absolute; 
+    border:none;
+    background-color: transparent; 
+    color: #bbb;
+    padding: 0; 
+    font-weight: bold;
+    margin: 0; 
+    font-size: xx-large; 
+    top: -8px;
+    right: 6px;
+    transition: color .3s;
+}
+.swal-close:hover{color: grey; transition: color .3s}
+.swal-text{text-align: center;}
 
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
 .form-control:-ms-.form-control-placeholder {font-style:italic}
@@ -14,8 +28,14 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
 .nogutter-left{margin-left: -15px;}
 .nogutter-right{margin-right: -15px;}
+
 .table .active > td {background:#5CACEB !important;color:white;}
 .table .active > td:last-child > *{color:inherit;}
+
+.table .archived{color: #888; background: lightgoldenrodyellow !important;}
+.table .archived .label{background-color: lightgray}
+.table .archived .glyphicon{color: lightgray}
+
 .caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
@@ -96,6 +116,10 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .expediente-content .editing > .expediente-info, .expediente-info.editing{border-color:lightgrey;padding: 4px 1em;}
 .expediente-content .removed{opacity: .4;border-color:lightgrey;}
 .expediente-info-item{margin-bottom:10px;font-size:medium}
+
+.expediente-archived-overlay{height: 100%; position: fixed; width: 100%; background-color: rgba(0,0,0,.4)}
+.expediente-archived{position: relative; top: 25vh; margin: auto; width: 25%; box-shadow: 0 0 8px #666 !important;}
+.expediente-archived > .panel-body{padding: 2em 1.5em; font-size: large}
 
 .animatedModal-header{
     padding: .5em;

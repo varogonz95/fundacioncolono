@@ -47,31 +47,12 @@ app.provider('AppResource', function () {
 
                     $service: service,
 
-                    // Get resource object
-                    get: function (data = {}, success = function () { }, error = function () { }) {
-                        return service.get(data, success, error);
+                    create: function (data = {}, success = function () { }, error = function () { }) {
+                        return service.create(data, success, error);
                     },
 
-                    // Get list of resources
-                    query: function (success = function(){}, data = {}) {
-                        var params = '';
-
-                        if (!angular.equals(data, {})) {
-                            for (var key in data) {
-                                params += '&' + key + '=' + data[key];
-                            }
-                            params = '?' + params.substring(1, params.length);
-                        }
-                        return $resource(getUrl() + route, data).query(success);
-                    },
-
-                    // insert or update a model by passing its id and model
-                    save: function (model = {}, id = null, success = function () { }, error = function () { }) {
-                        return id === null?
-                        // Insert
-                        $resource(getUrl() + route, null).save(model, success, error) :
-                        // Update
-                        $resource(getUrl() + route + '/' + id, null, { 'save': { method: 'PATCH' } }).save(model, success, error);
+                    save: function (data = {}, success = function () { }, error = function () { }) {
+                        return service.save(data, success, error);
                     },
 
                     // Delete or remove resource
@@ -79,7 +60,7 @@ app.provider('AppResource', function () {
                         return service.delete(data, success, error);                        
                     },
 
-                    find: function (data, success = function () { }, error = function () { }) {
+                    get: function (data, success = function () { }, error = function () { }) {
                         return service.get(data, success, error);
                     },
 
@@ -88,7 +69,7 @@ app.provider('AppResource', function () {
                     },
 
                     update: function (data, success = function () { }, error = function () { }) {
-                        return service.save(data, success, error);                        
+                        return service.update(data, success, error);                        
                     }
 
                 };
@@ -118,22 +99,22 @@ app.provider('AlertProvider', function () {
                     visible: true,
                     closeModal: true
                 },
-                // close: {
-                //     text: 'x',
-                //     value: null,
-                //     visible: true,
-                //     closeModal: true,
-                //     className: 'swal-close'
-                // }
             },
             promptContent = this.promptContent || {
                 element: 'input',
                 attributes: {type: 'text'},
-            };
+            },
+            closebtn = {
+                element: $.parseHTML('<button class="swal-close" title="Cerrar" onclick="swal.setActionValue({confirm: null,cancel: null});swal.close()">\u00D7</button>')[0],
+            },
+            //! *** Notice that angular.merge is deprecated, but functional in this case ***
+            dangerbtn = angular.merge({confirm: {className: 'swal-button--danger'}}, buttons);
 
         return {
             buttons: buttons,
-            promptContent: promptContent
+            promptContent: promptContent,
+            close: closebtn,
+            dangerbtn: dangerbtn,
         }
     }
 });

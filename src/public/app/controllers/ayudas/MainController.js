@@ -25,7 +25,7 @@ app.controller('Ayudas_MainController', function ($scope, Alert, AyudaExpediente
         ayuda.changed = true;
 
         if (!find('id', ayuda.id, $scope.update.ayudas.updates))
-            $scope.update.ayudas.updates.push(ayuda);
+            $scope.update.ayudas.updates.push(ayuda.update);
     };
 
     $scope.revert = function (ayuda){

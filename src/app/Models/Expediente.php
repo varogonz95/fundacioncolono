@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Expediente extends Model{
 
+    use SoftDeletes;
+
     const CREATED_AT = 'fecha_creacion';
+    const DELETED_AT = 'fecha_eliminacion';
+    
+    protected $dates = ['fecha_eliminacion'];
 
     public $timestamps = false;
 

@@ -7,7 +7,7 @@
                 <span class="glyphicon glyphicon-plus"></span>
                 Agregar ayuda
             </button>
-            <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAll()">
+            <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAyudas()">
                 Guardar cambios
             </button>
             <button class="btn-rest btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
@@ -20,7 +20,7 @@
     <div class="row">
         <section class="col-md-4" ng-repeat="ayuda in selected.ayudas">
 
-            <div class="expediente-info @{{ ayuda.editable? 'editing' : '' }}" ng-if="ayuda.editable">
+            <div class="expediente-info @{{ ayuda.editable? 'editing' : '' }}" ng-if="ayuda.editable && !selected.archivado">
                 <div class="controls" ng-show="ayuda.editable">
                     <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit(ayuda)">
                         <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
@@ -41,7 +41,7 @@
                     </button>
                 </div>
 
-                <div class="btn-group" ng-hide="ayuda.removed">
+                <div class="btn-group @{{ selected.archivado }}" ng-hide="ayuda.removed">
                     <button class="btn-edit btn-rest btn-outline btn-sm" ng-click="edit(ayuda)">
                         <span class="glyphicon-pencil glyphicon"></span>
                         <span class="hidden-xs">Editar</span>

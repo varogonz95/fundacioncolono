@@ -1,8 +1,9 @@
 
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
-    var showModal = $('#show_modal').animatedModal({
+    var showModal = Modal.init('#show_modal',{
         style:{'overflow-y':'hidden'},
+        // This below not working somehow...
         onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Filter;
+use App\Services\Filter;
 use Illuminate\Support\ServiceProvider;
 
 class FilterServiceProvider extends ServiceProvider{

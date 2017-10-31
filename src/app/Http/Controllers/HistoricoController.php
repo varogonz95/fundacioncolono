@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ayuda;
 use Illuminate\Http\Request;
 
-class AyudasController extends Controller
+class HistoricoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +13,7 @@ class AyudasController extends Controller
      */
     public function index()
     {
-        return response()->json(Ayuda::all());
+        //
     }
 
     /**
@@ -60,20 +59,15 @@ class AyudasController extends Controller
         //
     }
 
-    public function updatePivot(Request $request, $id){
-        Ayuda::find($id)->expedientes()
-        ->updateExistingPivot(
-            $expedienteId, 
-            ['detalle' => $request['detalle'], 'monto' => $request['monto']]
-        );
-
-        return response()->json([
-            'status' => true,
-            'msg' => ''
-        ]);
-    }
-
-    public function update(Request $request, $id){
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
         //
     }
 
