@@ -1,4 +1,4 @@
-<article id="selectedexpediente" class="col-md-4 col-md-offset-1 @{{ (selected.editable)? 'editing' : '' }}" ng-controller="Expedientes_EditController">
+<article id="selectedexpediente" class="col-md-4 col-md-offset-1" ng-class="{'editing': selected.editable}" ng-controller="Expedientes_EditController">
     <header>
         <h3>
             Detalles del caso
@@ -9,7 +9,7 @@
         <hr>
     </header>
 
-    <section class="expediente-info form-horizontal" ng-if="selected.editable" style="overflow-y: auto">
+    <section class="expediente-info form-horizontal" style="overflow-y: auto" ng-if="selected.editable">
         <div class="controls" ng-show="selected.editable">
             <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit()">
                 <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
@@ -20,7 +20,7 @@
         @include('templates.expediente.$edit')
     </section>
 
-    <section class="expediente-info @{{ update.cache ? 'cached' : '' }}" ng-hide="selected.editable">
+    <section class="expediente-info" ng-class="{'cached': update.cache, 'archived': selected.archivado}" ng-hide="selected.editable">
 
         <div class="row change-state" ng-show="update.cache">
             <strong>Marcado para actualizar</strong>
@@ -30,7 +30,7 @@
             </button>
         </div>
 
-        <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()">
+        <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()" ng-if="!selected.archivado">
             <span class="glyphicon glyphicon-pencil"></span> 
             <span class="hidden-xs">Editar</span>
         </button>
@@ -47,7 +47,7 @@
 
         <div class="expediente-info-item">
             <label>Prioridad: </label>
-            <span class="label label-@{{ (selected.prioridad === 1)? 'info' : (selected.prioridad === 2)? 'warning' : (selected.prioridad === 3)? 'danger' : '' }}">
+            <span class="label" ng-class="{'label-info':selected.prioridad === 1, 'label-warning': selected.prioridad === 2, 'label-danger':selected.prioridad === 3}">
                 @{{ (selected.prioridad === 1)? 'Baja' : (selected.prioridad === 2)? 'Media' : (selected.prioridad === 3)? 'Alta' : '' }}
             </span>
         </div>
@@ -55,14 +55,15 @@
         <div class="expediente-info-item">
             <label>Estado de aprobación: </label>
             <br class="visible-xs">
-            <span class="label label-@{{  selected.estado === 0 ? 'info' :  selected.estado === 1 ? 'success' :  selected.estado === 2 ? 'danger' : selected.estado === 3 ? 'warning' : '' }}">
+            <span class="label" ng-class="{'label-info':selected.estado === 0, 'label-success': selected.estado === 1, 'label-danger': selected.estado === 2, 'label-warning': selected.estado === 3}">
                 @{{ selected.estado === 0 ? 'En valoración' : selected.estado === 1 ? 'Aprobado' : selected.estado === 2 ? 'No aprobado' : selected.estado === 3 ? 'Pendiente' : '' }}
             </span>
-            {{-- <p class="help-block" ng-show="selected.estado !== 1">
-                <small>Para mostrar el campo de
+            <p class="help-block" ng-show="selected.estado !== 1">
+                <small>Para mostrar el los
                     <strong>meses asignados</strong>, el expediente debe estar
-                    <u>Aprobado</u>.</small>
-            </p> --}}
+                    <u>Aprobado</u>.
+                </small>
+            </p>
         </div>
 
         <div class="expediente-info-item" ng-show="selected.estado === 1">

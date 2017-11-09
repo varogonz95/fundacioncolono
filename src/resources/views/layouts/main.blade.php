@@ -14,6 +14,7 @@
     <!-- Scripts top -->
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular.1.6.4.min.js') }}"></script>
+    <script src="{{ asset('js/angularjs/angular-animate.1.6.4.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular-resource.1.6.4.js') }}"></script>
     <script src="{{ asset('js/angularjs-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js') }}"></script>
     <script src="{{ asset('app/app.js') }}"></script>
@@ -28,7 +29,7 @@
 
     @include('partials._navbar')
 
-    <main class="container-fluid" style="padding-top:50px" ng-app="App" ng-controller="@yield('controller')_MainController">
+    <main class="container-fluid" style="padding-top:50px" ng-app="App" ng-controller="@yield('controller')_MainController" ng-cloak>
         <div class="row" style="padding: 1em 0">
             @yield('content')
         </div>

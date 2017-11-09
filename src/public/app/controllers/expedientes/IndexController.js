@@ -2,8 +2,7 @@
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
     var showModal = Modal.init('#show_modal',{
-        style:{'overflow-y':'hidden'},
-        // This below not working somehow...
+        style:{'overflow-y':'hidden', 'bottom': '0'},
         onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
@@ -104,6 +103,14 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
         $scope.selected = obj;
         showModal.show();
+
+        if (obj.archivado)
+            Alert.notify(
+                'Expediente archivado', 
+                'No se pueden realizar cambios al expediente mientras esté archivado. ', 
+                'info',
+                3000
+            );
     };
 
     $scope.filter_pichudo = function () {
@@ -112,7 +119,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
         Expediente('test').get(
             data,
-            true,
             function (response) {
                 $scope.filter_data.filtered = true;
                 // $scope.filter_data.filter = null;

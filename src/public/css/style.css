@@ -6,20 +6,23 @@ a.btn-rest, a.btn-outline{text-decoration: none !important}
 hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
 .swal-close{
-    position: absolute; 
+    position: absolute;
     border:none;
-    background-color: transparent; 
+    background-color: transparent;
     color: #bbb;
-    padding: 0; 
+    padding: 0;
     font-weight: bold;
-    margin: 0; 
-    font-size: xx-large; 
+    margin: 0;
+    font-size: xx-large;
     top: -8px;
     right: 6px;
     transition: color .3s;
 }
 .swal-close:hover{color: grey; transition: color .3s}
 .swal-text{text-align: center;}
+.swal-overlay{overflow: hidden}
+
+.ayudas-empty{border:2px dashed #c5c5c5; padding: 1em; text-align: center; font-size: large; border-radius: 6px; color: #666}
 
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
 .form-control:-ms-.form-control-placeholder {font-style:italic}
@@ -36,6 +39,15 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .table .archived .label{background-color: lightgray}
 .table .archived .glyphicon{color: lightgray}
 
+uib-accordion .addayudas{margin: 0 !important; border-radius: 0 !important;}
+uib-accordion .addayudas:first-child{border-radius: 4px 4px 0 0 !important;}
+uib-accordion .addayudas:last-child{border-radius: 0 0 4px 4px !important;}
+uib-accordion .addayudas:only-child{border-radius: 4px !important;}
+
+.panel a{width: 100%;text-decoration: none !important; display: inline-block;}
+.addayudas span > span{vertical-align: sub}
+.addayudas .panel-heading{padding: 5px 15px}
+
 .caret-right{transform: rotate(-90deg)}
 .controls{margin-top:4px; margin-bottom:1em;}
 .noresize{resize: none;}
@@ -44,9 +56,9 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 /* .nowrap{white-space: nowrap;} */
 
 /*#nav-top{font-family: 'Raleway'}*/
+#show_modal{height: calc(100% - 50px);}
 #nav-top .filters > li:not(:first-child){text-indent: 5px;}
 #nav-top .filters > li:not(:first-child) input{margin: 4px 10px}
-#show_modal{display: none;height: calc(100% - 50px)}
 
 .btn-rest{
     display: inline-block;
@@ -98,7 +110,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .status.priority-low{background-color: #5CB85C}
 
 .expediente-info{
-    border:2px dashed transparent; 
+    border:2px dashed transparent;
     border-radius: 6px;
     overflow: hidden;
     transition:border .3s;
@@ -108,8 +120,8 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
     overflow-y: auto; */
 }
 .expediente-info.cached{border:thin solid #dfdfdf}
-.expediente-info:hover{border-color:lightgrey; transition:border .3s}
-.expediente-info:hover .btn-rest, .expediente-info:hover .btn-group{opacity: 1; transition: .3s}
+.expediente-info:not(.archived):hover{border-color:lightgrey; transition:border .3s}
+.expediente-info:not(.archived):hover .btn-rest, .expediente-info:hover .btn-group{opacity: 1; transition: .3s}
 
 .expediente-info > .btn-rest, .expediente-info > .btn-group{position: relative;top: -10px;right: -8px;float: right;opacity: 0; transition: .3s;}
 .expediente-content .editing .btn-group{opacity: 1}
@@ -117,19 +129,29 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .expediente-content .removed{opacity: .4;border-color:lightgrey;}
 .expediente-info-item{margin-bottom:10px;font-size:medium}
 
-.expediente-archived-overlay{height: 100%; position: fixed; width: 100%; background-color: rgba(0,0,0,.4)}
-.expediente-archived{position: relative; top: 25vh; margin: auto; width: 25%; box-shadow: 0 0 8px #666 !important;}
+.expediente-archived-overlay{height: 100%; position: fixed; width: 100%;}
+.expediente-archived{position: relative; top: 25vh; margin: auto; min-width: 25%; max-width: 30%; box-shadow: 0 0 8px #666 !important;}
 .expediente-archived > .panel-body{padding: 2em 1.5em; font-size: large}
 
-.animatedModal-header{
+#ayudaModal{border-radius: 3px; box-shadow: 0 0 6px #666; margin-top: -20px}
+#ayudaModal .content{padding: 1em 0;}
+#ayudaModal .content .form-group{margin-left: 0; margin-right: 0}
+
+.animatedModal-overlay{bottom: 0; left: 0}
+
+.animatedModal{display: none;}
+
+.animatedModal-header{border-bottom: thin solid;}
+.animatedModal-footer{border-top: thin solid;}
+.animatedModal-footer, .animatedModal-header{
     padding: .5em;
-    border-bottom: thin solid #efefef;
-    background: #f9f9f9;
+    background: #f6f6f6;
+    border-color:  #efefef;
     max-height: 50px;
     min-height: 50px;
 }
 
-.animatedModal-content{
+#show_modal .animatedModal-content{
     overflow-y: auto;
     height: calc(100vh - 100px);
 }

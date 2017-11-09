@@ -1,5 +1,5 @@
 
-app.controller('Ayudas_MainController', function ($scope, Alert, AyudaExpediente) {
+app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente) {
 
     $scope.remove = function(ayuda){
         ayuda.removed = true;

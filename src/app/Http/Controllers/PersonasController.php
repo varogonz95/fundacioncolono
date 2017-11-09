@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 
-class PersonasController extends Controller
-{
+use DB;
+
+class PersonasController extends Controller{
     /**
      * Display a listing of the resource.
      *
@@ -69,22 +70,28 @@ class PersonasController extends Controller
      */
     public function update(Request $request, $id){
 
-        $persona = Persona::find($id);
+        $status = true;
 
-        $persona->nombre    = $request['nombre'];
-        $persona->apellidos = $request['apellidos'];
-        $persona->telefonos = $request['telefonos'];
-        $persona->ubicacion = "{$request['provincia']['cod']}/{$request['canton']['cod']}/{$request['distrito']['cod']}";
-        $persona->direccion = $request['direccion'];
-        $persona->contactos = $request['contactos'];
+        DB::beginTransaction();
 
-        // $request->flash('status', [
-        //         'type' => $status? 'success' : 'danger',
-        //         'title' => $status? 'Éxito' : 'Error',
-        //         'msg' => $status? 'Msj de éxito' : 'Msj de error',
-        //     ]);
+        try {
+            $persona = Persona::find($id);
 
-        $status = $persona->save();
+            $persona->nombre    = $request['data']['nombre'];
+            $persona->apellidos = $request['data']['apellidos'];
+            $persona->telefonos = $request['data']['telefonos'];
+            $persona->ubicacion = "{$request['data']['provincia']['cod']}/{$request['data']['canton']['cod']}/{$request['data']['distrito']['cod']}";
+            $persona->direccion = $request['data']['direccion'];
+            $persona->contactos = $request['data']['contactos'];
+
+            $persona->save();
+
+            DB::commit();
+        }
+        catch (Exception $e) {
+            $status  = false;
+            DB::rollback();
+        }
 
         return response()->json([
             'status' => $status,

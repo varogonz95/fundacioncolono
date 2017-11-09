@@ -7,21 +7,6 @@ app.provider('AppResource', function () {
             port = this.port || $location.port(),
             extras = this.extras || '',
 
-            queryData = function (data, append) {
-
-                var params = '',
-                    data_params = {};
-
-                if (!append) {
-                    for (var key in data) {
-                        params += '/:' + key;
-                        data_params[key] = '@' + key;
-                    }
-                }
-
-                return { params: params, data_params: data_params };
-            },
-
             getTemplate = function (route) {
                 var type = typeof route;
                 if(type === 'array'){
@@ -39,7 +24,7 @@ app.provider('AppResource', function () {
             extend = function (route, placeholders) {
 
                 route = (route[0] === '/') ? route : '/' + route;
-                
+
                 var url = getUrl() + getTemplate(route),
                     service = $resource(url, placeholders);
 
@@ -47,29 +32,29 @@ app.provider('AppResource', function () {
 
                     $service: service,
 
-                    create: function (data = {}, success = function () { }, error = function () { }) {
+                    create: function (data, success = function () { }, error = function () { }) {
                         return service.create(data, success, error);
                     },
 
-                    save: function (data = {}, success = function () { }, error = function () { }) {
+                    save: function (data, success = function () { }, error = function () { }) {
                         return service.save(data, success, error);
                     },
 
                     // Delete or remove resource
-                    delete: function (data = {}, success = function () { }, error = function () { }) {
-                        return service.delete(data, success, error);                        
+                    delete: function (data, success = function () { }, error = function () { }) {
+                        return service.delete(data, success, error);
                     },
 
-                    get: function (data, success = function () { }, error = function () { }) {
+                    get: function (data = {}, success = function () { }, error = function () { }) {
                         return service.get(data, success, error);
                     },
 
-                    all: function (data, success = function () { }, error = function () { }) {
-                        return service.query(data, success, error);
+                    all: function (success = function () { }, error = function () { }) {
+                        return service.query(success, error);
                     },
 
                     update: function (data, success = function () { }, error = function () { }) {
-                        return service.update(data, success, error);                        
+                        return service.update(data, success, error);
                     }
 
                 };

@@ -40,6 +40,7 @@ class ExpedientesController extends Controller{
                 'value' => $request['value']
             ]
         )
+        ->withTrashed()
         ->paginate(16);
 
         $expedientes = $pagination->items();
@@ -47,6 +48,7 @@ class ExpedientesController extends Controller{
 
         foreach ($expedientes as $e) {
             $e->montoTotal = $e->getMontoTotal();
+            $e->archivado = $e->trashed();
         }
 
         return response()->json([
@@ -63,12 +65,12 @@ class ExpedientesController extends Controller{
 
         $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
 
-        if($request->has('search')){
+        if($request->has('search'))
             $expedientes = $expedientes->where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
-        }
-        else {
+        
+        else 
             $expedientes = $expedientes->orderBy($by, $request['order'])->paginate(16);
-        }
+        
 
         foreach ($expedientes as $e) {
             $e->montoTotal = $e->getMontoTotal();
@@ -150,13 +152,14 @@ class ExpedientesController extends Controller{
             // Save Persona and Expediente altogether
             $persona->expediente()->save($expediente);
 
+            AyudaExpedienteService::processAttachments($expediente->ayudas(), ['ids' => $request['ayuda'], 'detalles' => $request['ayuda_detalle'], 'montos' => $request['ayuda_monto']]);
             // Loop through input ayuda and attach them to Expediente
-            for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
-                $expediente->ayudas()->attach($request['ayuda'][$i], [
-                    'detalle' => $request['ayuda_detalle'][$i],
-                    'monto' => $request['ayuda_monto'][$i]
-                ]);
-            }
+            // for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
+            //     $expediente->ayudas()->attach($request['ayuda'][$i], [
+            //         'detalle' => $request['ayuda_detalle'][$i],
+            //         'monto' => $request['ayuda_monto'][$i]
+            //     ]);
+            // }
 
             DB::commit();
             
@@ -267,7 +270,7 @@ class ExpedientesController extends Controller{
             'msg'    => $status? 'Archivado correctamente.' : 'Ocurrió un fallo.',
             // **************** OPTIMIZE THIS **********************
             // ---- COMPUTE, THEN STORE IN SESSION
-            'last' => Expediente::orderBy(session('sort')['by'], session('sort')['order'])->paginate(16)->lastPage(),
+            'last' => Expediente::withTrashed()->orderBy(session('sort')['by'], session('sort')['order'])->paginate(16)->lastPage(),
         ]);
     }
 }

@@ -56,18 +56,9 @@ app.service('Modal', function(){
 
     var instance;
 
-    this.init = function(selector, settings){
-        instance = $(selector).animatedModal({
-            style: { 'overflow-y': 'hidden' },
-            onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
-            onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
-            // settings
-        });
+    this.init = function(selector, settings = {}){
+        instance = $(selector).animatedModal(settings);
         return instance;
-    };
-
-    this.close = function(){
-        instance.close();
     };
 
     // etc...

@@ -39,15 +39,15 @@
     <label class="text-right col-md-3" for="ubicacion">Ubicación:</label>
     <div class="col-md-8 col-md-offset-1">
         <p class="help-block">Provincia</p>
-        <select class="form-control" name="provincia" ng-model="{{ $provincia_model }}" ng-options="{{ $provincia_options_expression }}" ng-change="{{ $provincia_onchanged_handler }}">
+        <select class="form-control" name="provincia" ng-model="{{ $provincia_model }}" ng-options="{{ $provincia_options_expression }}" ng-change="{{ $provincia_onchanged_handler }}" required>
             <option value="" disabled>-Seleccionar provincia-</option>
         </select>
         <p class="help-block">Cantón</p>
-        <select class="form-control" name="canton" ng-model="{{ $canton_model }}" ng-options="{{ $canton_options_expression }}" ng-change="{{ $canton_onchanged_handler }}" ng-disabled="{{ $canton_list }}.length === 0">
+        <select class="form-control" name="canton" ng-model="{{ $canton_model }}" ng-options="{{ $canton_options_expression }}" ng-change="{{ $canton_onchanged_handler }}" ng-disabled="{{ $canton_list }}.length === 0" required>
             <option value="" disabled>-Seleccionar cantón-</option>
         </select>
         <p class="help-block">Distrito</p>
-        <select class="form-control" name="distrito" ng-model="{{ $distrito_model }}" ng-options="{{ $distrito_options_expression }}" ng-disabled="{{ $distrito_list }}.length === 0">
+        <select class="form-control" name="distrito" ng-model="{{ $distrito_model }}" ng-options="{{ $distrito_options_expression }}" ng-disabled="{{ $distrito_list }}.length === 0" required>
             <option value="" disabled>-Seleccionar distrito-</option>
         </select>
     </div>

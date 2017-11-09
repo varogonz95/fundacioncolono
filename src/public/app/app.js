@@ -1,4 +1,4 @@
-var app = angular.module('App',['ngResource','ui.bootstrap']);
+var app = angular.module('App',['ngAnimate', 'ngResource', 'ui.bootstrap']);
 
 app.config(['uibPaginationConfig',function(conf){
     conf.previousText="Anterior";
@@ -39,7 +39,7 @@ function copy(_this, _into, except){
     if (except) {
         for (var key in _this) {
             for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
-            if (fails === 0) { 
+            if (fails === 0) {
                 data[key] = _this[key];
                 _into[key] = _this[key];
             }
@@ -47,7 +47,7 @@ function copy(_this, _into, except){
         }
     }
     else {
-        for (var key in _this) { 
+        for (var key in _this) {
             data[key] = _this[key];
             _into[key] = _this[key];
         }
@@ -57,11 +57,9 @@ function copy(_this, _into, except){
 }
 
 function find(key, value, array) {
-    for (var i = 0; i < array.length; i++) {
-        if(array[i][key] == value){
+    for (var i = 0; i < array.length; i++)
+        if(array[i][key] == value)
             return array[i];
-        }
-    }
 
     return false;
 }
@@ -70,13 +68,11 @@ function getIndex(list, object){
     var i = 0,
     found = false;
 
-    for (;i < list.length; i++) {
-
+    for (;i < list.length; i++)
         if (angular.equals(list[i], object)) {
             found = true;
             break;
         }
-    }
 
     return found? i : -1;
 };

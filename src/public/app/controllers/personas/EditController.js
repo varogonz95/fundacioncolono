@@ -5,7 +5,7 @@
 app.controller('Personas_EditController', function ($scope, $http, Persona, Region) {
 
     $scope.edit = function () {
-        var regions = $scope.selected.persona.ubicacion.split('/'); 
+        var regions = $scope.selected.persona.ubicacion.split('/');
         $scope.selected.persona.editable = true;
         $scope.update.persona = copy($scope.selected.persona, ['editable']);
 
@@ -38,11 +38,14 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
     $scope.updatePersona = function () {
 
         Persona.save(
-            $scope.update.persona,
-            $scope.selected.persona.cedula,
+            {
+                cedula: $scope.selected.persona.cedula,
+                data: $scope.update.persona,
+            },
             function (response) {
+                console.log(response);
                 if (response.status) {
-                    $scope.selected.persona = copy($scope.update.persona);
+                    copy($scope.update.persona, $scope.selected.persona);
                     $scope.selected.persona.editable = false;
                 }
                 else { alert(response.msg); }

@@ -13,6 +13,10 @@
                 <span class="glyphicon glyphicon-briefcase"></span>
                 <span class="hidden-xs">Archivar</span>
             </button>
+            <button type="button" class="btn-rest btn-show btn-sm btn-outline" title="Restaurar" ng-show="selected.archivado" ng-click="restore()">
+                <span class="glyphicon glyphicon-refresh"></span>
+                <span class="hidden-xs">Restaurar</span>
+            </button>
             <a href="expedientes/@{{ selected.id }}/history" target="_blank" class="btn-rest btn-outline btn-sm btn-edit" title="Historial de cambios">
                 <span class="glyphicon glyphicon-time"></span>
                 <span class="hidden-xs">Historial de cambios</span>
@@ -24,40 +28,17 @@
                 </button>
             </span>
         </div>
-        @endslot
+    @endslot
         
-        @slot('content_classes', 'expediente-content')
-        
-        <!-- DATOS DE LA PERSONA -->
-        @include('templates.persona.show')
-        
-        <!-- INFORMACION DEL EXPEDIENTE -->
-        @include('templates.expediente.show')
-        
-        <!-- INFORMACION DE LAS AYUDAS -->
-        @include('templates.ayuda.show')
-        
-        <div class="expediente-archived-overlay" ng-show="selected.archivado">
-
-            <div class="expediente-archived panel panel-default">
-                <header class="panel-heading">
-                    <h4>Expediente archivado</h4>
-                </header>
-                
-                <section class="panel-body text-muted">
-                    <p>
-                        No se pueden realizar cambios al expediente mientras esté archivado. 
-                    </p>
-                </section>
-                
-                <footer class="panel-footer text-right">
-                    <button type="button" class="btn-rest btn-show btn- btn-outline" title="Restaurar" ng-show="selected.archivado" ng-click="restore()">
-                        <span class="glyphicon glyphicon-refresh"></span>
-                        <span class="hidden-xs">Restaurar</span>
-                    </button>
-                </footer>
-        </div>
-
-    </div>
+    @slot('content_classes', 'expediente-content')
     
+    <!-- DATOS DE LA PERSONA -->
+    @include('templates.persona.show')
+    
+    <!-- INFORMACION DEL EXPEDIENTE -->
+    @include('templates.expediente.show')
+    
+    <!-- INFORMACION DE LAS AYUDAS -->
+    @include('templates.ayuda.show')
+        
 @endcomponent
