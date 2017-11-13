@@ -17,7 +17,6 @@ class Filter{
     public function badassFunction($model, $with = null, $filter = [], $input = [], $order = []){
     
         $table_name = (new $model)->getTable();
-    
         $builder = !is_null($with)? $model::query()->with($with) : $model::query();
         
         /* 
@@ -26,13 +25,23 @@ class Filter{
          */
         if (!empty($filter)) {
             if($table_name === $filter['relationship']){
-                $builder = $builder->where($filter['property'], $filter['comparator'], $filter['value']);
+                if(gettype($filter['value']) === 'array'){
+                    $builder = $builder->whereBetween($filter['property'], [$filter['value'][0], $filter['value'][1]]);
+                }
+                else{
+                    $builder = $builder->where($filter['property'], $filter['comparator'], $filter['value']);
+                }
             }
             else{
                 $builder = $builder->whereHas(
                     $filter['relationship'], 
                     function($query) use ($filter){
-                        $query->where($filter['property'], $filter['comparator'], $filter['value']);
+                        if(gettype($filter['value']) === 'array'){
+                            $query->whereBetween($filter['property'], $filter['value']);
+                        }
+                        else{
+                            $query->where($filter['property'], $filter['comparator'], $filter['value']);
+                        }
                     }
                 );
             }
@@ -44,13 +53,23 @@ class Filter{
          */
         if (!empty($input)) {
             if($table_name === $input['relationship']){
-                 $builder = $builder->where($input['property'], $input['comparator'], $input['value']);
+                if(gettype($input['value']) === 'array'){
+                    $builder = $builder->whereBetween($input['property'], $input['value']);
+                }
+                else{
+                    $builder = $builder->where($input['property'], $input['comparator'], $input['value']);
+                }
             }
             else{
                 $builder = $builder->whereHas(
                     $input['relationship'], 
                     function($query) use ($input){
-                        $query->where($input['property'], $input['comparator'], $input['value']);
+                        if(gettype($input['value']) === 'array'){
+                            $query->whereBetween($input['property'], $input['value']);
+                        }
+                        else{
+                            $query->where($input['property'], $input['comparator'], $input['value']);
+                        }
                     }
                 );
             }

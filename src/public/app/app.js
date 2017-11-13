@@ -10,6 +10,14 @@ app.config(['uibPaginationConfig',function(conf){
     conf.forceEllipses=true;
 }]);
 
+app.config(['uibDatepickerPopupConfig', function (conf) {
+    conf.altInputFormats = [];
+    conf.clearText = 'Limpiar';
+    conf.closeText = 'Hecho';
+    conf.currentText = 'Hoy';
+    conf.placement = 'auto bottom';
+}]);
+
 app.config(function ($resourceProvider) {
     $resourceProvider.defaults.actions.save.method = 'PATCH';
     $resourceProvider.defaults.actions.update = { method: 'PUT' };
@@ -31,7 +39,7 @@ function jQueryToJson(obj, key){
     return data;
 }
 
-function copy(_this, _into, except){
+function copy(_this, _into = {}, except = []){
 
     var data = {},
     fails = 0;
