@@ -5,7 +5,7 @@ namespace App\Services;
 class AyudaExpedienteService{
 	
 	public static function processAttachments($ayudas, $attachs){
-		for ($i=0, $count = count($attachs[0]); $i < $count; $i++)
+		for ($i=0, $count = count($attachs['ids']); $i < $count; $i++)
             $ayudas->attach(
                 $attachs['ids'][$i],
 				[
