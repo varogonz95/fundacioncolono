@@ -16,6 +16,11 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     
     $scope.expedientes = [];
     
+    $scope.datePickers = {
+        openFrom:false,
+        openTo:false,
+    };
+
     $scope.filter_data = {
         active: false,
         filter: null,
@@ -24,10 +29,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         estado: $scope.estados[0],
         referente: [],
         ayuda: [],
-        fecha_creacion: null,
-        relationship: '',
-        property: '',
-        comparator: '',
+        fecha_creacion: {from: new Date(), to: null},
         value: ''
     };
 
@@ -132,6 +134,10 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         // Code here...
 
         return data;  
+    };
+
+    $scope.toStandardDate = function(date){
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     };
 
     $scope.filter_pichudo = function () {

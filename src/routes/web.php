@@ -17,7 +17,6 @@ Route::get('expedientes/test', 'ExpedientesController@test');
 
 Route::get('/', 'HomeController@index')->name('home');
 
-// Route::delete('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@destroy');
 Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@update');
 
 Route::middleware(['auth'])->group(function(){

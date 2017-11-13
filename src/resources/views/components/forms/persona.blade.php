@@ -1,5 +1,5 @@
 <!-- CEDULA -->
-<div class="form-group{{-- @{{ newexpediente.cedula.$invalid && newexpediente.cedula.$dirty? 'has-error' : '' }} --}}">
+<div class="form-group" {{-- ng-class="{'has-error': newexpediente.cedula.$invalid && newexpediente.cedula.$dirty}"--}}>
     <label class="control-label col-md-3" for="cedula">Cédula:</label>
     <div class="col-md-8 col-md-push-1">
         <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" ng-model="{{ $cedula_model }}" ng-value="{{ $cedula_value }}" required>
