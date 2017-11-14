@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use \App\Models\Ayuda;
+use App\Models\Ayuda;
 use Illuminate\Http\Request;
 
 class AyudasController extends Controller

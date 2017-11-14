@@ -22,9 +22,11 @@ class CreateExpedientesTable extends Migration{
             $table->tinyInteger('prioridad');
             $table->tinyInteger('estado');
             $table->text('descripcion');
-            $table->timestamp('fecha_creacion');
             $table->date('pago_inicio')->nullable();
             $table->date('pago_final')->nullable();
+            $table->timestamp('fecha_creacion');
+            $table->softDeletes('fecha_eliminacion');
+            // $table->boolean('activo')->default(true);
 
             // Table constraints
             $table->foreign('persona_fk')

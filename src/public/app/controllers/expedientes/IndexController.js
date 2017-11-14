@@ -1,11 +1,8 @@
 
-/*
-*   Controller for entity 'Expediente'
-*/
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
-    var showModal = $('#show_modal').animatedModal({
-        style:{'overflow-y':'hidden'},
+    var showModal = Modal.init('#show_modal',{
+        style:{'overflow-y':'hidden', 'bottom': '0'},
         onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
@@ -16,6 +13,11 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     
     $scope.expedientes = [];
     
+    $scope.datePickers = {
+        openFrom:false,
+        openTo:false,
+    };
+
     $scope.filter_data = {
         active: false,
         filter: null,
@@ -24,10 +26,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         estado: $scope.estados[0],
         referente: [],
         ayuda: [],
-        fecha_creacion: null,
-        relationship: '',
-        property: '',
-        comparator: '',
+        fecha_creacion: {from: new Date(), to: null},
         value: ''
     };
 
@@ -38,6 +37,18 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         by: 'cedula',
         order: true
     };
+    
+    $scope.columns = {
+        cedula: true,
+        nombre: true,
+        apellidos: true,
+        prioridad: true,
+        estado: true,
+        referente: true,
+        ayuda: true,
+        fecha_creacion: true
+    };
+
     // Not supported for Location yet
     $scope.doSort = function (by) {
         $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
@@ -52,17 +63,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
             $scope.filter_data.ayuda = $scope.ayudas[0];
             $scope.filter_data.active = true;
         }
-    };
-
-    $scope.columns = {
-        cedula: true,
-        nombre: true,
-        apellidos: true,
-        prioridad: true,
-        estado: true,
-        referente: true,
-        ayuda: true,
-        fecha_creacion: true
     };
 
     $scope.index = function (page = 1, params = {}) {
@@ -105,33 +105,18 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
         $scope.selected = obj;
         showModal.show();
+
+        if (obj.archivado)
+            Alert.notify(
+                'Expediente archivado', 
+                'No se pueden realizar cambios al expediente mientras esté archivado. ', 
+                'info',
+                3000
+            );
     };
 
-    $scope.delete = function () {
-        if (confirm('¿Realmente desea eliminar este expediente?\nEsta acción es irreversible.'))
-            Expediente().delete({id: $scope.selected.persona.cedula},
-                function (response) {
-                    if (response.status) {
-                        showModal.close();
-                        $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
-                        $scope.selected = {};
-
-                        if ($scope.page !== response.last && $scope.expedientes.length > 0) { $scope.index($scope.page); }
-                        else if ($scope.expedientes.length === 0) { $scope.index($scope.page - 1); }
-
-                        alert('Deleted successfully');
-                    }
-                },
-                function (error) {alert(error.message);} 
-            );
-    }
-
-    var filter_selector = function () {
-        var data = {};
-
-        // Code here...
-
-        return data;  
+    $scope.toStandardDate = function(date){
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
     };
 
     $scope.filter_pichudo = function () {
@@ -140,7 +125,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
         Expediente('test').get(
             data,
-            true,
             function (response) {
                 $scope.filter_data.filtered = true;
                 // $scope.filter_data.filter = null;
@@ -148,7 +132,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 $scope.total = response.total;
             }
         );
-    }
+    };
 
     $scope.index();
 });

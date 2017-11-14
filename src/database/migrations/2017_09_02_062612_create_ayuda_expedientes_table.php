@@ -19,8 +19,12 @@ class CreateAyudaExpedientesTable extends Migration
             $table->unsignedInteger('expediente_id');
             $table->unsignedInteger('ayuda_id');
             // ------------------------------------------------------
-            $table->text('detalle');
-            $table->unsignedMediumInteger('monto')->default(0);
+            $table->text('detalle')
+                   ->nullable()
+                   ->default(null);
+            $table->unsignedMediumInteger('monto')
+                  ->nullable()
+                  ->default(0);
 
             // Table constraints
             $table->foreign('expediente_id')

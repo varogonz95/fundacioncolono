@@ -17,12 +17,14 @@ Route::get('expedientes/test', 'ExpedientesController@test');
 
 Route::get('/', 'HomeController@index')->name('home');
 
-// Route::delete('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@destroy');
 Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@update');
+
+// Route::post('historicos', 'AyudaExpedienteController@update');
 
 Route::middleware(['auth'])->group(function(){
     
     Route::get('expedientes/all','ExpedientesController@all');
+    Route::post('expedientes/{expediente}/restore','ExpedientesController@restore');
     Route::resource('expedientes','ExpedientesController');
 
     Route::resource('personas','PersonasController');

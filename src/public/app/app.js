@@ -1,4 +1,4 @@
-var app = angular.module('App',['ngResource','ui.bootstrap']);
+var app = angular.module('App',['ngAnimate', 'ngResource', 'ui.bootstrap']);
 
 app.config(['uibPaginationConfig',function(conf){
     conf.previousText="Anterior";
@@ -10,9 +10,18 @@ app.config(['uibPaginationConfig',function(conf){
     conf.forceEllipses=true;
 }]);
 
+app.config(['uibDatepickerPopupConfig', function (conf) {
+    conf.altInputFormats = [];
+    conf.clearText = 'Limpiar';
+    conf.closeText = 'Hecho';
+    conf.currentText = 'Hoy';
+    conf.placement = 'auto bottom';
+}]);
+
 app.config(function ($resourceProvider) {
     $resourceProvider.defaults.actions.save.method = 'PATCH';
     $resourceProvider.defaults.actions.update = { method: 'PUT' };
+    $resourceProvider.defaults.actions.create = { method: 'POST' };
     $resourceProvider.defaults.actions.post = { method: 'POST'};
 });
 
@@ -30,7 +39,7 @@ function jQueryToJson(obj, key){
     return data;
 }
 
-function copy(_this, _into, except){
+function copy(_this, _into = {}, except = []){
 
     var data = {},
     fails = 0;
@@ -38,7 +47,7 @@ function copy(_this, _into, except){
     if (except) {
         for (var key in _this) {
             for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
-            if (fails === 0) { 
+            if (fails === 0) {
                 data[key] = _this[key];
                 _into[key] = _this[key];
             }
@@ -46,7 +55,7 @@ function copy(_this, _into, except){
         }
     }
     else {
-        for (var key in _this) { 
+        for (var key in _this) {
             data[key] = _this[key];
             _into[key] = _this[key];
         }
@@ -56,11 +65,9 @@ function copy(_this, _into, except){
 }
 
 function find(key, value, array) {
-    for (var i = 0; i < array.length; i++) {
-        if(array[i][key] == value){
+    for (var i = 0; i < array.length; i++)
+        if(array[i][key] == value)
             return array[i];
-        }
-    }
 
     return false;
 }
@@ -69,13 +76,11 @@ function getIndex(list, object){
     var i = 0,
     found = false;
 
-    for (;i < list.length; i++) {
-
+    for (;i < list.length; i++)
         if (angular.equals(list[i], object)) {
             found = true;
             break;
         }
-    }
 
     return found? i : -1;
 };

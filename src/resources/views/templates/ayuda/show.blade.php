@@ -1,18 +1,20 @@
-<article id="selectedayuda" class="col-md-10 col-md-offset-1" ng-controller="Ayudas_MainController">
+<article id="selectedayuda" class="col-md-10 col-md-offset-1" ng-controller="Ayudas_EditController">
     <header>
         <h3>
             Ayudas solicitadas
             <small class="text-nowrap">Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
-            <button class="btn-rest btn-sm btn-show btn-outline">
-                <span class="glyphicon glyphicon-plus"></span>
-                Agregar ayuda
-            </button>
-            <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAll()">
-                Guardar cambios
-            </button>
-            <button class="btn-rest btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
-                Cancelar
-            </button>
+            <ngIf ng-if="!selected.archivado">
+                <button class="btn-rest btn-sm btn-show btn-outline">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Agregar ayuda
+                </button>
+                <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAyudas()">
+                    Guardar cambios
+                </button>
+                <button class="btn-rest btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
+                    Cancelar
+                </button>
+            </ngIf>
         </h3>
         <hr>
     </header>
@@ -20,7 +22,7 @@
     <div class="row">
         <section class="col-md-4" ng-repeat="ayuda in selected.ayudas">
 
-            <div class="expediente-info @{{ ayuda.editable? 'editing' : '' }}" ng-if="ayuda.editable">
+            <div class="expediente-info" ng-if="ayuda.editable && !selected.archivado" ng-class="{'editing': ayuda.editable}">
                 <div class="controls" ng-show="ayuda.editable">
                     <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit(ayuda)">
                         <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
@@ -29,7 +31,7 @@
                 @include('templates.ayuda.$edit_pivot')
             </div>
 
-            <div class="expediente-info @{{ ayuda.removed || ayuda.changed? 'cached' : '' }}" ng-hide="ayuda.editable">
+            <div class="expediente-info" ng-hide="ayuda.editable" ng-class="{'cached': ayuda.removed || ayuda.changed, 'archived': selected.archivado}">
 
                 <div class="row change-state" ng-show="ayuda.removed || ayuda.changed">
                     <strong>
@@ -41,7 +43,7 @@
                     </button>
                 </div>
 
-                <div class="btn-group" ng-hide="ayuda.removed">
+                <div class="btn-group" ng-hide="ayuda.removed" ng-if="!selected.archivado">
                     <button class="btn-edit btn-rest btn-outline btn-sm" ng-click="edit(ayuda)">
                         <span class="glyphicon-pencil glyphicon"></span>
                         <span class="hidden-xs">Editar</span>
@@ -59,7 +61,7 @@
                 <p class="lead">@{{ ayuda.pivot.monto | currency:"‎₡" }}</p>
                 <label>Descripcion:</label>
                 <br>
-                <p class="text-@{{ !ayuda.pivot.text_expanded? 'collapsed' : '' }}" ng-init="ayuda.pivot.text_expanded = false">
+                <p ng-class="{'text-collapsed': !ayuda.pivot.text_expanded}" ng-init="ayuda.pivot.text_expanded = false">
                     <span ng-init="ayuda.pivot.detalle_tmp = ayuda.pivot.detalle.substring(0,200)">@{{ ayuda.pivot.detalle_tmp }}</span>
                     <span ng-show="ayuda.pivot.detalle.length > 200 && ayuda.pivot.detalle_tmp.length <= 200" class="text-length-toggle">
                         ...

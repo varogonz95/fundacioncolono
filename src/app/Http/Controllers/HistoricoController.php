@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Persona;
 use Illuminate\Http\Request;
 
-use DB;
-
-class PersonasController extends Controller{
+class HistoricoController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
@@ -68,36 +66,9 @@ class PersonasController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
-
-        $status = true;
-
-        DB::beginTransaction();
-
-        try {
-            $persona = Persona::find($id);
-
-            $persona->nombre    = $request['data']['nombre'];
-            $persona->apellidos = $request['data']['apellidos'];
-            $persona->telefonos = $request['data']['telefonos'];
-            $persona->ubicacion = "{$request['data']['provincia']['cod']}/{$request['data']['canton']['cod']}/{$request['data']['distrito']['cod']}";
-            $persona->direccion = $request['data']['direccion'];
-            $persona->contactos = $request['data']['contactos'];
-
-            $persona->save();
-
-            DB::commit();
-        }
-        catch (Exception $e) {
-            $status  = false;
-            DB::rollback();
-        }
-
-        return response()->json([
-            'status' => $status,
-            'title' => $status? 'Ok' : 'Error',
-            'msg' => $status? 'Everything ok' : 'Baby don\'t worry about nothing, \'cause every little thing is gonna be alright',
-        ]);
+    public function update(Request $request, $id)
+    {
+        //
     }
 
     /**

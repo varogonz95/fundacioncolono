@@ -51,12 +51,3 @@
 </div>
 
 {{ $slot }}
-
-@if(isset($hasSubmitButton) && $hasSubmitButton)
-{{-- FINALLY, THE SUBMIT BUTTTON --}}
-<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="center-block btn btn-primary" ng-disabled="newexpediente.$invalid">Guardar expediente</button>
-    </div>
-</div>
-@endif

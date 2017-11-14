@@ -51,3 +51,20 @@ app.service('Region', function($http){
         return list;
     };
 });
+
+app.service('Modal', function(){
+
+    var instance;
+
+    this.init = function(selector, settings = {}){
+        instance = $(selector).animatedModal(settings);
+        return instance;
+    };
+
+    // etc...
+
+    this.getInstance = function(){
+        return instance;
+    };
+
+});
