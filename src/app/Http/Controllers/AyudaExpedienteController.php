@@ -79,7 +79,7 @@ class AyudaExpedienteController extends Controller{
         try{
 
             // Process attachs
-            AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
+            // AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
     
             // Process detachs
             AyudaExpedienteService::processDetachments($expediente->ayudas(), $request['detachs']);
