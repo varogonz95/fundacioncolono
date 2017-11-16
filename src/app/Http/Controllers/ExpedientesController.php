@@ -83,8 +83,7 @@ class ExpedientesController extends Controller{
         ]);
     }
 
-    public function index()
-    {
+    public function index(){
         return view(
             'templates.expediente.index', 
             // Pass first Referente id into template
@@ -93,8 +92,7 @@ class ExpedientesController extends Controller{
         );
     }
 
-    public function create()
-    {
+    public function create(){
         return view('templates.expediente.create_all');
     }
 
@@ -207,7 +205,7 @@ class ExpedientesController extends Controller{
                 $expediente->save();
     
                 // Process attachs
-                AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
+                // AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
         
                 // Process detachs
                 AyudaExpedienteService::processDetachments($expediente->ayudas(), $request['detachs']);
@@ -247,8 +245,7 @@ class ExpedientesController extends Controller{
         
         try{
             Expediente::withTrashed()
-            ->where('id', $id)
-            ->first()
+            ->find($id)
             ->restore();
             DB::commit();
         }
@@ -258,7 +255,6 @@ class ExpedientesController extends Controller{
         }
 
         return response()->json(['status' => $status]);
-        
     }
 
     public function destroy($id){

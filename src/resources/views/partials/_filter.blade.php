@@ -85,7 +85,7 @@
         <div class="col-lg-2">
             <div class="form-group form-group-sm">
                 <label>
-                    Fecha de creación
+                    Fecha de ingreso
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="fecha_creacion">
                     <ngIf ng-if="filter_data.filter === 'fecha_creacion'">
                         <input type="hidden" name="relationship" value="expedientes">

@@ -39,6 +39,8 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .table .archived .label{background-color: lightgray}
 .table .archived .glyphicon{color: lightgray}
 
+.uib-daypicker .btn{border:none}
+
 uib-accordion .addayudas{margin: 0 !important; border-radius: 0 !important;}
 uib-accordion .addayudas:first-child{border-radius: 4px 4px 0 0 !important;}
 uib-accordion .addayudas:last-child{border-radius: 0 0 4px 4px !important;}
