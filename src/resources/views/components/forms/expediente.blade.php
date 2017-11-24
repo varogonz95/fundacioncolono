@@ -55,12 +55,21 @@
 </div>
 
 {{-- PERIODO DE APROBACION --}}
-<div class="form-group" ng-show="{{ $estado_model }}.id === 1">
-    <label class="control-label col-sm-4">?fecha 1</label>
-    <input type="number" name="fecha1" class="form-control" min="1" max="30">
-    <label class="control-label col-sm-4">?fecha 2</label>
-    <input type="number" name="fecha2" class="form-control" min="1" max="30">
-</div>
+<ng-show ng-show="{{ $estado_model }}.id === 1">
+    <div class="form-group">
+        <label class="control-label col-sm-4">?fecha 1:</label>
+        <div class="col-sm-4">
+            <input type="number" name="fecha1" class="form-control" min="1" max="30">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="control-label col-sm-4">?fecha 2</label>
+        <div class="col-sm-4">
+            <input type="number" name="fecha2" class="form-control" min="1" max="30">
+        </div>
+    </div>
+</ng-show>
 
 {{-- FECHAS EN QUE RECIBE AYUDA --}}
 

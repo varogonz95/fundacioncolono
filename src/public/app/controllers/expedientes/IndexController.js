@@ -65,16 +65,26 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         }
     };
 
-    $scope.index = function (page = 1, params = {}) {
+    $scope.index = function (page = 1) {
+
+        var params = {
+            page: page,
+            by: $scope.sort.by,
+            order: ($scope.sort.order ? 'asc' : 'desc')
+        };
 
         $scope.page = (page < 1) ? 1 : page;
 
+        if ($scope.filter_data.filtered){
+            page = 1;
+            params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
+        }   
+        else
+            params = angular.extend(params, {search: $scope.search});
+
+
         Expediente('all').get(
-            angular.extend({
-                page: page,
-                by: $scope.sort.by,
-                order: ($scope.sort.order ? 'asc' : 'desc')},
-                params),
+            params,
             function(response){
                 $scope.expedientes = response.expedientes;
                 $scope.total = response.total;
@@ -121,17 +131,13 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
     $scope.filter_pichudo = function () {
 
-        var data = jQueryToJson($('#filter'), 'name');
+        $scope.filter_data.filtered = true;
+        $scope.index($scope.page, jQueryToJson($('#filter'), 'name'));
 
-        Expediente('test').get(
-            data,
-            function (response) {
-                $scope.filter_data.filtered = true;
-                // $scope.filter_data.filter = null;
-                $scope.expedientes = response.expedientes;
-                $scope.total = response.total;
-            }
-        );
+    };
+
+    $scope.clear = function(){
+        $scope.search = null;
     };
 
     $scope.index();

@@ -46,14 +46,8 @@
 
         <!-- BUSQUEDA -->
         <div class="col-lg-12">
-            <div class="row col-lg-4 col-lg-offset-3">
-                <form ng-submit="index(1,{search: search})">
-                    <div class="form-group has-feedback">
-                        <input type="text" class="form-control" placeholder="Búsqueda..." ng-model="search" ng-change="index(1,{search:search})"/>
-                        <span class="glyphicon glyphicon-search form-control-feedback" style="color:#aaa"></span>
-                    </div>
-                </form>
-            </div>
+            
+            @include('partials._search')
 
             <!-- FILTRAR RESULTADOS -->
             <div class="col-lg-2 row">
@@ -69,7 +63,7 @@
                 <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
             </button>
 
-            <button class="btn-outline btn-rest btn-edit" type="button" ng-show="filter_data.filtered" ng-click="index(); filter_data.filtered = false">Ver todos</button>
+            <button class="btn-outline btn-rest btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; index();">Ver todos</button>
         </div>
 
         <!-- LINK AGREGAR NUEVO CASO -->
@@ -93,16 +87,36 @@
                                 Cédula <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'cedula'}"></span>
                             </button>
                         </th>
-                        <th ng-show="columns.nombre">Nombre</th>
-                        <th ng-show="columns.apellidos">Apellidos</th>
+                        <th ng-show="columns.nombre">
+                            <button type="button" class="btn btn-table-header" ngclass="'asc':sort.order, 'desc':!sort.order" ng-click="doSort('nombre')">
+                                Nombre
+                                <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'nombre'}"></span>
+                            </button>
+                        </th>
+                        <th ng-show="columns.apellidos">
+                            <button type="button" class="btn btn-table-header" ngclass="'asc':sort.order, 'desc':!sort.order" ng-click="doSort('apellidos')">
+                                Apellidos
+                                <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'apellidos'}"></span>
+                            </button>
+                        </th>
                         <th ng-show="columns.referente">Referente</th>
-                        <th ng-show="columns.estado">Estado</th>
+                        <th ng-show="columns.estado">
+                            <button type="button" class="btn btn-table-header" ngclass="'asc':sort.order, 'desc':!sort.order" ng-click="doSort('estado')">
+                                Estado
+                                <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'estado'}"></span>
+                            </button>
+                        </th>
                         <th ng-show="columns.prioridad">
                             <button type="button" class="btn btn-table-header" ngclass="'asc':sort.order, 'desc':!sort.order" ng-click="doSort('prioridad')">
                                 Prioridad <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'prioridad'}"></span>
                             </button>
                         </th>
-                        <th ng-show="columns.fecha_creacion">Fecha de creación</th>
+                        <th ng-show="columns.fecha_creacion">
+                            <button type="button" class="btn btn-table-header" ngclass="'asc':sort.order, 'desc':!sort.order" ng-click="doSort('fecha_creacion')">
+                                Fecha de creación
+                                <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'fecha_creacion'}"></span>
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
