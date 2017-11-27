@@ -69,8 +69,21 @@
             <input type="number" name="fecha2" class="form-control" min="1" max="30">
         </div>
     </div>
-</ng-show>
-
+    
 {{-- FECHAS EN QUE RECIBE AYUDA --}}
+    <div class="form-group">
+        <label>Fecha desde: </label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Fecha hasta: </label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+</ng-show>
 
 {{ $slot }}
