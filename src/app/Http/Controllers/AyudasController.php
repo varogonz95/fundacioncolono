@@ -61,16 +61,7 @@ class AyudasController extends Controller
     }
 
     public function updatePivot(Request $request, $id){
-        Ayuda::find($id)->expedientes()
-        ->updateExistingPivot(
-            $expedienteId, 
-            ['detalle' => $request['detalle'], 'monto' => $request['monto']]
-        );
-
-        return response()->json([
-            'status' => true,
-            'msg' => ''
-        ]);
+        
     }
 
     public function update(Request $request, $id){

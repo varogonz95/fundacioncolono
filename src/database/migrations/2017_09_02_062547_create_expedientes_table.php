@@ -16,14 +16,21 @@ class CreateExpedientesTable extends Migration{
             $table->increments('id');
             // one-to-one relationship with Persona
             $table->char('persona_fk', 9);
+            
             $table->unsignedInteger('referente_fk');
             // In case Referente not in options but exists
             $table->string('referente_otro',100)->nullable();
+            
             $table->tinyInteger('prioridad');
             $table->tinyInteger('estado');
             $table->text('descripcion');
+
             $table->date('pago_inicio')->nullable();
             $table->date('pago_final')->nullable();
+
+            $table->date('fecha_desde')->nullable();
+            $table->date('fecha_hasta')->nullable();
+
             $table->timestamp('fecha_creacion');
             $table->softDeletes('fecha_eliminacion');
             // $table->boolean('activo')->default(true);

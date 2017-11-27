@@ -22,8 +22,8 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                     function (response) {
                         if (response.status) {
 
+                            console.log($scope.expedientes);
                             $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
-                            // $scope.selected = {};
 
                             if ($scope.page !== response.last && $scope.expedientes.length > 0) 
                                 $scope.index($scope.page);

@@ -1,3 +1,5 @@
+
+{{-- DESCRIPCION --}}
 <div class="form-group">
     <label class="col-sm-2" for="descripcion">Descripcion:</label>
     <div class="col-sm-12">
@@ -7,9 +9,9 @@
     </div>
 </div>
 
+{{-- REFERENTE --}}
 <div class="form-group col-sm-pull-2">
     <label class="text-right col-sm-4" for="referente">Referente:</label>
-
     <div class="col-sm-8">
         <label style="font-weight:100">
             Otro referente:
@@ -34,6 +36,7 @@
     
 </div>
 
+{{-- PRIORIDAD --}}
 <div class="form-group col-sm-pull-2">
     <label class="text-right col-sm-4" for="prioridad">Prioridad:</label>
     <div class="col-sm-8">
@@ -43,11 +46,44 @@
     </div>
 </div>
 
+{{-- ESTADO --}}
 <div class="form-group col-sm-pull-2">
     <label class="text-right col-sm-4" for="estado" ng-model="{{ $estado_model }}" required>Estado de aprobación:</label>
     <div class="col-sm-8">
         <select class="form-control" name="estado" ng-model="{{ $estado_model }}" ng-options="e.name for e in {{ $estados_list }} track by e.id" convert-to-number required></select>
     </div>
 </div>
+
+{{-- PERIODO DE APROBACION --}}
+<ng-show ng-show="{{ $estado_model }}.id === 1">
+    <div class="form-group">
+        <label class="control-label col-sm-4">?fecha 1:</label>
+        <div class="col-sm-4">
+            <input type="number" name="fecha1" class="form-control" min="1" max="30">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="control-label col-sm-4">?fecha 2</label>
+        <div class="col-sm-4">
+            <input type="number" name="fecha2" class="form-control" min="1" max="30">
+        </div>
+    </div>
+    
+{{-- FECHAS EN QUE RECIBE AYUDA --}}
+    <div class="form-group">
+        <label>Fecha desde: </label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Fecha hasta: </label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+</ng-show>
 
 {{ $slot }}

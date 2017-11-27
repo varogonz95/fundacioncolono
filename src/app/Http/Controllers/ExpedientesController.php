@@ -7,84 +7,69 @@ use App\Models\Persona;
 use App\Models\Referente;
 
 use App\Services\AyudaExpedienteService;
+use App\Services\ReferentesService;
+
 use Illuminate\Http\Request;
 use Filter;
 use DB;
 
 class ExpedientesController extends Controller{
 
-    const EN_VALORACION = 0;
-    const APROBADO = 1;
-    const NO_APROBADO = 2;
-
-    private $items;
-    private $total;
-    private $lastPage;
-
-    public function __construct()
-    {
-        $this->items = [];
-        $this->total = 0;
-        $this->lastPage = 0;
-    }
+    const MAX_RECORDS = 16;
 
     public function test(Request $request){
-
-        $pagination = Filter::badassFunction(
-            Expediente::class,
-            ['persona', 'referente', 'ayudas'],           // -> Better performance, since it uses eager loading
-            [
-                'relationship' => $request['relationship'], 
-                'property' => $request['property'],
-                'comparator' => $request['comparator'], 
-                'value' => $request['value']
-            ]
-        )
-        ->withTrashed()
-        ->paginate(16);
-
-        $expedientes = $pagination->items();
-        $total = $pagination->total();
-
-        foreach ($expedientes as $e) {
-            $e->montoTotal = $e->getMontoTotal();
-            $e->archivado = $e->trashed();
-        }
-
-        return response()->json([
-            'expedientes' => $expedientes,
-            'total' => $total,
-        ]);
+        // return Expediente::count();
     }
 
     public function all(Request $request){
 
-        $expedientes = Expediente::with(['persona', 'referente', 'ayudas'])->withTrashed();
+        $orderBy = [
+            'order' => $request['order'],
+            'by' => $request['by'],
+        ];
 
-        $by = $request['by'] === 'cedula'? 'persona_fk' : $request['by'];
+        $filter = [
+            'relationship' => $request['relationship'],
+            'comparator' => $request['comparator'],
+            'property' => $request['property'],
+            'value' => $request['value'],
+        ];
 
-        $request->session()->put('sort', [ 'by' => $by, 'order' => $request['order'] ]);
+        // Check if 'relationship' parameter is set into request
+        $filtered = (!isset($filter['relationship']) ?
 
-        if($request->has('search'))
-            $expedientes = $expedientes->where($by, 'like', "{$request['search']}%")->orderBy($by, $request['order'])->paginate(16);
+            // If not, then do an usual filter: By 'cedula' attribute from 'Persona' model
+            Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+                    ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
+                    ->orderBy('persona', $orderBy['by'], $orderBy['order']) :
+
+            // If true, then filter using relationship, property, comparator and value
+            Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+                    ->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
+                    ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
+                    ->orderBy('persona', $orderBy['by'], $orderBy['order']))
+                
+            // Get items from filter
+            ->get()
+
+            // Iterate over items
+            ->each(function($item, $index){
+                $item->montoTotal = $item->getMontoTotal();
+                $item->archivado = $item->trashed();
+            });
         
-        else 
-            $expedientes = $expedientes->orderBy($by, $request['order'])->paginate(16);
-        
-
-        foreach ($expedientes as $e) {
-            $e->montoTotal = $e->getMontoTotal();
-            $e->archivado = $e->trashed();
-        }
+        // Paginate , passing the filtered items and the max records per page
+        $pagination = Filter::paginate($filtered, self::MAX_RECORDS);
+        $items = $pagination->items();
 
         return response()->json([
-            'expedientes' => $expedientes->items(),
-            'total' => $expedientes->total(),
+            'expedientes' => $items,
+            'total'       => $pagination->total(),
+            'type'        => gettype($items)
         ]);
     }
 
-    public function index()
-    {
+    public function index(){
         return view(
             'templates.expediente.index', 
             // Pass first Referente id into template
@@ -93,8 +78,7 @@ class ExpedientesController extends Controller{
         );
     }
 
-    public function create()
-    {
+    public function create(){
         return view('templates.expediente.create_all');
     }
 
@@ -112,6 +96,7 @@ class ExpedientesController extends Controller{
 
         $expediente = new Expediente;
         // Assign Expediente property values
+        $expediente->referente_otro = $request['referente_otro'];
         $expediente->descripcion = $request['descripcion'];
         $expediente->prioridad   = $request['prioridad'];
         $expediente->estado      = $request['estado'];
@@ -123,43 +108,29 @@ class ExpedientesController extends Controller{
             $persona->save();
 
             // Check if Referente is 'Otro'.
-            if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)) {
+            if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN))
                 
                 // Create and save new Referente
-                if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)) {
-                    $referente = new Referente(['descripcion' => $request['referente_otro']]);
-                    $referente->save();
-                    // Associate that new Referente to this Expediente
-                    $expediente->referente()->associate($referente);
-                }
+                if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN))
+                    ReferentesService::createAssociate($expediente->referente(), $request['referente_otro']);
                 
                 // If not, then associate Expediente with first Referente (Otro)
-                else {
-                    $expediente->referente_otro = $request['referente_otro'];
-                    $expediente->referente()->associate(Referente::first());
-                }
-            }
+                else
+                    ReferentesService::associate($expediente->referente(), Referente::first());
             
             // If not, associate Expediente with a Referente
-            else {
-                $expediente->referente()->associate(
+            else
+                ReferentesService::associate(
+                    $expediente->referente(),
                     is_null($request['referente'])?
                         Referente::first() :
                         Referente::find($request['referente'])
                     );
-            }
 
             // Save Persona and Expediente altogether
             $persona->expediente()->save($expediente);
 
-            AyudaExpedienteService::processAttachments($expediente->ayudas(), ['ids' => $request['ayuda'], 'detalles' => $request['ayuda_detalle'], 'montos' => $request['ayuda_monto']]);
-            // Loop through input ayuda and attach them to Expediente
-            // for ($i=0, $count = count($request['ayuda']); $i < $count; $i++) {
-            //     $expediente->ayudas()->attach($request['ayuda'][$i], [
-            //         'detalle' => $request['ayuda_detalle'][$i],
-            //         'monto' => $request['ayuda_monto'][$i]
-            //     ]);
-            // }
+            AyudaExpedienteService::attach($expediente->ayudas(), ['ids' => $request['ayuda'], 'detalles' => $request['ayuda_detalle'], 'montos' => $request['ayuda_monto']]);
 
             DB::commit();
             
@@ -168,7 +139,6 @@ class ExpedientesController extends Controller{
         catch(\Exception $e){
             $status = false;
             DB::rollback();
-            throw $e;
         }
 
         // Redirect and flash data with operation status
@@ -207,7 +177,7 @@ class ExpedientesController extends Controller{
                 $expediente->save();
     
                 // Process attachs
-                AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
+                // AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
         
                 // Process detachs
                 AyudaExpedienteService::processDetachments($expediente->ayudas(), $request['detachs']);
@@ -242,13 +212,11 @@ class ExpedientesController extends Controller{
     public function restore($id){
         
         $status = true;
-        $test = $id;
         DB::beginTransaction();
         
         try{
             Expediente::withTrashed()
-            ->where('id', $id)
-            ->first()
+            ->find($id)
             ->restore();
             DB::commit();
         }
@@ -258,7 +226,6 @@ class ExpedientesController extends Controller{
         }
 
         return response()->json(['status' => $status]);
-        
     }
 
     public function destroy($id){
@@ -268,9 +235,10 @@ class ExpedientesController extends Controller{
             'status' => $status,
             'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
             'msg'    => $status? 'Archivado correctamente.' : 'Ocurrió un fallo.',
-            // **************** OPTIMIZE THIS **********************
-            // ---- COMPUTE, THEN STORE IN SESSION
-            'last' => Expediente::withTrashed()->orderBy(session('sort')['by'], session('sort')['order'])->paginate(16)->lastPage(),
+            // Count actual number of records, then divide by MAX_RECORDS
+            // this will give the total number of pages, which is also
+            // the last page index
+            'last' => ceil( Expediente::count()/self::MAX_RECORDS ),
         ]);
     }
 }
