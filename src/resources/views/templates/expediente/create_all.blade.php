@@ -3,7 +3,6 @@
 @push('scripts_top')
     <script src="{{ asset('app/controllers/expedientes/MainController.js') }}" charset="utf-8"></script>
     <script src="{{ asset('app/controllers/expedientes/CreateController.js') }}" charset="utf-8"></script>
-    <script src="{{ asset('app/controllers/ayudas/AddController.js') }}" charset="utf-8"></script>
 @endpush
 
 @push('scripts_bottom')
@@ -40,7 +39,7 @@
             <fieldset class="col-md-5 col-md-offset-1">
                 <legend>
                     Ayudas solicitadas
-                    <button type="button" class="btn-outline btn-rest btn-show btn-sm pull-right" title="Agregar ayudas" style="margin-bottom: 5px" data-toggle="modal" data-target="#ayudasModal" ng-click="addAyuda()" ng-disabled="false">
+                    <button type="button" class="btn-outline btn-rest btn-show btn-sm pull-right" title="Agregar ayudas" style="margin-bottom: 5px" data-toggle="modal" data-target="#ayudasModal">
                         <span class="glyphicon glyphicon-plus"></span>
                         <span class="hidden-xs">Agregar ayudas</span>
                     </button>

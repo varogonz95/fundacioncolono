@@ -1,15 +1,14 @@
 app.controller('Expedientes_CreateController', function($scope, Referente, Ayuda, Region, Typeahead) {
 
-    $scope.invalid_add = false;
-
     $scope.formatter = Typeahead.formatter;
 
     $scope.items = [];
 
     $scope.cantones = [];
     $scope.distritos = [];
-
     $scope.estado = $scope.estados[0];
+
+    $scope.date = new Date();
 
     $scope.add = function(){
 
