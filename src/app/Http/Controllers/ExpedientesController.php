@@ -24,15 +24,15 @@ class ExpedientesController extends Controller{
     public function all(Request $request){
 
         $orderBy = [
-            'order' => $request['order'],
-            'by' => $request['by'],
+            'order' => $request['order'] ?: 'asc',
+            'by'    => $request['by'] ?:    'cedula',
         ];
 
         $filter = [
             'relationship' => $request['relationship'],
-            'comparator' => $request['comparator'],
-            'property' => $request['property'],
-            'value' => $request['value'],
+            'comparator'   => $request['comparator'],
+            'property'     => $request['property'],
+            'value'        => $request['value'],
         ];
 
         // Check if 'relationship' parameter is set into request
@@ -59,13 +59,11 @@ class ExpedientesController extends Controller{
             });
         
         // Paginate , passing the filtered items and the max records per page
-        $pagination = Filter::paginate($filtered, self::MAX_RECORDS);
-        $items = $pagination->items();
+        $pagination = Filter::paginate($filtered, self::MAX_RECORDS, $request['page']);
 
         return response()->json([
-            'expedientes' => $items,
+            'expedientes' => $pagination->items(),
             'total'       => $pagination->total(),
-            'type'        => gettype($items)
         ]);
     }
 
@@ -116,7 +114,7 @@ class ExpedientesController extends Controller{
                 
                 // If not, then associate Expediente with first Referente (Otro)
                 else
-                    ReferentesService::associate($expediente->referente(), Referente::first());
+                    ReferentesService::associate($expediente->referente(), Referente::first());            
             
             // If not, associate Expediente with a Referente
             else

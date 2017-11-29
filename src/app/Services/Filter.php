@@ -71,9 +71,12 @@ class Filter{
     }
 
     public function paginate($items, $perPage = 15, $page = null, $options = []){
+        $arr = [];
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        // $items = $items instanceof Collection ? $items : collect($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        $items = $items->forPage($page, $perPage);
+        $items->each(function($e, $i) use (&$arr){$arr[] = $e;});
+
+        return new LengthAwarePaginator($arr, $items->count(), $perPage, $page);
     }
 
     public function orderBy($relationship, $by, $order){
