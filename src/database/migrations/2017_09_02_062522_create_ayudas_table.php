@@ -16,8 +16,6 @@ class CreateAyudasTable extends Migration
         Schema::create('ayudas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descripcion',50);
-            $table->unsignedInteger('primer_dia_entrega')->nullable();
-            $table->unsignedInteger('segundo_dia_entrega')->nullable();
         });
     }
 

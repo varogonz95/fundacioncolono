@@ -22,8 +22,8 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-3">Monto ₡:</label>
-            <div class="col-md-6 col-md-offset-2">
+            <label class="control-label col-md-4">Monto base ₡:</label>
+            <div class="col-md-6 col-md-offset-1">
                 <input type="text" class="form-control" ng-model="monto" placeholder="(en colones)" value="0">
             </div>
         </div>

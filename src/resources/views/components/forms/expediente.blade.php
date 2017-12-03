@@ -54,34 +54,44 @@
     </div>
 </div>
 
-{{-- PERIODO DE APROBACION --}}
 <ng-show ng-show="{{ $estado_model }}.id === 1">
-    <div class="form-group">
-        <label class="control-label col-sm-4">?fecha 1:</label>
-        <div class="col-sm-4">
-            <input type="number" name="fecha1" class="form-control" min="1" max="30">
+    <h4 class="page-header">Fechas de pago y período de aprobación</h4>
+    
+    {{-- FECHAS EN QUE RECIBE AYUDA --}}
+    <div class="form-group col-sm-12">
+        <h5 class="" style="font-weight: bold">Fechas de pago:</h5>
+        
+        <div class="col-sm-6">
+            <label class="control-label text-muted col-sm-6" style="font-weight: 100">Primera fecha:</label>
+            <div class="col-sm-4">
+                <input type="number" name="fecha1" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+            </div>
+        </div>
+        
+        <div class="col-sm-6">
+            <label class="control-label text-muted col-sm-6" style="font-weight: 100">Segunda fecha:</label>
+            <div class="col-sm-4">
+                <input type="number" name="fecha2" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+            </div>
         </div>
     </div>
     
-    <div class="form-group">
-        <label class="control-label col-sm-4">?fecha 2</label>
-        <div class="col-sm-4">
-            <input type="number" name="fecha2" class="form-control" min="1" max="30">
-        </div>
-    </div>
     
-{{-- FECHAS EN QUE RECIBE AYUDA --}}
-    <div class="form-group">
-        <label>Fecha desde: </label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control">
-        </div>
-    </div>
+    {{-- PERIODO DE APROBACION --}}
+    <div class="form-group col-sm-12">
+        <h5 class="" style="font-weight: bold">Período de aprobación</h5>
 
-    <div class="form-group">
-        <label>Fecha hasta: </label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control">
+        <div class="col-sm-6">
+            <label class="control-label text-muted col-sm-3" style="font-weight: 100">Desde: </label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open" ng-required="{{ $estado_model }}.id === 1">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <label class="control-label text-muted col-sm-3" style="font-weight: 100">Hasta: </label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}" ng-required="{{ $estado_model }}.id === 1">
+            </div>
         </div>
     </div>
 </ng-show>

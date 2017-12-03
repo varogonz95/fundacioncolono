@@ -82,10 +82,10 @@ class AyudaExpedienteController extends Controller{
             // AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
     
             // Process detachs
-            AyudaExpedienteService::processDetachments($expediente->ayudas(), $request['detachs']);
+            AyudaExpedienteService::detach($expediente->ayudas(), $request['detachs']);
     
             // Process updates
-            AyudaExpedienteService::processUpdates($expediente->ayudas(), $request['updates']);
+            AyudaExpedienteService::update($expediente->ayudas(), $request['updates']);
 
             // All good to commit :)
             DB::commit();

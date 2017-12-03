@@ -73,10 +73,11 @@ class Filter{
     public function paginate($items, $perPage = 15, $page = null, $options = []){
         $arr = [];
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $count = $items->count();
         $items = $items->forPage($page, $perPage);
         $items->each(function($e, $i) use (&$arr){$arr[] = $e;});
 
-        return new LengthAwarePaginator($arr, $items->count(), $perPage, $page);
+        return new LengthAwarePaginator($arr, $count, $perPage, $page);
     }
 
     public function orderBy($relationship, $by, $order){

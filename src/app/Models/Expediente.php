@@ -13,6 +13,7 @@ class Expediente extends Model{
     const DELETED_AT = 'fecha_eliminacion';
     
     protected $dates = ['fecha_eliminacion'];
+    protected $fillable = ['descripcion', 'estado', 'prioridad', 'referente_otro'];
 
     public $timestamps = false;
 
@@ -25,7 +26,7 @@ class Expediente extends Model{
     }
 
     public function ayudas(){
-        return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes')->withPivot(['detalle','monto']);
+        return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes', 'expediente_fk', 'ayuda_fk')->withPivot(['detalle','monto']);
     }
 
     public function getFechaCreacionAttribute($value){

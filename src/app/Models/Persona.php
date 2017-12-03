@@ -16,4 +16,9 @@ class Persona extends Model{
         return $this->hasOne('App\Models\Expediente','persona_fk');
     }
 
+    public function historico()
+    {
+        return $this->hasManyThrough('App\Models\HistoricoExpediente', 'App\Models\Expediente', 'persona_fk', 'expediente_fk', 'cedula', 'id');
+    }
+
 }

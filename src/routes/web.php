@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function(){
     Route::post('expedientes/{expediente}/restore','ExpedientesController@restore');
     Route::resource('expedientes','ExpedientesController');
 
+    Route::resource('historicos','HistoricoController');
+
     Route::resource('personas','PersonasController');
 
     Route::resource('referentes','ReferentesController');

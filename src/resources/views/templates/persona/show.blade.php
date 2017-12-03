@@ -44,9 +44,7 @@
 
         <div class="expediente-info-item">
             <label>Ubicación: </label>
-            <span>
-                @{{ selected.persona.provincia.name + ', ' + selected.persona.canton.name + ', ' + selected.persona.distrito.name }}
-            </span>
+            <span region-text path="selected.persona.ubicacion"></span>
         </div>
 
         <div class="expediente-info-item">

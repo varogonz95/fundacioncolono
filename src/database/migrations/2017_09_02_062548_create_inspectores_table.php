@@ -14,11 +14,13 @@ class CreateInspectoresTable extends Migration
     public function up()
     {
         Schema::create('inspectores', function (Blueprint $table) {
+            $table->increments('id');
+
             $table->char('persona_fk', 9);
             $table->unsignedInteger('usuario_fk');
+
             $table->boolean('activo')->default(true);
 
-            $table->primary(['persona_fk', 'usuario_fk']);
 
             // constraints
             $table->foreign('persona_fk')

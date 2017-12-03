@@ -1,28 +1,29 @@
 var app = angular.module('App',['ngAnimate', 'ngResource', 'ui.bootstrap']);
 
 app.config(['uibPaginationConfig',function(conf){
-    conf.previousText="Anterior";
-    conf.nextText="Siguiente";
-    conf.lastText="Último";
-    conf.firstText="Primero";
-    conf.boundaryLinks=true;
-    conf.directionLinks=false;
-    conf.forceEllipses=true;
+    // conf.previousText="Anterior";
+    // conf.nextText="Siguiente";
+    conf.maxSize        = 16;
+    conf.boundaryLinks  = true;
+    conf.forceEllipses  = true;
+    conf.directionLinks = false;
+    conf.lastText       = "Último";
+    conf.firstText      = "Primero";
 }]);
 
 app.config(['uibDatepickerPopupConfig', function (conf) {
     conf.altInputFormats = [];
-    conf.clearText = 'Limpiar';
-    conf.closeText = 'Hecho';
-    conf.currentText = 'Hoy';
-    conf.placement = 'auto bottom';
+    conf.currentText     = 'Hoy';
+    conf.closeText       = 'Hecho';
+    conf.clearText       = 'Limpiar';
+    conf.placement       = 'auto bottom';
 }]);
 
 app.config(function ($resourceProvider) {
     $resourceProvider.defaults.actions.save.method = 'PATCH';
-    $resourceProvider.defaults.actions.update = { method: 'PUT' };
-    $resourceProvider.defaults.actions.create = { method: 'POST' };
-    $resourceProvider.defaults.actions.post = { method: 'POST'};
+    $resourceProvider.defaults.actions.update      = { method: 'PUT' };
+    $resourceProvider.defaults.actions.post        = { method: 'POST' };
+    $resourceProvider.defaults.actions.create      = { method: 'POST' };
 });
 
 app.config(function(AppResourceProvider){

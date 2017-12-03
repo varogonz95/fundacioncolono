@@ -34,19 +34,16 @@ app.service('Region', function($http){
     };
 
     this.find = function(array, key, value) {
-        for (var i = 0; i < array.length; i++) {
-            if(array[i][key] === value){
+        for (var i = 0; i < array.length; i++)
+            if(array[i][key] == value) 
                 return array[i];
-            }
-        }
-    }
+    };
 
     this.toList = function(data) {
         var list = [];
 
-        for (var key in data) {
+        for (var key in data)
             list.push({cod: key, name: data[key]});
-        }
 
         return list;
     };

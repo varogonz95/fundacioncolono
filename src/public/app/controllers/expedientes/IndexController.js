@@ -2,50 +2,52 @@
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
     var showModal = Modal.init('#show_modal',{
-        style:{'overflow-y':'hidden', 'bottom': '0'},
-        onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
+        style:         {'overflow-y': 'hidden', 'bottom': '0'},
+        onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
 
     $scope.formatter = Typeahead.formatter;
     
-    $scope.selected = {};
-    
     $scope.expedientes = [];
     
     $scope.datePickers = {
-        openFrom:false,
-        openTo:false,
+        openTo:   false,
+        openFrom: false,
     };
 
     $scope.filter_data = {
-        active: false,
-        filter: null,
-        filtered: false,
-        prioridad: $scope.prioridades[0],
-        estado: $scope.estados[0],
-        referente: [],
-        ayuda: [],
+        value:          '',
+        referente:      [],
+        ayuda:          [],
+        filter:         null,
+        // active:         false,
+        filtered:       false,
+        one:            false,
+        estado:         $scope.estados[0],
+        prioridad:      $scope.prioridades[0],
         fecha_creacion: {from: new Date(), to: null},
-        value: ''
     };
 
     $scope.total = 1;
-    $scope.page = 1;
+    $scope.page  = 1;
+    // $scope.totalpages = 1;
 
     $scope.sort = {
-        by: 'cedula',
-        order: true
+        relationship: 'persona',
+        by:           'cedula',
+        order:        true,
     };
     
     $scope.columns = {
-        cedula: true,
-        nombre: true,
-        apellidos: true,
-        prioridad: true,
-        estado: true,
-        referente: true,
-        ayuda: true,
+        ayuda:          true,
+        cedula:         true,
+        nombre:         true,
+        estado:         true,
+        apellidos:      true,
+        prioridad:      true,
+        referente:      true,
+        ubicacion:      true,
         fecha_creacion: true
     };
 
@@ -53,6 +55,21 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     $scope.doSort = function (by) {
         $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
         $scope.sort.by = by;
+
+        switch ($scope.sort.by) {
+            case 'estado':
+            case 'prioridad':
+            case 'referentes':
+            case 'fecha_creacion':
+                $scope.sort.relationship = 'expedientes'
+                break;
+
+            default:
+                $scope.sort.relationship = 'persona'
+                
+        }
+
+        console.log($scope.sort);
 
         $scope.index();
     };
@@ -67,34 +84,39 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
     $scope.index = function (page = 1) {
 
+        $scope.page = page < 1 ? 1 : page;
+
         var params = {
-            page: page,
-            by: $scope.sort.by,
-            order: ($scope.sort.order ? 'asc' : 'desc')
+            relationship: $scope.sort.relationship,
+            order:        $scope.sort.order ? 'asc': 'desc',
+            page:         $scope.page,
+            by:           $scope.sort.by,
         };
 
-        $scope.page = (page < 1) ? 1 : page;
-
         if ($scope.filter_data.filtered){
-            page = 1;
-            params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
-        }   
-        else
-            params = angular.extend(params, {search: $scope.search});
 
+            params.page = $scope.filter_data.one ? 1 : $scope.page;
+            $scope.page = params.page;
+            $scope.filter_data.one = false;
+
+            if ($scope.search !== '') params.search = $scope.search;
+            params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
+        }
+        else params.search = $scope.search;
 
         Expediente('all').get(
             params,
             function(response){
+                $scope.total       = response.total;
+                // $scope.totalpages  = response.pages;
                 $scope.expedientes = response.expedientes;
-                $scope.total = response.total;
             });
     };
 
     $scope.show = function (obj) {
-        obj.editable = false;
-        obj.isSelected = true;
-        obj.persona.editable = false;
+        obj.editable               = false;
+        obj.isSelected             = true;
+        obj.persona.editable       = false;
         $scope.selected.isSelected = obj === $scope.selected;
         // scope.ayudas.editable = false;
 
@@ -104,11 +126,11 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
 
         Region.getCantones(obj.persona.provincia.cod).then(function (response) {
-            $scope.cantones = Region.toList(response.data);
+            $scope.cantones    = Region.toList(response.data);
             obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
 
             Region.getDistritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-                $scope.distritos = Region.toList(response.data);
+                $scope.distritos     = Region.toList(response.data);
                 obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
             });
         });
@@ -131,8 +153,10 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
     $scope.filter_pichudo = function () {
 
+        $scope.search          = '',
+        $scope.filter_data.one = true;
         $scope.filter_data.filtered = true;
-        $scope.index($scope.page, jQueryToJson($('#filter'), 'name'));
+        $scope.index($scope.page);
 
     };
 

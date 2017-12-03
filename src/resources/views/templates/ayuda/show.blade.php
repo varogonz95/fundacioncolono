@@ -31,7 +31,7 @@
                 @include('templates.ayuda.$edit_pivot')
             </div>
 
-            <div class="expediente-info" ng-hide="ayuda.editable" ng-class="{'cached': ayuda.removed || ayuda.changed, 'archived': selected.archivado}">
+            <div class="expediente-info" ng-hide="ayuda.editable" ng-class="{'cached': ayuda.removed || ayuda.changed, 'archived': selected.archivado, 'text-expanded': ayuda.pivot.text_expanded}">
 
                 <div class="row change-state" ng-show="ayuda.removed || ayuda.changed">
                     <strong>

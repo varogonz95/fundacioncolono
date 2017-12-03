@@ -8,7 +8,10 @@ app.controller('Expedientes_CreateController', function($scope, Referente, Ayuda
     $scope.distritos = [];
     $scope.estado = $scope.estados[0];
 
-    $scope.date = new Date();
+    $scope.datePickers = {
+        from: {open: false, date: new Date()},
+        to: {open: false, date: null},
+    }
 
     $scope.add = function(){
 

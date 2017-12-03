@@ -16,8 +16,10 @@ class CreateAyudaExpedientesTable extends Migration
         Schema::create('ayuda_expedientes', function (Blueprint $table) {
 
             // Many-to-many relationship between Ayuda and Expediente
-            $table->unsignedInteger('expediente_id');
-            $table->unsignedInteger('ayuda_id');
+            $table->increments('id');
+
+            $table->unsignedInteger('expediente_fk');
+            $table->unsignedInteger('ayuda_fk');
             // ------------------------------------------------------
             $table->text('detalle')
                    ->nullable()
@@ -27,11 +29,11 @@ class CreateAyudaExpedientesTable extends Migration
                   ->default(0);
 
             // Table constraints
-            $table->foreign('expediente_id')
+            $table->foreign('expediente_fk')
                   ->references('id')->on('expedientes')
                   ->onDelete('cascade');
 
-            $table->foreign('ayuda_id')
+            $table->foreign('ayuda_fk')
                   ->references('id')->on('ayudas')
                   ->onDelete('no action');
               });

@@ -32,7 +32,4 @@ app.controller('Expedientes_MainController', function ($scope, Expediente, Refer
     ];
 
     $scope.provincias = Region.getProvincias();
-
-    $scope.total = 1;
-    $scope.page = 1;
 });

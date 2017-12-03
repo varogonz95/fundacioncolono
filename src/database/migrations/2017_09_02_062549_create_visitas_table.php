@@ -16,8 +16,7 @@ class CreateVisitasTable extends Migration
         Schema::create('visitas', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->char('persona_fk', 9);
-            $table->unsignedInteger('usuario_fk');
+            $table->unsignedInteger('inspector_fk');
             $table->unsignedInteger('expediente_fk');
 
             // Fecha en la que el inspector eligió la visita
@@ -29,12 +28,8 @@ class CreateVisitasTable extends Migration
 
             // Soft delete for inspector
             // Documentation at: https://laravel.com/docs/5.5/eloquent#soft-deleting
-            $table->foreign('persona_fk')
-                  ->references('cedula')->on('personas')
-                  ->onDelete('no action');
-
-            $table->foreign('usuario_fk')
-                  ->references('id')->on('usuarios')
+            $table->foreign('inspector_fk')
+                  ->references('id')->on('inspectores')
                   ->onDelete('no action');
 
             $table->foreign('expediente_fk')

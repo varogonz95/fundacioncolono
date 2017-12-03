@@ -51,7 +51,7 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .addayudas .panel-heading{padding: 5px 15px}
 
 .caret-right{transform: rotate(-90deg)}
-.controls{margin-top:4px; margin-bottom:1em;}
+.controls{margin-top:4px; margin-bottom: 1em;}
 .noresize{resize: none;}
 .text-length-toggle{max-height: 20px; min-height: 20px}
 .text-collapsed{max-height: calc(3 * 1.42857143em + 20px);min-height: calc(3 * 1.42857143em + 20px);}
@@ -144,6 +144,8 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .expediente-archived-overlay{height: 100%; position: fixed; width: 100%;}
 .expediente-archived{position: relative; top: 25vh; margin: auto; min-width: 25%; max-width: 30%; box-shadow: 0 0 8px #666 !important;}
 .expediente-archived > .panel-body{padding: 2em 1.5em; font-size: large}
+
+#selectedayuda .expediente-info.text-expanded{position: absolute}
 
 #ayudaModal{border-radius: 3px; box-shadow: 0 0 6px #666; margin-top: -20px}
 #ayudaModal .content{padding: 1em 0;}

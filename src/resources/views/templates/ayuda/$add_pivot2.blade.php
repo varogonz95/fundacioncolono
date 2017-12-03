@@ -18,7 +18,7 @@
 
 
         <div class="form-group">
-            <label class="control-label col-md-2">Monto:</label>
+            <label class="col-md-3">Monto base:</label>
             <div class="col-md-2">
                 <input type="text" name="ayuda_monto[@{{$index}}]" ng-value="i.monto">
             </div>

@@ -95,10 +95,11 @@
                         <input type="hidden" name="value[1]" ng-value="toStandardDate(filter_data.fecha_creacion.to)">
                     </ngIf>
                 </label>
+                <br>
                 <label class="text-muted" style="font-weight: 100">Desde:</label>
                 <input 
                     type="text" class="form-control"
-                    uib-datepicker-popup="dd-MM-yyyy" 
+                    uib-datepicker-popup="dd/MM/yyyy" 
                     ng-click="datePickers.openFrom = true" placeholder="Fecha desde"
                     ng-model="filter_data.fecha_creacion.from" is-open="datePickers.openFrom"
                 />
@@ -107,7 +108,7 @@
                     type="text" class="form-control" 
                     ng-click="datePickers.openTo = true" placeholder="Fecha hasta"
                     ng-model="filter_data.fecha_creacion.to" is-open="datePickers.openTo"
-                    uib-datepicker-popup="dd-MM-yyyy" datepicker-options="{minDate:filter_data.fecha_creacion.from}"
+                    uib-datepicker-popup="dd/MM/yyyy" datepicker-options="{minDate:filter_data.fecha_creacion.from}"
                 />
             </div>
         </div>
@@ -141,9 +142,7 @@
                         <button class="btn-outline btn-rest btn-show" type="submit">
                             <span class="glyphicon glyphicon-ok"></span> Filtrar
                         </button>
-                        <button class="btn-outline btn-rest btn-none" type="button" ng-click="filter_data.filter = null">
-                            <span class="glyphicon glyphicon-remove"></span> Cancelar
-                        </button>
+                        <button class="btn-outline btn-rest btn-none" type="button" ng-click="filter_active = false; filter_data.filter = filter_data.filtered ? filter_data.filter : null" data-toggle="collapse" data-target="#filter">Cancelar</button>
                     </ngShow>
                 </div>
             </div>

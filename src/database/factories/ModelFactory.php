@@ -49,15 +49,7 @@ $factory->define(App\Models\Referente::class, function (Faker\Generator $faker) 
 |--------------------------------------------------------------------------
 */
 $factory->define(App\Models\Ayuda::class, function (Faker\Generator $faker) {
-
-    $first_day = $faker->numberBetween(1, 15);
-    $second_day = $faker->numberBetween($first_day + 1, 30);
-
-    return [
-        'descripcion' => $faker->text(50),
-        'primer_dia_entrega' => $first_day,
-        'segundo_dia_entrega' => $second_day,
-    ];
+    return ['descripcion' => $faker->text(50)];
 });
 
 /*
