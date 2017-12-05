@@ -39,7 +39,7 @@
 
 > Una vez preparada la configuración básica de la aplicación, es suficiente con navegar a la carpeta raíz del proyecto y correr el siguiente comando de *artisan*:
 
-    php artisan migrate:refresh --seed
+    php artisan migrate:fresh --seed
 
 > Este comando creará las tablas necesarias en la base de datos y las poblará con datos ficticios proporcionados por [Faker](https://github.com/fzaninotto/Faker).
 
