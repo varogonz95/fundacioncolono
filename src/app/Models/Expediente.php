@@ -33,6 +33,29 @@ class Expediente extends Model{
         return (new \DateTime($value))->format('d-m-Y');
     }
 
+    public function setFechaDesdeAttribute($value){
+        $date = explode('/', $value);
+        $this->attributes['fecha_desde'] = (new \DateTime("{$date[2]}/{$date[1]}/{$date[0]}"))->format('Y-m-d');
+    }
+
+    public function setFechaHastaAttribute($value){
+        $date = explode('/', $value);
+        $this->attributes['fecha_hasta'] = (new \DateTime("{$date[2]}/{$date[1]}/{$date[0]}"))->format('Y-m-d');
+    }
+
+    public function getFechaDesdeAttribute($value){
+        return (new \DateTime($value))->format('d-m-Y');        
+    }
+
+    public function getFechaHastaAttribute($value){
+        return (new \DateTime($value))->format('d-m-Y');
+    }
+
+    //? Should the last month be counted? (Months + 1)
+    public function getMeses($date1, $date2){
+        return (new \DateTime($date1))->diff(new \DateTime($date2), true)->m;
+    }
+
     public function getMontoTotal(){
         $monto = 0;
 

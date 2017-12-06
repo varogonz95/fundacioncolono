@@ -13,7 +13,7 @@
 
 @section('content')
 
-    <section class="col-md-10 col-md-offset-1" ng-controller="Expedientes_CreateController">
+    <section class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1" ng-controller="Expedientes_CreateController">
 
         @include('templates.ayuda.$add_pivot')
 

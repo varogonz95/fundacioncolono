@@ -53,6 +53,7 @@ class ExpedientesController extends Controller{
 		// Iterate over items
 		$filtered->each(function($item, $index){
 			$item->montoTotal = $item->getMontoTotal();
+			$item->meses = $item->getMeses($item->fecha_desde, $item->fecha_hasta);
 			$item->archivado = $item->trashed();
 		});
 		
@@ -98,9 +99,13 @@ class ExpedientesController extends Controller{
 		$expediente = new Expediente;
 		// Assign Expediente property values
 		$expediente->referente_otro = $request['referente_otro'];
-		$expediente->descripcion = $request['descripcion'];
-		$expediente->prioridad   = $request['prioridad'];
-		$expediente->estado      = $request['estado'];
+		$expediente->fecha_desde    = $request['fecha_desde'];
+		$expediente->fecha_hasta    = $request['fecha_hasta'];
+		$expediente->descripcion    = $request['descripcion'];
+		$expediente->pago_inicio    = $request['pago_inicio'];
+		$expediente->pago_final     = $request['pago_final'];
+		$expediente->prioridad      = $request['prioridad'];
+		$expediente->estado         = $request['estado'];
 
 		$status = true;
 		DB::beginTransaction();

@@ -59,7 +59,7 @@
                 @{{ selected.estado === 0 ? 'En valoración' : selected.estado === 1 ? 'Aprobado' : selected.estado === 2 ? 'No aprobado' : selected.estado === 3 ? 'Pendiente' : '' }}
             </span>
             <p class="help-block" ng-show="selected.estado !== 1">
-                <small>Para mostrar el los
+                <small>Para mostrar los
                     <strong>meses asignados</strong>, el expediente debe estar
                     <u>Aprobado</u>.
                 </small>
@@ -67,12 +67,19 @@
         </div>
 
         <div class="expediente-info-item" ng-show="selected.estado === 1">
-            <label>Validez</label>
+            <label>Aprobado</label>
             <p style="padding: 0 10px">
-                Desde: @{{ selected.pago_inicio }}
-                <br> Hasta: @{{ selected.pago_final }}
+                Desde: @{{ selected.fecha_desde }}
+                <br> Hasta: @{{ selected.fecha_hasta }}
                 <br>
-                <small class="help-block">Número de meses: </small>
+                <small class="help-block">Número de meses: @{{ selected.meses }}</small>
+            </p>
+        </div>
+
+        <div class="expediente-info-item" ng-show="selected.estado === 1">
+            <label>Recibe</label>
+            <p style="padding: 0 10px">
+                los @{{ selected.pago_inicio }} y los @{{ selected.pago_final }} de cada mes
             </p>
         </div>
 

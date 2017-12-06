@@ -25,8 +25,8 @@ class CreateExpedientesTable extends Migration{
             $table->tinyInteger('estado');
             $table->text('descripcion');
 
-            $table->date('pago_inicio')->nullable();
-            $table->date('pago_final')->nullable();
+            $table->unsignedInteger('pago_inicio')->nullable();
+            $table->unsignedInteger('pago_final')->nullable();
 
             $table->date('fecha_desde')->nullable();
             $table->date('fecha_hasta')->nullable();

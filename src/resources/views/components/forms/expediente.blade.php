@@ -58,39 +58,40 @@
     <h4 class="page-header">Fechas de pago y período de aprobación</h4>
     
     {{-- FECHAS EN QUE RECIBE AYUDA --}}
-    <div class="form-group col-sm-12">
-        <h5 class="" style="font-weight: bold">Fechas de pago:</h5>
+    <div class="form-group col-lg-push-0 col-sm-12 col-sm-push-1">
+        <h5 style="font-weight: bold">Fechas de pago:</h5>
         
-        <div class="col-sm-6">
-            <label class="control-label text-muted col-sm-6" style="font-weight: 100">Primera fecha:</label>
-            <div class="col-sm-4">
-                <input type="number" name="fecha1" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+        <div class="form-group col-md-12 col-sm-6 col-xs-12 nogutters">
+            <label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Primera fecha:</label>
+            <div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
+                <input type="number" name="pago_inicio" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
         
-        <div class="col-sm-6">
-            <label class="control-label text-muted col-sm-6" style="font-weight: 100">Segunda fecha:</label>
-            <div class="col-sm-4">
-                <input type="number" name="fecha2" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+        <div class="form-group col-lg-12 col-md-pull-0 col-md-12 col-sm-6 col-sm-pull-1 col-xs-12 nogutters">
+            <label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Segunda fecha:</label>
+            <div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
+                <input type="number" name="pago_final" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
     </div>
     
     
     {{-- PERIODO DE APROBACION --}}
-    <div class="form-group col-sm-12">
-        <h5 class="" style="font-weight: bold">Período de aprobación</h5>
+    <div class="form-group col-lg-push-0 col-sm-12 col-sm-push-1">
+        <h5 style="font-weight: bold">Período de aprobación</h5>
 
-        <div class="col-sm-6">
-            <label class="control-label text-muted col-sm-3" style="font-weight: 100">Desde: </label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open" ng-required="{{ $estado_model }}.id === 1">
+        <div class="form-group col-sm-6 col-xs-12 nogutters">
+            <label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Desde: </label>
+            <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
+                <input class="form-control" type="text" name="fecha_desde" ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
-        <div class="col-sm-6">
-            <label class="control-label text-muted col-sm-3" style="font-weight: 100">Hasta: </label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}" ng-required="{{ $estado_model }}.id === 1">
+
+        <div class="form-group col-md-pull-0 col-sm-6 col-sm-pull-2 col-xs-12 nogutters">
+            <label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Hasta: </label>
+            <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
+                <input class="form-control" type="text" name="fecha_hasta" ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
     </div>

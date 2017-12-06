@@ -29,6 +29,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .form-control:-moz-placeholder {font-style:italic}
 .form-control::-moz-placeholder {font-style:italic}
 
+.nogutters{padding-left: 0 !important;padding-right: 0 !important}
 .nogutter-left{margin-left: -15px;}
 .nogutter-right{margin-right: -15px;}
 
