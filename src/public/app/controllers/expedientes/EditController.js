@@ -1,4 +1,4 @@
-app.controller('Expedientes_EditController', function ($scope, Expediente, Region, Typeahead) {
+app.controller('Expedientes_EditController', function ($scope, Expediente, Typeahead) {
 
     $scope.invalid_add = false;
 

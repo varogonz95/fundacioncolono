@@ -11,18 +11,21 @@
 
 @push('scripts_bottom')
     <script src="{{ asset('js/animatedModal/animatedModal.js') }}"></script>
+    @if (Session::has('status'))
+        <script>
+            swal("{{ Session:: get('status')['title'] }}", "{{ Session::get('status')['msg'] }}", "{{ Session:: get('status')['type'] }}");
+        </script>
+        {{-- <div class="alert alert-{{ Session::get('status')['type'] }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>{{ Session::get('status')['title'] }}</strong> {{ Session::get('status')['msg'] }}
+        </div> --}}
+    @endif
 @endpush
 
 @section('controller', 'Expedientes')
 
 @section('content')
 
-    @if (Session::has('status'))
-        <div class="alert alert-{{ Session::get('status')['type'] }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>{{ Session::get('status')['title'] }}</strong> {{ Session::get('status')['msg'] }}
-        </div>
-    @endif
 
     <section id="expedientes" class="col-md-10 col-md-offset-1" ng-controller="Expedientes_IndexController">
 

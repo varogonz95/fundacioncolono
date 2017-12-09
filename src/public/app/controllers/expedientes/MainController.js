@@ -30,6 +30,5 @@ app.controller('Expedientes_MainController', function ($scope, Expediente, Refer
         { id: 2, name: 'Media' },
         { id: 3, name: 'Alta' }
     ];
-
-    $scope.provincias = Region.getProvincias();
+    $scope.provincias = Region.provincias();
 });

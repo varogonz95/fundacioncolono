@@ -42,14 +42,18 @@ app.controller('Expedientes_CreateController', function($scope, Referente, Ayuda
         $scope.distritos = [];
         $scope.canton = null;
 
-        Region.getCantones(p)
-        .then(function(response){ $scope.cantones = Region.toList(response.data);});
+        Region.cantones(p)
+        .then(function(response){ $scope.cantones = Region.parse(response).cantones;});
     };
 
     // Update Distrito SELECT
     $scope.updateDistritos = function(p, c){
-        Region.getDistritos(p, c)
-        .then(function(response){ $scope.distritos = Region.toList(response.data); });
-    }
+        Region.distritos(p, c)
+        .then(function(response){ $scope.distritos = Region.parse(response).distritos; });
+    };
+
+    // $scope.validateDate = function(date){
+    //     return $scope.estado === 1 ? date : null;
+    // };
 
 });

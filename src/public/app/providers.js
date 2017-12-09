@@ -1,5 +1,10 @@
 app.provider('AppResource', function () {
 
+    this.host;
+    this.port;
+    this.extras;
+    this.protocol;
+
     this.$get = function ($location, $resource) {
 
         var protocol = this.protocol || $location.protocol(),
@@ -67,6 +72,104 @@ app.provider('AppResource', function () {
     }
 });
 
+app.provider('Territory', function(){
+    
+    this.resultWrapper;
+    this.fields = {
+        canton:{},
+        distrito:{}
+    };
+    this.orderby = {};
+    this.defaultParameters    = {
+        f:                           'pjson',
+        time:                        '',
+        inSR:                        '',
+        outSR:                       '',
+        token:                       '',
+        units:                       'esriSRUnit_Meter',
+        having:                      '',
+        returnZ:                     false,
+        returnM:                     false,
+        geometry:                    '',
+        distance:                    '0.0',
+        objectIds:                   '',
+        sqlFormat:                   'none',
+        outFields:                   '',
+        spatialRel:                  'esriSpatialRelIntersects',
+        resultType:                  'none',
+        geometryType:                'esriGeometryEnvelope',
+        resultOffset:                '',
+        orderByFields:               '',
+        returnIdsOnly:               false,
+        outStatistics:               '',
+        returnGeodetic:              false,
+        returnGeometry:              false,
+        returnCentroid:              false,
+        returnCountOnly:             false,
+        multipatchOption:            'xyFootprint',
+        returnExtentOnly:            false,
+        resultRecordCount:           '',
+        geometryPrecision:           '',
+        maxAllowableOffset:          '',
+        applyVCSProjection:          false,
+        datumTransformation:         '',
+        returnDistinctValues:        false,
+        quantizationParameters:      '',
+        groupByFieldsForStatistics:  '',
+        returnExceededLimitFeatures: false,
+    };
+
+    // this.outFields = 'COD_PROV,COD_CANT,COD_DIST,NOM_PROV,NOM_CANT,NOM_DIST';
+    // this.URL       = 'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Distritos_CR/FeatureServer/0/query';
+    
+    this.$get = function(){
+
+        var params = this.defaultParameters,
+            fields = this.fields,
+            orderby = this.orderby,
+
+        distritos = function(provincia, canton){
+            params.where = 'COD_PROV=' + provincia + ' AND COD_CANT=' + canton;
+            params.outFields = fields.distritos;
+            params.orderByFields = orderby.distrito;
+            return params;
+        }, 
+        
+        cantones = function (provincia) {
+            params.where = 'COD_PROV=' + provincia;
+            params.outFields = fields.cantones;
+            params.orderByFields = orderby.canton;
+            return params;
+        },
+
+        all = function (provincia, canton, distrito) {
+            params.where = 'COD_PROV=' + provincia + ' AND COD_CANT=' + canton + ' AND COD_DIST=' + distrito;
+            params.outFields = fields.all;
+            // console.log(params.where);
+            return params;
+        };
+
+        return {
+            wrapper:    this.resultWrapper,
+            fields: fields,
+            parameters: params,
+            all:        all,
+            cantones:   cantones,
+            distritos:  distritos,
+            url:        this.URL,
+            urls: {
+                // provincia:,
+                canton:   'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Cantones_CR/FeatureServer/0/query',
+                distrito: 'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Distritos_CR/FeatureServer/0/query',
+            },
+        };
+    };
+    
+    // this.cantonesOutFields = ['COD_PROV', 'COD_CANT', 'NOM_CANT_1'];
+    // this.cantonesUrl  = 'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Cantones_CR/FeatureServer/0';
+    // this.distritosUrl = 'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Distritos_CR/FeatureServer/0';
+});
+
 app.provider('AlertProvider', function () {
 
     this.$get = function () {
@@ -103,3 +206,5 @@ app.provider('AlertProvider', function () {
         }
     }
 });
+
+

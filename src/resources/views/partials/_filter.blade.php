@@ -113,26 +113,7 @@
             </div>
         </div>
         
-        {{-- PERIODO DE APROBACION --}}
-        {{--
-            <div class="col-lg-2">
-                <div class="form-group form-group-sm">
-                    <label>
-                        Periodo de aprobación
-                        <input type="radio" name="filter" ng-model="filter_data.filter" value="fecha_creacion">
-                        <ngIf ng-if="filter_data.filter === 'fecha_creacion'">
-                            <input type="hidden" name="relationship" value="expedientes">
-                            <input type="hidden" name="property" value="fecha_creacion">
-                            <input type="hidden" name="comparator" value="between">
-                        </ngIf>
-                    </label>
-                    <label class="text-muted" style="font-weight: 100">Desde:</label>
-                    <input type="text" class="form-control" placeholder="Fecha desde"/>
-                    <label class="text-muted" style="font-weight: 100">Hasta:</label>
-                    <input type="text" class="form-control" placeholder="Fecha hasta"/>
-                </div>
-            </div>
-        --}}
+        {{-- UBICACION --}}
 
         {{-- CONTROLES --}}
         <div class="col-lg-2">

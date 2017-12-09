@@ -1,4 +1,4 @@
-app.directive('regionSelectGroup', function (AppResource, Region) {
+/* app.directive('regionSelectGroup', function (AppResource, Region) {
 
 	var scope = {
 			// Provincias data binding
@@ -27,36 +27,28 @@ app.directive('regionSelectGroup', function (AppResource, Region) {
 		restrict:    'AE',
 		templateUrl:  AppResource.getUrl() + '/app/templates/test.html',
 	};
-});
+}); */
 
 app.directive('regionText', function (Region) {
 	return {
 		template: '{{ubicacion}}',
 		restrict: 'AE',
+		scope:{
+			path: '<'
+		},
 		link: function (scope, element, attrs) {
-			
-			scope.$watch(attrs.path, function(value){
-				
-				if (value && value.trim() !== '') {
-					var data = value.split('/'),
-						provincia = Region.find(Region.getProvincias(), 'cod', data[0]),
-						canton, distrito;
-		
-					Region.getCantones(provincia.cod)
-						.then(function (response) {
-							canton = Region.find(Region.toList(response.data), 'cod', data[1]);
-		
-							Region.getDistritos(provincia.cod, canton.cod)
-								.then(function (response) {
-									distrito = Region.find(Region.toList(response.data), 'cod', data[2]);
-		
-									scope.ubicacion = provincia.name + ', ' + canton.name + ', ' + distrito.name;
-									scope.ngModel = scope.ubicacion;
-								});
-						});
+
+			scope.$watch("path", function (newVal, oldVal, scp) {
+
+				if (newVal){
+					var data = newVal.split('/');
+
+					Region.text(data[0], data[1], data[2])
+					.then(function (response) {
+						scp.ubicacion = Region.parse(response).location.text;
+					})
 				}
 			});
-
 
 		},
 	};

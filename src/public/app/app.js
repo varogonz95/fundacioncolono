@@ -30,6 +30,23 @@ app.config(function(AppResourceProvider){
     AppResourceProvider.extras = 'fundacioncolono';
 });
 
+app.config(function (TerritoryProvider) {
+    TerritoryProvider.fields.canton.cod = 'COD_CANT';
+    TerritoryProvider.fields.canton.name = 'NOM_CANT_1';
+    TerritoryProvider.fields.distrito.cod = 'COD_DIST';
+    TerritoryProvider.fields.distrito.name = 'NOM_DIST';
+
+    TerritoryProvider.fields.cantones   = 'COD_PROV,COD_CANT,NOM_CANT_1';
+    TerritoryProvider.fields.distritos = 'COD_PROV,COD_CANT,COD_DIST,NOM_DIST';
+    TerritoryProvider.fields.all      = 'COD_PROV,COD_CANT,COD_DIST,NOM_PROV,NOM_CANT,NOM_DIST';
+    
+    TerritoryProvider.orderby.canton = 'COD_CANT';
+    TerritoryProvider.orderby.distrito = 'COD_DIST';
+
+    TerritoryProvider.resultWrapper = 'features';
+});
+
+
 
 // SOME BUILT-IN FUNCTIONS
 function jQueryToJson(obj, key){
@@ -40,12 +57,12 @@ function jQueryToJson(obj, key){
     return data;
 }
 
-function copy(_this, _into = {}, except = []){
+function copy(_this, _into = {}, except = [], only = []){
 
     var data = {},
     fails = 0;
 
-    if (except) {
+    if (except.length > 0) {
         for (var key in _this) {
             for (var i = 0; i < except.length; i++) { if (key === except[i]) { fails++; } }
             if (fails === 0) {

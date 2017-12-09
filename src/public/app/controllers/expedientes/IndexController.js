@@ -7,6 +7,9 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
 
+    // Allowed search atributes
+    $scope.searchable = ['cedula', 'nombre', 'apellidos'];
+
     $scope.formatter = Typeahead.formatter;
     
     $scope.expedientes = [];
@@ -125,14 +128,15 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         // Get Provincia from list and set to persona
         obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
 
-        Region.getCantones(obj.persona.provincia.cod).then(function (response) {
-            $scope.cantones    = Region.toList(response.data);
+        Region.cantones(obj.persona.provincia.cod).then(function (response) {
+            $scope.cantones    = Region.parse(response).cantones;
             obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
-
-            Region.getDistritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-                $scope.distritos     = Region.toList(response.data);
+            
+            Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
+                $scope.distritos     = Region.parse(response).distritos;
                 obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
             });
+
         });
 
         $scope.selected = obj;

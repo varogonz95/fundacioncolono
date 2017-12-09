@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<ng-show ng-show="{{ $estado_model }}.id === 1">
+<ng-if ng-if="{{ $estado_model }}.id === 1">
     <h4 class="page-header">Fechas de pago y período de aprobación</h4>
     
     {{-- FECHAS EN QUE RECIBE AYUDA --}}
@@ -84,17 +84,27 @@
         <div class="form-group col-sm-6 col-xs-12 nogutters">
             <label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Desde: </label>
             <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-                <input class="form-control" type="text" name="fecha_desde" ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open" ng-required="{{ $estado_model }}.id === 1">
+                <input 
+                    class="form-control" type="text" name="fecha_desde" 
+                    ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" 
+                    uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open"
+                    ng-required="{{ $estado_model }}.id === 1"
+                >
             </div>
         </div>
 
         <div class="form-group col-md-pull-0 col-sm-6 col-sm-pull-2 col-xs-12 nogutters">
             <label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Hasta: </label>
             <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-                <input class="form-control" type="text" name="fecha_hasta" ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}" ng-required="{{ $estado_model }}.id === 1">
+                <input 
+                    class="form-control" type="text" name="fecha_hasta" 
+                    ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" 
+                    uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}"
+                    ng-required="{{ $estado_model }}.id === 1"
+                >
             </div>
         </div>
     </div>
-</ng-show>
+</ng-if>
 
 {{ $slot }}

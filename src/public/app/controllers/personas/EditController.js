@@ -9,12 +9,14 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
         $scope.selected.persona.editable = true;
         $scope.update.persona = copy($scope.selected.persona, ['editable']);
 
-        Region.getCantones($scope.selected.persona.provincia.cod).then(function (response) {
-            $scope.cantones = Region.toList(response.data);
+        Region.cantones($scope.selected.persona.provincia.cod).then(function (response) {
+            console.log(response);          
+            $scope.cantones = Region.parse(response).cantones;
             $scope.selected.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
 
-            Region.getDistritos($scope.selected.persona.provincia.cod, $scope.selected.persona.canton.cod).then(function (response) {
-                $scope.distritos = Region.toList(response.data);
+            Region.distritos($scope.selected.persona.provincia.cod, $scope.selected.persona.canton.cod).then(function (response) {
+                console.log(response);
+                $scope.distritos = Region.parse(response).distritos;
                 $scope.selected.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
             });
         });
@@ -25,14 +27,14 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
         $scope.distritos = [];
         $scope.update.persona.canton = null;
 
-        Region.getCantones(p)
-        .then(function(response){ $scope.cantones = Region.toList(response.data);});
+        Region.cantones(p)
+        .then(function(response){ $scope.cantones = Region.parse(response).cantones;});
     };
 
     // Update Distrito SELECT
     $scope.updateDistritos = function(p, c){
-        Region.getDistritos(p, c)
-        .then(function(response){ $scope.distritos = Region.toList(response.data); });
+        Region.distritos(p, c)
+        .then(function(response){ $scope.distritos = Region.parse(response).distritos; });
     }
 
     $scope.updatePersona = function () {
@@ -43,9 +45,19 @@ app.controller('Personas_EditController', function ($scope, $http, Persona, Regi
                 data: $scope.update.persona,
             },
             function (response) {
-                console.log(response);
                 if (response.status) {
-                    copy($scope.update.persona, $scope.selected.persona);
+                    console.log('selected.persona');
+                    console.log($scope.selected.persona);
+                    console.log('will become');
+                    console.log($scope.update.persona);
+                    console.log('final data');
+                    console.log(copy($scope.update.persona, $scope.selected.persona));
+                    
+                    // $scope.selected.persona.ubicacion = $scope.selected.persona.canton.
+
+                    console.log($scope.selected.persona);
+                    console.log($scope.update.persona);
+
                     $scope.selected.persona.editable = false;
                 }
                 else { alert(response.msg); }
