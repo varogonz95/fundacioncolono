@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder{
             $this->call(AyudasSeeder::class);
         }
 
-        factory(App\Models\Expediente::class, 50)->create()
+        factory(App\Models\Expediente::class, 150)->create()
         ->each(function($expediente){
 
             $faker = Faker\Factory::create();

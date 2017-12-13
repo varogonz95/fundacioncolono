@@ -12,20 +12,13 @@
 @push('scripts_bottom')
     <script src="{{ asset('js/animatedModal/animatedModal.js') }}"></script>
     @if (Session::has('status'))
-        <script>
-            swal("{{ Session:: get('status')['title'] }}", "{{ Session::get('status')['msg'] }}", "{{ Session:: get('status')['type'] }}");
-        </script>
-        {{-- <div class="alert alert-{{ Session::get('status')['type'] }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>{{ Session::get('status')['title'] }}</strong> {{ Session::get('status')['msg'] }}
-        </div> --}}
+        @include('partials._error_alert')
     @endif
 @endpush
 
 @section('controller', 'Expedientes')
 
 @section('content')
-
 
     <section id="expedientes" class="col-md-10 col-md-offset-1" ng-controller="Expedientes_IndexController">
 
@@ -94,6 +87,7 @@
             <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th ng-show="columns.cedula">
                             <button type="button" class="btn btn-table-header" ng-class="{'asc': sort.order, 'desc': !sort.order}" ng-click="doSort('cedula')">
                                 Cédula <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'cedula'}"></span>
@@ -134,6 +128,7 @@
                 </thead>
                 <tbody>
                     <tr class="@{{ (e.isSelected)? 'active' : '' }} @{{ (e.archivado)? 'archived progress-bar-striped' : '' }}" ng-repeat="e in expedientes" ng-click="show(e)" ng-cloak>
+                        <td><a href="expedientes/@{{ e.id }}" target="_blank">Ver</a></td>
                         <td ng-show="columns.cedula">@{{ e.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>

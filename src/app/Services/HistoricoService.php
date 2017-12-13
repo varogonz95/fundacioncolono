@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\HistoricoExpediente;
+use App\Models\Historico;
 use App\Models\Expediente;
 
 class HistoricoService{
@@ -14,11 +14,13 @@ class HistoricoService{
 		 TODO b. Create Expediente with updated data
 		 TODO c. Attach previous Ayudas
 		 TODO d. Delete current Expediente
+		 TODO e. Save new expediente
+		 TODO f. Return new Expediente
 		*/
 
 		//* a.
-		$historico = new HistoricoExpediente;
-		$historico->expediente()->associate($current->id);
+		$historico = new Historico;
+		$historico->expedientes()->associate($current->id);
         $historico->save();
 		
 		//* b.
@@ -37,11 +39,26 @@ class HistoricoService{
 		// AyudaExpedienteService::attach($expediente->ayudas(), );
 
 		//* d.
-		$current->destroy();
+		$current->delete();
 
-		// Save
+		//* e.
 		$expediente->save();
 
+		//* f.
+		return $expediente;
+	}
+
+	public function find($id)
+	{
+		$historico = HistoricoExpediente::whereHas('expedientes.persona', function($query) use($id){
+			$query->where('cedula', $id);
+		})
+		->get()
+		->each(function($item, $index){
+			$item->expedientes;
+		});
+
+		return ['actual' => Persona::with(['expediente'])->find($id), 'historico' => $historico];
 	}
 
 }

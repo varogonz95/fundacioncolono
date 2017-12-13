@@ -69,14 +69,14 @@
         <div class="expediente-info-item" ng-show="selected.estado === 1">
             <label>Aprobado</label>
             <p style="padding: 0 10px">
-                Desde: @{{ selected.fecha_desde }}
-                <br> Hasta: @{{ selected.fecha_hasta }}
+                Desde: @{{ selected.fecha_desde.formatted }}
+                <br> Hasta: @{{ selected.fecha_hasta.formatted }}
                 <br>
                 <small class="help-block">Número de meses: @{{ selected.meses }}</small>
             </p>
         </div>
 
-        <div class="expediente-info-item" ng-show="selected.estado === 1">
+        <div class="expediente-info-item" ng-show="selected.estado === 1 && selected.pago_inicio && selected.pago_final">
             <label>Recibe</label>
             <p style="padding: 0 10px">
                 los @{{ selected.pago_inicio }} y los @{{ selected.pago_final }} de cada mes

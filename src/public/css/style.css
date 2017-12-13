@@ -21,6 +21,8 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .swal-close:hover{color: grey; transition: color .3s}
 .swal-text{text-align: center;}
 .swal-overlay{overflow: hidden}
+.swal-button--warning{background-color: #F8BC86}
+.swal-button--warning:active{background-color: #FAAD69}
 
 .ayudas-empty{border:2px dashed #c5c5c5; padding: 1em; text-align: center; font-size: large; border-radius: 6px; color: #666}
 

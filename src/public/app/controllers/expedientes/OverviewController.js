@@ -21,8 +21,6 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                 Expediente().delete({ id: $scope.selected.id },
                     function (response) {
                         if (response.status) {
-
-                            console.log($scope.expedientes);
                             $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
 
                             if ($scope.page !== response.last && $scope.expedientes.length > 0) 
@@ -68,11 +66,14 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                             record: value
                         },
                         function (response) {
-                            if (response.status)
+                            if (response.status){
                                 copy($scope.update.caso, $scope.selected);
                                 delete $scope.update.cache;
                                 $scope.selected.editable = false;
                                 $scope.cancelAll(false);
+
+                                console.log(response.data);
+                            }
                             Alert.notify(
                                 response.title,
                                 response.msg,

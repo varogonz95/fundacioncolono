@@ -18,15 +18,11 @@ class ExpedientesController extends Controller{
 
 	const MAX_RECORDS = 16;
 
-	public function test(Request $request){
-		// return Expediente::count();
-	}
-
 	public function all(Request $request){
 
 		$orderBy = [
 			'order' => $request['order'],
-			'by' => $request['by'],
+			'by'    => $request['by'],
 		];
 
 		$filter = [
@@ -38,13 +34,13 @@ class ExpedientesController extends Controller{
 		$filtered = [];
 		
 		if ($this->hasEmptyValues($filter))
-		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+		$filtered = Filter::with(Expediente::class, ['persona', 'referente'])
 					->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
 					->orderBy($request['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		else
-		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+		$filtered = Filter::with(Expediente::class, ['persona', 'referente'])
 					->where($request['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
 					->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
 					->orderBy('persona', $orderBy['by'], $orderBy['order'])
@@ -52,9 +48,12 @@ class ExpedientesController extends Controller{
 
 		// Iterate over items
 		$filtered->each(function($item, $index){
+			$item->meses = $item->getMeses(
+				$item->fecha_desde['formatted'],
+				$item->fecha_hasta['formatted']
+			);
 			$item->montoTotal = $item->getMontoTotal();
-			$item->meses = $item->getMeses($item->fecha_desde, $item->fecha_hasta);
-			$item->archivado = $item->trashed();
+			$item->archivado  = $item->trashed();
 		});
 		
 		// Paginate , passing the filtered items and the max records per page
@@ -150,15 +149,20 @@ class ExpedientesController extends Controller{
 		// Redirect and flash data with operation status
 		return redirect('expedientes')
 		->with('status', [
-				'type' => $status? 'success' : 'danger',
+				'type' => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
-				'msg' => $status? 'Msj de éxito' : 'Msj de error',
+				'msg' => $status? 'Se ha creado el expediente correctamente.' : 
+								  'Es posible que los datos ingresados sean incorrectos.<br>'.
+								  'Si el problema persiste, por favor contacte a soporte.',
 			]);
 		// return $request->all();
 	}
 
 	public function show($id){
-		return response()->json(Expediente::find($id));
+		$expediente = Expediente::with(['persona', 'ayudas'])->find($id);
+		$expediente->montoTotal = $expediente->getMontoTotal();
+		return view('templates.expediente.show2', ['expediente' => $expediente]);
+		// return response()->json(Expediente::with(['persona', 'ayudas'])->find($id));
 	}
 
 	public function edit($id){
@@ -197,12 +201,23 @@ class ExpedientesController extends Controller{
 	
 			else{
 				// Create new 'Expediente' and attach 'Historico'		
-				HistoricoService::create($current, [
+				$current = HistoricoService::create($current, [
 					'referente_otro' => $request['expediente']['referente_otro'],
 					'descripcion'    => $request['expediente']['descripcion'],
 					'prioridad'      => $request['expediente']['prioridad'],
 					'estado'         => $request['expediente']['estado'],
+					'fecha_desde'    => $request['fecha_desde'],
+					'fecha_hasta'    => $request['fecha_hasta'],
+					'pago_inicio'    => $request['pago_inicio'],
+					'pago_final'     => $request['pago_final'],
 				]);
+
+				$current->persona;
+				$current->referente;
+				$current->meses      = $current->getMeses($current->fecha_desde, $current->fecha_hasta);
+				$current->montoTotal = $current->getMontoTotal();
+				// $current->archivado  = $item->trashed();
+				
 			}
 			
 			// Everything went just fine
@@ -211,17 +226,16 @@ class ExpedientesController extends Controller{
 		catch(\Exception $e){
 			// Something went wrong :(
 			$status = false;
-
 			// Rollback transaction
 			DB::rollback();
-
 			throw $e;
 		}
 
 		return response()->json([
 			'status' => $status,
-			'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
-			'msg'    => $status? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
+			'title'  => $status? '¡Operación exitosa!':                      'Ocurrió un fallo.',
+			'msg'    => $status? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
+			'data'   => $current,
 		]);
 	}
 

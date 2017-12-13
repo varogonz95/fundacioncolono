@@ -113,7 +113,7 @@ app.provider('Territory', function(){
         maxAllowableOffset:          '',
         applyVCSProjection:          false,
         datumTransformation:         '',
-        returnDistinctValues:        false,
+        returnDistinctValues:        true,
         quantizationParameters:      '',
         groupByFieldsForStatistics:  '',
         returnExceededLimitFeatures: false,
@@ -196,13 +196,15 @@ app.provider('AlertProvider', function () {
                 element: $.parseHTML('<button class="swal-close" title="Cerrar" onclick="swal.setActionValue({confirm: null,cancel: null});swal.close()">\u00D7</button>')[0],
             },
             //! *** Notice that angular.merge is deprecated, but functional in this case ***
-            dangerbtn = angular.merge({confirm: {className: 'swal-button--danger'}}, buttons);
+            dangerbtn = angular.merge({ confirm: { className: 'swal-button--danger' } }, buttons);
+            warningbtn = angular.merge({ confirm: { className: 'swal-button--warning' } }, buttons);
 
         return {
             buttons: buttons,
             promptContent: promptContent,
             close: closebtn,
             dangerbtn: dangerbtn,
+            warningbtn: warningbtn,
         }
     }
 });
