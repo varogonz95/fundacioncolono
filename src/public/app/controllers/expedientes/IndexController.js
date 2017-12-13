@@ -2,7 +2,7 @@
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
     var showModal = Modal.init('#show_modal',{
-        style:         {'overflow-y': 'hidden', 'bottom': '0'},
+        style:         { 'overflow-y': 'hidden', 'bottom': '0' },
         onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
         onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
     });
@@ -34,7 +34,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
     $scope.total = 1;
     $scope.page  = 1;
-    // $scope.totalpages = 1;
 
     $scope.sort = {
         relationship: 'persona',
@@ -54,7 +53,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         fecha_creacion: true
     };
 
-    // Not supported for Location yet
     $scope.doSort = function (by) {
         $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
         $scope.sort.by = by;
@@ -71,8 +69,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 $scope.sort.relationship = 'persona'
                 
         }
-
-        console.log($scope.sort);
 
         $scope.index();
     };
@@ -117,9 +113,16 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
     };
 
     $scope.show = function (obj) {
+        
         obj.editable               = false;
         obj.isSelected             = true;
         obj.persona.editable       = false;
+
+        console.log('obj');
+        console.log(obj);
+        console.log('selected');
+        console.log($scope.selected);
+
         $scope.selected.isSelected = obj === $scope.selected;
         // scope.ayudas.editable = false;
 
@@ -135,12 +138,15 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
             Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
                 $scope.distritos     = Region.parse(response).distritos;
                 obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
+                
+                $scope.selected.datePickers.from.date = obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date();
+                $scope.selected.datePickers.to.date = obj.fecha_hasta.raw;
+                
+                copy(obj, $scope.selected);
+                showModal.show();
             });
 
         });
-
-        $scope.selected = obj;
-        showModal.show();
 
         if (obj.archivado)
             Alert.notify(

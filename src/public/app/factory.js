@@ -49,7 +49,11 @@ app.factory('Alert', function (AlertProvider) {
                 content: AlertProvider.close,
                 icon: type,
                 closeOnClickOutside: false,
-                buttons: !buttons ? (type === 'error' ? AlertProvider.dangerbtn : AlertProvider.buttons) : buttons,
+                buttons: !buttons ? 
+                    (type === 'error' ? AlertProvider.dangerbtn : 
+                     type === 'warning' ? AlertProvider.warningbtn : 
+                     AlertProvider.buttons) : 
+                    buttons,
             });
         },
 

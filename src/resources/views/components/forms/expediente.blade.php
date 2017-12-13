@@ -54,6 +54,7 @@
     </div>
 </div>
 
+{{-- FECHAS DE PAGO Y PERÍODO DE APROBACIÓN --}}
 <ng-if ng-if="{{ $estado_model }}.id === 1">
     <h4 class="page-header">Fechas de pago y período de aprobación</h4>
     
@@ -64,18 +65,17 @@
         <div class="form-group col-md-12 col-sm-6 col-xs-12 nogutters">
             <label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Primera fecha:</label>
             <div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-                <input type="number" name="pago_inicio" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+                <input type="number" name="pago_inicio" class="form-control" min="1" max="30" ng-model="{{ $pago_inicio_model }}" ng-value="{{ $pago_inicio_value }}" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
         
         <div class="form-group col-lg-12 col-md-pull-0 col-md-12 col-sm-6 col-sm-pull-1 col-xs-12 nogutters">
             <label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Segunda fecha:</label>
             <div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-                <input type="number" name="pago_final" class="form-control" min="1" max="30" ng-required="{{ $estado_model }}.id === 1">
+                <input type="number" name="pago_final" class="form-control" min="1" max="30" ng-model="{{ $pago_final_model }}" ng-value="{{ $pago_final_value }}" ng-required="{{ $estado_model }}.id === 1">
             </div>
         </div>
     </div>
-    
     
     {{-- PERIODO DE APROBACION --}}
     <div class="form-group col-lg-push-0 col-sm-12 col-sm-push-1">
@@ -86,8 +86,9 @@
             <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
                 <input 
                     class="form-control" type="text" name="fecha_desde" 
-                    ng-model="datePickers.from.date" ng-click="datePickers.from.open = true" 
-                    uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.from.open"
+                    ng-model="{{ $fecha_desde_model }}" ng-click="{{ $fecha_desde_model }} = true" 
+                    {{ isset($fecha_desde_value) ? "ng-init='$fecha_desde_model = new Date('$fecha_desde_value')'" : '' }}
+                    uib-datepicker-popup="dd/MM/yyyy" is-open="{{ $fecha_desde_is_open }}"
                     ng-required="{{ $estado_model }}.id === 1"
                 >
             </div>
@@ -98,8 +99,9 @@
             <div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
                 <input 
                     class="form-control" type="text" name="fecha_hasta" 
-                    ng-model="datePickers.to.date" ng-click="datePickers.to.open = true" 
-                    uib-datepicker-popup="dd/MM/yyyy" is-open="datePickers.to.open" datepicker-options="{minDate: datePickers.from.date}"
+                    ng-model="{{ $fecha_hasta_model }}" ng-click="{{ $fecha_hasta_model }} = true" 
+                    {{ isset($fecha_hasta_value) ? "ng-init='$fecha_hasta_model = new Date('$fecha_hasta_value')'" : '' }}
+                    uib-datepicker-popup="dd/MM/yyyy" is-open="{{ $fecha_hasta_is_open }}" datepicker-options="{minDate: {{ $fecha_hasta_min_date }}}"
                     ng-required="{{ $estado_model }}.id === 1"
                 >
             </div>

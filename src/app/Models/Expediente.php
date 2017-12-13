@@ -13,7 +13,16 @@ class Expediente extends Model{
 	const DELETED_AT = 'fecha_eliminacion';
 	
 	protected $dates = ['fecha_eliminacion'];
-	protected $fillable = ['descripcion', 'estado', 'prioridad', 'referente_otro'];
+	protected $fillable = [
+		'descripcion', 
+		'estado', 
+		'fecha_desde', 
+		'fecha_hasta', 
+		'pago_inicio', 
+		'pago_final', 
+		'prioridad', 
+		'referente_otro'
+	];
 
 	public $timestamps = false;
 
@@ -29,6 +38,7 @@ class Expediente extends Model{
 		return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes', 'expediente_fk', 'ayuda_fk')->withPivot(['detalle','monto']);
 	}
 
+	
 	public function getFechaCreacionAttribute($value){
 		return (new \DateTime($value))->format('d-m-Y');
 	}
@@ -52,11 +62,11 @@ class Expediente extends Model{
 	}
 
 	public function getFechaDesdeAttribute($value){
-		return (new \DateTime($value))->format('d-m-Y');        
+		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d-m-Y')];
 	}
 
 	public function getFechaHastaAttribute($value){
-		return (new \DateTime($value))->format('d-m-Y');
+		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d-m-Y')];
 	}
 
 	//? Should the last month be counted? (Months + 1)

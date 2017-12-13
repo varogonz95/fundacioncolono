@@ -4,11 +4,17 @@
 */
 app.controller('Expedientes_MainController', function ($scope, Expediente, Referente, Ayuda, Region) {
 
-    $scope.selected = {};
+    $scope.selected = {
+        datePickers: {
+            from: { date: null, open: false },
+            to:   { date: null, open: false },
+        },
+        //* Attributes are populated when a record is selected
+    };
     $scope.update = {
+        caso:    {},
         persona: {},
-        caso: {},
-        ayudas: {
+        ayudas:  {
             attachs: [],
             detachs: [],
             updates: []

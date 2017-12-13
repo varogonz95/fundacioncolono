@@ -23,4 +23,17 @@
     @slot('estado_model', 'update.caso.estado_selected')
     @slot('estados_list', 'estados')
 
+    @slot('pago_inicio_model', 'update.caso.pago_inicio')
+    @slot('pago_inicio_value', 'selected.pago_inicio')
+
+    @slot('pago_final_model', 'update.caso.pago_final')
+    @slot('pago_final_value', 'selected.pago_final')
+    
+    @slot('fecha_desde_model', 'selected.datePickers.from.date')
+    @slot('fecha_desde_is_open', 'selected.datePickers.from.open')
+    
+    @slot('fecha_hasta_model', 'selected.datePickers.from.date')
+    @slot('fecha_hasta_is_open', 'selected.datePickers.to.open')
+    @slot('fecha_hasta_min_date', 'selecteddatePickers.from.date')
+
 @endcomponent
