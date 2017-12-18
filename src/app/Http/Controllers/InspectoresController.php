@@ -3,19 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Inspector;
 use App\Models\Persona;
+use App\Models\Usuario;
+
+use Laracast\Flash\Flash;
+use DB;
+use Filter;
 
 class InspectoresController extends Controller{
-    
-    public function all(Request $request){
-        $inspectores = Inspector::with(['persona', 'usuario'])
-        ->paginate(16);
 
-        return response()->json([
-            'inspectores' => $inspectores->items(),
-            'total' => $inspectores->total(),
-        ]);
+    const MAX_RECORDS = 16;
+
+    public function all(Request $request){
+      $orderBy = [
+  			'order' => $request['order'],
+  			'by' => $request['by'],
+  		];
+
+  		$filter = [
+  			'comparator' => $request['comparator'],
+  			'property'   => $request['property'],
+  			'value'      => $request['value'],
+  		];
+
+      $filtered = [];
+
+      if ($this->hasEmptyValues($filter))
+    		$filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
+          ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
+          ->orderBy($request['relationship'], $orderBy['by'], $orderBy['order'])
+          ->get();
+      else
+        $filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
+          ->where($request['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
+          ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
+          ->orderBy('persona', $orderBy['by'], $orderBy['order'])
+          ->get();
+
+
+  		// Paginate , passing the filtered items and the max records per page
+  		$pagination = Filter::paginate($filtered, self::MAX_RECORDS);
+  		$items = $pagination->items();
+
+      return response()->json([
+        'inspectores' => $items,
+        'total'       => $pagination->total(),
+        // 'pages'       => ceil( Expediente::count()/self::MAX_RECORDS ),
+      ]);
     }
 
     public function index(){
@@ -38,7 +74,49 @@ class InspectoresController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        //
+
+		// Assign Persona property values
+		$persona = new Persona;
+        $persona->cedula        =   $request['cedula'];
+		$persona->nombre        =   $request['nombre'];
+		$persona->apellidos     =   $request['apellidos'];
+		$persona->telefonos     =   $request['telefonos'];
+		$persona->ubicacion     =   "{$request['provincia']}/{$request['canton']}/{$request['distrito']}";
+		$persona->direccion     =   $request['direccion'];
+		$persona->contactos     =   $request['contactos'];
+        $persona->ocupacion     =   "Inspector";
+        // Assign Persona property values
+		$user = new Usuario();
+        $user->username  =   $request['username'];
+		$user->password  =   $request['password'];
+		$user->email     =   $request['email'];
+
+        // Assign Inspector property values
+        $inspector = new Inspector();
+        $inspector->persona_fk  =   $request['cedula'];
+        $inspector->activo      =   $request['activo'];
+
+        $status = true;
+		DB::beginTransaction();
+
+		try{
+			$persona->save();
+            $user->save();
+            $inspector->usuario_fk =  DB::table('usuarios')->where('username', $request['username'])->value('id');
+            $inspector->save();
+			DB::commit();
+		}
+
+		catch(\Exception $e){
+			$status = false;
+			DB::rollback();
+		}
+        if($status == true){
+            flash('El inspector se ha registrado correctamente')->success();
+        }else{
+            flash('Error, el inspector no se logró registrar correctamente')->error();
+        }
+        return redirect()->route('inspectores.create');
     }
 
     /**
@@ -81,4 +159,11 @@ class InspectoresController extends Controller{
     public function destroy($id){
         //
     }
+
+    private function hasEmptyValues($array){
+
+  		foreach ($array as $item) return empty($item);
+
+  		return false;
+  	}
 }

@@ -181,6 +181,7 @@ return [
          * Custom Service Providers...
          */
         App\Providers\FilterServiceProvider::class,
+        Laracasts\Flash\FlashServiceProvider::class,
     ],
 
     /*
@@ -234,7 +235,6 @@ return [
          * Custom Aliases...
          */
         'Filter' => App\Facades\Filter::class,        
-
     ],
 
 ];
