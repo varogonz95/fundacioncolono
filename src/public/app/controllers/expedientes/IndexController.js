@@ -118,11 +118,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
         obj.isSelected             = true;
         obj.persona.editable       = false;
 
-        console.log('obj');
-        console.log(obj);
-        console.log('selected');
-        console.log($scope.selected);
-
         $scope.selected.isSelected = obj === $scope.selected;
         // scope.ayudas.editable = false;
 
@@ -145,8 +140,9 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
                 copy(obj, $scope.selected);
                 showModal.show();
             });
-
+            
         });
+        
 
         if (obj.archivado)
             Alert.notify(

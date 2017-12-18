@@ -5,20 +5,20 @@
 @section('content')
 
 <div class="col-lg-offset-1 col-xs-10 text-left" style="margin-bottom: 2em">
-    <button type="button" class="btn-rest btn-delete btn-sm btn-outline" title="Archivar" ng-hide="selected.archivado" ng-click="delete()">
+    <button type="button" class="btn btn-delete btn-sm btn-outline" title="Archivar" ng-hide="selected.archivado" ng-click="delete()">
         <span class="glyphicon glyphicon-briefcase"></span>
         <span class="hidden-xs">Archivar</span>
     </button>
-    <button type="button" class="btn-rest btn-show btn-sm btn-outline" title="Restaurar" ng-show="selected.archivado" ng-click="restore()">
+    <button type="button" class="btn btn-show btn-sm btn-outline" title="Restaurar" ng-show="selected.archivado" ng-click="restore()">
         <span class="glyphicon glyphicon-refresh"></span>
         <span class="hidden-xs">Restaurar</span>
     </button>
-    <a href="{{ route('expedientes.show', ['id' => $expediente]) }}" target="_blank" class="btn-rest btn-outline btn-sm btn-edit" title="Historial de cambios">
+    <a href="{{ route('expedientes.show', ['id' => $expediente]) }}" target="_blank" class="btn btn-outline btn-sm btn-edit" title="Historial de cambios">
         <span class="glyphicon glyphicon-time"></span>
         <span class="hidden-xs">Historial de cambios</span>
     </a>
     <span style="border-left: thin solid #ccc; padding: 0 4px" ng-show="update.cache || (update.cache && (update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0))">
-        <button type="button" class="btn-rest btn-outline btn-update" title="Guardar cambios" ng-click="updateCaso()">
+        <button type="button" class="btn btn-outline btn-update" title="Guardar cambios" ng-click="updateCaso()">
             <span class="glyphicon glyphicon-edit"></span>
             <span class="hidden-xs">Guardar todo</span>
         </button>

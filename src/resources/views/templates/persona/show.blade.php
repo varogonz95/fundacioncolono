@@ -9,7 +9,7 @@
 
     <section class="expediente-info form-horizontal" ng-if="selected.persona.editable">
         <div class="controls">
-            <button type="button" class="btn-outline btn-rest btn-show" ng-click="updatePersona()">
+            <button type="button" class="btn-outline btn btn-show" ng-click="updatePersona()">
                 <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
             <button type="button" class="close" title="Cancelar edición" ng-click="selected.persona.editable = false">&times;</button>
         </div>
@@ -20,7 +20,7 @@
 
     <section class="expediente-info" ng-hide="selected.persona.editable">
 
-        <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()">
+        <button type="button" class="btn-outline btn btn-edit btn-sm" ng-click="edit()">
             <span class="glyphicon glyphicon-pencil"></span> 
             <span class="hidden-xs">Editar</span>
         </button>

@@ -120,10 +120,10 @@
             <div class="form-group-sm form-group">
                 <div class="text-right">
                     <ngShow ng-show="filter_data.filter">
-                        <button class="btn-outline btn-rest btn-show" type="submit">
+                        <button class="btn-outline btn btn-show" type="submit">
                             <span class="glyphicon glyphicon-ok"></span> Filtrar
                         </button>
-                        <button class="btn-outline btn-rest btn-none" type="button" ng-click="filter_active = false; filter_data.filter = filter_data.filtered ? filter_data.filter : null" data-toggle="collapse" data-target="#filter">Cancelar</button>
+                        <button class="btn-outline btn btn-none" type="button" ng-click="filter_active = false; filter_data.filter = filter_data.filtered ? filter_data.filter : null" data-toggle="collapse" data-target="#filter">Cancelar</button>
                     </ngShow>
                 </div>
             </div>

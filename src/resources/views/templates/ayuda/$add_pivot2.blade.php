@@ -10,7 +10,7 @@
 
         <uib-accordion-heading>
             <span>@{{ i.ayuda.descripcion }}</span>
-            <button class="pull-right btn-sm btn-outline btn-rest btn-delete" ng-click="remove($index)">
+            <button class="pull-right btn-sm btn-outline btn btn-delete" ng-click="remove($index)">
                 <span class="glyphicon glyphicon-minus"></span>
                 Quitar
             </button>

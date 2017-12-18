@@ -39,7 +39,7 @@
             <fieldset class="col-md-5 col-md-offset-1 controls">
                 <legend>
                     Ayudas solicitadas
-                    <button type="button" class="btn-outline btn-rest btn-show btn-sm pull-right" title="Agregar ayudas" style="margin-bottom: 5px" data-toggle="modal" data-target="#ayudasModal">
+                    <button type="button" class="btn-outline btn btn-show btn-sm pull-right" title="Agregar ayudas" style="margin-bottom: 5px" data-toggle="modal" data-target="#ayudasModal">
                         <span class="glyphicon glyphicon-plus"></span>
                         <span class="hidden-xs">Agregar ayudas</span>
                     </button>

@@ -4,14 +4,14 @@
             Ayudas solicitadas
             <small class="text-nowrap">Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
             <ngIf ng-if="!selected.archivado">
-                <button class="btn-rest btn-sm btn-show btn-outline">
+                <button class="btn btn-sm btn-show btn-outline">
                     <span class="glyphicon glyphicon-plus"></span>
                     Agregar ayuda
                 </button>
-                <button class="btn-rest btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAyudas()">
+                <button class="btn btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAyudas()">
                     Guardar cambios
                 </button>
-                <button class="btn-rest btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
+                <button class="btn btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="cancelAll()">
                     Cancelar
                 </button>
             </ngIf>
@@ -24,7 +24,7 @@
 
             <div class="expediente-info" ng-if="ayuda.editable && !selected.archivado" ng-class="{'editing': ayuda.editable}">
                 <div class="controls" ng-show="ayuda.editable">
-                    <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit(ayuda)">
+                    <button type="button" class="btn btn-outline btn-show" ng-click="commit(ayuda)">
                         <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
                     <button type="button" class="close" title="Cancelar edición" ng-click="cancel(ayuda)">&times;</button>
                 </div>
@@ -37,18 +37,18 @@
                     <strong>
                         Marcado para @{{ ayuda.removed ? 'eliminar' : ayuda.changed ? 'actualizar' : '' }}
                     </strong>
-                    <button class="btn-rest btn-outline btn-show btn-sm" ng-click="revert(ayuda)">
+                    <button class="btn btn-outline btn-show btn-sm" ng-click="revert(ayuda)">
                         <span class="glyphicon glyphicon-repeat" style="transform: rotateY(180deg)"></span>
                         <span class="hidden-xs">Revertir cambios</span>
                     </button>
                 </div>
 
                 <div class="btn-group" ng-hide="ayuda.removed" ng-if="!selected.archivado">
-                    <button class="btn-edit btn-rest btn-outline btn-sm" ng-click="edit(ayuda)">
+                    <button class="btn-edit btn btn-outline btn-sm" ng-click="edit(ayuda)">
                         <span class="glyphicon-pencil glyphicon"></span>
                         <span class="hidden-xs">Editar</span>
                     </button>
-                    <button type="button" class="btn-rest btn-sm btn-delete btn-outline" ng-hide="ayuda.changed" ng-click="remove(ayuda)">
+                    <button type="button" class="btn btn-sm btn-delete btn-outline" ng-hide="ayuda.changed" ng-click="remove(ayuda)">
                         <span class="glyphicon glyphicon-minus"></span>
                         <span class="hidden-xs">Quitar</span>
                     </button>

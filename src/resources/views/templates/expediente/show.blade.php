@@ -11,7 +11,7 @@
 
     <section class="expediente-info form-horizontal" style="overflow-y: auto" ng-if="selected.editable">
         <div class="controls" ng-show="selected.editable">
-            <button type="button" class="btn-rest btn-outline btn-show" ng-click="commit()">
+            <button type="button" class="btn btn-outline btn-show" ng-click="commit()">
                 <span class="glyphicon glyphicon-ok"></span> Aceptar cambios</button>
             <button type="button" class="close" title="Cancelar edición" ng-click="selected.editable = false">&times;</button>
         </div>
@@ -24,13 +24,13 @@
 
         <div class="row change-state" ng-show="update.cache">
             <strong>Marcado para actualizar</strong>
-            <button class="btn-rest btn-outline btn-show btn-sm" ng-click="revert()">
+            <button class="btn btn-outline btn-show btn-sm" ng-click="revert()">
                 <span class="glyphicon glyphicon-repeat" style="transform: rotateY(180deg)"></span> 
                 <span class="hidden-xs">Revertir cambios</span>
             </button>
         </div>
 
-        <button type="button" class="btn-outline btn-rest btn-edit btn-sm" ng-click="edit()" ng-if="!selected.archivado">
+        <button type="button" class="btn-outline btn btn-edit btn-sm" ng-click="edit()" ng-if="!selected.archivado">
             <span class="glyphicon glyphicon-pencil"></span> 
             <span class="hidden-xs">Editar</span>
         </button>

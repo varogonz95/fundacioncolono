@@ -35,14 +35,14 @@
         
             <!-- FILTRAR RESULTADOS -->
             <div class="col-lg-2 row">
-                <button class="btn-outline btn-rest btn-none" ng-init="filter_active = false" ng-click="filter_active = !filter_active; filter_init()"
+                <button class="btn-outline btn btn-none" ng-init="filter_active = false" ng-click="filter_active = !filter_active; filter_init()"
                     style="margin: 0 4px" type="button" data-toggle="collapse" data-target="#filter">
                     <!-- <span class="glyphicon glyphicon-filter"></span> -->
                     Filtrar
                     <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
                 </button>
         
-                <button class="btn-outline btn-rest btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search = ''; index();">Ver todos</button>
+                <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search = ''; index();">Ver todos</button>
             </div>
         
             <!-- LINK AGREGAR NUEVO CASO -->
@@ -87,7 +87,6 @@
             <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th></th>
                         <th ng-show="columns.cedula">
                             <button type="button" class="btn btn-table-header" ng-class="{'asc': sort.order, 'desc': !sort.order}" ng-click="doSort('cedula')">
                                 Cédula <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'cedula'}"></span>
@@ -128,7 +127,6 @@
                 </thead>
                 <tbody>
                     <tr class="@{{ (e.isSelected)? 'active' : '' }} @{{ (e.archivado)? 'archived progress-bar-striped' : '' }}" ng-repeat="e in expedientes" ng-click="show(e)" ng-cloak>
-                        <td><a href="expedientes/@{{ e.id }}" target="_blank">Ver</a></td>
                         <td ng-show="columns.cedula">@{{ e.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ e.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>

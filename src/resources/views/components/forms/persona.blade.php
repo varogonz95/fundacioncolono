@@ -1,7 +1,7 @@
 <!-- CEDULA -->
 <div class="form-group" {{-- ng-class="{'has-error': newexpediente.cedula.$invalid && newexpediente.cedula.$dirty}"--}}>
-    <label class="control-label col-md-3" for="cedula">Cédula:</label>
-    <div class="col-md-8 col-md-push-1">
+    <label class="control-label col-md-1" for="cedula">Cédula:</label>
+    <div class="col-md-8 col-md-push-3">
         <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" ng-model="{{ $cedula_model }}" ng-value="{{ $cedula_value }}" required>
         {{ $cedula_help }}
     </div>
@@ -25,10 +25,9 @@
 
 <!-- TELEFONOS -->
 <div class="form-group">
-    <label class="text-right col-md-3" for="apellidos">Teléfono(s):</label>
+    <label class="control-label col-md-3" for="telefonos">Teléfono(s):</label>
     <div class="col-md-8 col-md-push-1">
         <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios" ng-model="{{ $telefonos_model }}">
-            {{ $telefonos_value }}
         </textarea>
     </div>
 </div>
@@ -36,39 +35,40 @@
 <!-- UBICACION -->
 {{-- THIS NEEDS TO BE CHANGED TO A DIRECTIVE --}}
 <div class="form-group">
-    <label class="text-right col-md-3" for="ubicacion">Ubicación:</label>
+    <label class="control-label col-md-3" for="ubicacion">Ubicación:</label>
     <div class="col-md-8 col-md-offset-1">
         <p class="help-block">Provincia</p>
         <select class="form-control" name="provincia" ng-model="{{ $provincia_model }}" ng-options="{{ $provincia_options_expression }}" ng-change="{{ $provincia_onchanged_handler }}" required>
             <option value="" disabled>-Seleccionar provincia-</option>
+            <option value="1" >Limon</option>
         </select>
         <p class="help-block">Cantón</p>
         <select class="form-control" name="canton" ng-model="{{ $canton_model }}" ng-options="{{ $canton_options_expression }}" ng-change="{{ $canton_onchanged_handler }}" ng-disabled="{{ $canton_list }}.length === 0" required>
             <option value="" disabled>-Seleccionar cantón-</option>
+            <option value="1" >Pococi</option>
         </select>
         <p class="help-block">Distrito</p>
         <select class="form-control" name="distrito" ng-model="{{ $distrito_model }}" ng-options="{{ $distrito_options_expression }}" ng-disabled="{{ $distrito_list }}.length === 0" required>
             <option value="" disabled>-Seleccionar distrito-</option>
+            <option value="1">Jimenez</option>
         </select>
     </div>
 </div>
 
 <!-- DIRECCION EXACTA -->
 <div class="form-group">
-    <label class="col-sm-3" for="direccion">Dirección exacta:</label>
-    <div class="col-sm-12">
+    <label class="control-label col-md-3" for="direccion" style="width:150px">Dirección exacta:</label>
+    <div class="col-md-8 col-md-push-1">
         <textarea name="direccion" class="noresize form-control" rows="5" cols="50" ng-model="{{ $direccion_model }}" required>
-            {{ $direccion_value }}
         </textarea>
     </div>
 </div>
 
 <!-- CONTACTOS -->
 <div class="form-group">
-    <label class="col-sm-2" for="contactos">Contacto(s):</label>
-    <div class="col-sm-12">
+    <label class="control-label col-sm-3" for="contactos">Contacto(s):</label>
+    <div class="col-md-8 col-md-push-1">
         <textarea name="contactos" class="noresize form-control" rows="5" cols="50" ng-model="{{ $contactos_model }}">
-            {{ $contactos_value }}
         </textarea>
     </div>
 </div>

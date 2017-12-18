@@ -148,7 +148,7 @@ class ExpedientesController extends Controller{
 
 		// Redirect and flash data with operation status
 		return redirect('expedientes')
-		->with('status', [
+			->with('status', [
 				'type' => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
 				'msg' => $status? 'Se ha creado el expediente correctamente.' : 
