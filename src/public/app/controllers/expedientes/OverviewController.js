@@ -55,7 +55,11 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
         else
             Alert.confirm('¿Desea incluir los cambios en el histórico?')
             .then(function (value) {
-                if (value !== null)
+                if (value !== null){
+
+                    $scope.update.caso.fecha_desde = $scope.update.caso.datePickers.from.date.toLocaleDateString();
+                    $scope.update.caso.fecha_hasta = $scope.update.caso.datePickers.to.date.toLocaleDateString();
+
                     Expediente().save(
                         {
                             id: $scope.selected.id,
@@ -67,12 +71,11 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                         },
                         function (response) {
                             if (response.status){
-                                copy($scope.update.caso, $scope.selected);
                                 delete $scope.update.cache;
-                                $scope.selected.editable = false;
-                                $scope.cancelAll(false);
+                                $scope.update.caso = {};
+                                $scope.selected = response.data
 
-                                console.log(response.data);
+                                $scope.cancelAll(false);
                             }
                             Alert.notify(
                                 response.title,
@@ -82,6 +85,7 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                         },
                         function (error) { },
                     );
+                }
             });
     };
     

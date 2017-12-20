@@ -69,9 +69,8 @@ class Expediente extends Model{
 		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d-m-Y')];
 	}
 
-	//? Should the last month be counted? (Months + 1)
 	public function getMeses($date1, $date2){
-		return (new \DateTime($date1))->diff(new \DateTime($date2), true)->m;
+		return (new \DateTime($date1))->diff(new \DateTime($date2), true)->m + 1;
 	}
 
 	public function getMontoTotal(){

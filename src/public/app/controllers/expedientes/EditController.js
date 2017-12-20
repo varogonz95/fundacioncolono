@@ -11,7 +11,8 @@ app.controller('Expedientes_EditController', function ($scope, Expediente, Typea
     
     $scope.edit = function (){
         copy($scope.selected, $scope.update.caso, ['editable','persona','ayudas','$$hashKey']);
-        
+        console.log($scope.update.caso);
+
         $scope.update.caso.estado_selected = find('id', $scope.update.caso.estado, $scope.estados);
         $scope.update.caso.prioridad_selected = find('id', $scope.update.caso.prioridad, $scope.prioridades);
         $scope.update.caso.referente_selected = $scope.selected.referente.id;
@@ -29,6 +30,8 @@ app.controller('Expedientes_EditController', function ($scope, Expediente, Typea
         // parse attributes...
         $scope.update.caso.prioridad = $scope.update.caso.prioridad_selected.id;
         $scope.update.caso.estado = $scope.update.caso.estado_selected.id;
+        $scope.update.caso.fecha_desde.formatted = $scope.update.caso.datePickers.from.date.toLocaleDateString();
+        $scope.update.caso.fecha_hasta.formatted = $scope.update.caso.datePickers.to.date.toLocaleDateString();
         
         if ($scope.update.caso.hasReferenteOtro) {$scope.update.caso.referente = { id: 1, descripcion: 'Otro o ninguno' };}
         else {

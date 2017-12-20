@@ -10,12 +10,12 @@ class HistoricoService{
 	public static function create($current, $new){
 
 		/**
-		 TODO a. Associate current Expediente to Historico
-		 TODO b. Create Expediente with updated data
-		 TODO c. Attach previous Ayudas
-		 TODO d. Delete current Expediente
-		 TODO e. Save new expediente
-		 TODO f. Return new Expediente
+		 * TODO a. Associate current Expediente to Historico
+		 * TODO b. Create Expediente with updated data
+		 * TODO c. Attach previous Ayudas
+		 * TODO d. Delete current Expediente
+		 * TODO e. Save new expediente
+		 * TODO f. Return new Expediente
 		*/
 
 		//* a.

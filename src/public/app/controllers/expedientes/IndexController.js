@@ -133,13 +133,18 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
             Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
                 $scope.distritos     = Region.parse(response).distritos;
                 obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
-                
-                $scope.selected.datePickers.from.date = obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date();
-                $scope.selected.datePickers.to.date = obj.fecha_hasta.raw;
-                
-                copy(obj, $scope.selected);
-                showModal.show();
             });
+
+            obj.datePickers = {
+                from: {
+                    date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
+                    open: false
+                },
+                to: { date: new Date(obj.fecha_hasta.raw), open: false }
+            };
+            
+            $scope.selected = obj;
+            showModal.show();
             
         });
         

@@ -181,22 +181,26 @@ class ExpedientesController extends Controller{
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
 				
 				$current->descripcion = $request['expediente']['descripcion'];
+				$current->fecha_desde = $request['expediente']['fecha_desde'];
+				$current->fecha_hasta = $request['expediente']['fecha_hasta'];
+				$current->pago_inicio = $request['expediente']['pago_inicio'];
+				$current->pago_final  = $request['expediente']['pago_final'];
 				$current->prioridad   = $request['expediente']['prioridad'];
 				$current->estado      = $request['expediente']['estado'];
 	
 				//TODO: Still need to process 'Referente' info...
 				//TODO ------------------------------------------
 
-				$expediente->save();
+				$current->save();
 	
 				// Process attachs
 				// AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
 		
 				// Process detachs
-				AyudaExpedienteService::detach($expediente->ayudas(), $request['detachs']);
+				AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
 		
 				// Process updates
-				AyudaExpedienteService::update($expediente->ayudas(), $request['updates']);
+				AyudaExpedienteService::update($current->ayudas(), $request['updates']);
 			}
 	
 			else{
@@ -204,25 +208,27 @@ class ExpedientesController extends Controller{
 				$current = HistoricoService::create($current, [
 					'referente_otro' => $request['expediente']['referente_otro'],
 					'descripcion'    => $request['expediente']['descripcion'],
+					'fecha_desde'    => $request['expediente']['fecha_desde'],
+					'fecha_hasta'    => $request['expediente']['fecha_hasta'],
+					'pago_inicio'    => $request['expediente']['pago_inicio'],
+					'pago_final'     => $request['expediente']['pago_final'],
 					'prioridad'      => $request['expediente']['prioridad'],
 					'estado'         => $request['expediente']['estado'],
-					'fecha_desde'    => $request['fecha_desde'],
-					'fecha_hasta'    => $request['fecha_hasta'],
-					'pago_inicio'    => $request['pago_inicio'],
-					'pago_final'     => $request['pago_final'],
 				]);
-
-				$current->persona;
-				$current->referente;
-				$current->meses      = $current->getMeses($current->fecha_desde, $current->fecha_hasta);
-				$current->montoTotal = $current->getMontoTotal();
-				// $current->archivado  = $item->trashed();
 				
 			}
 			
+			$current->referente;
+			$current->persona;
+			$current->ayudas;
+			$current->meses      = $current->getMeses($current->fecha_desde['raw'], $current->fecha_hasta['raw']);
+			$current->montoTotal = $current->getMontoTotal();
+			// $current->archivado  = $item->trashed();
+
 			// Everything went just fine
 			DB::commit();
 		}
+
 		catch(\Exception $e){
 			// Something went wrong :(
 			$status = false;
