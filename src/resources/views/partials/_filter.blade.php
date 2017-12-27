@@ -1,15 +1,15 @@
 <div class="row" style="padding: 15px 0">
-    <form ng-submit="filter_pichudo()">
+    <form ng-submit="filter()">
 
         {{-- PRIORIDAD --}}
         <div class="col-lg-2">
             <div class="form-group-sm form-group">
                 <label>
-                    Prioridad
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="prioridad">
+                    Prioridad
                     <!-- PUT THIS INTO DIRECTIVE -->
                     <ngIf ng-if="filter_data.filter === 'prioridad'">
-                        <input type="hidden" name="relationship" value="expedientes">
+                        <input type="hidden" name="filterRel" value="expedientes">
                         <input type="hidden" name="property" value="prioridad">
                         <input type="hidden" name="comparator" value="=">
                         <input type="hidden" name="value" ng-value="filter_data.prioridad.id">
@@ -24,10 +24,10 @@
         <div class="col-lg-2">
             <div class="form-group-sm form-group">
                 <label>
-                    Estado
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="estado">
+                    Estado
                     <ngIf ng-if="filter_data.filter === 'estado'">
-                        <input type="hidden" name="relationship" value="expedientes">
+                        <input type="hidden" name="filterRel" value="expedientes">
                         <input type="hidden" name="property" value="estado">
                         <input type="hidden" name="comparator" value="=">
                         <input type="hidden" name="value" ng-value="filter_data.estado.id">
@@ -41,10 +41,10 @@
         <div class="col-lg-2">
             <div class="form-group-sm form-group">
                 <label>
-                    Referente
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="referente">                    
+                    Referente
                     <ngIf ng-if="filter_data.filter === 'referente'">
-                        <input type="hidden" name="relationship" value="referente">
+                        <input type="hidden" name="filterRel" value="referente">
                         <input type="hidden" name="property" value="id">
                         <input type="hidden" name="comparator" value="=">
                         <input type="hidden" name="value" ng-value="filter_data.referente">
@@ -68,10 +68,10 @@
         <div class="col-lg-2">
             <div class="form-group form-group-sm">
                 <label>
-                    Tipo de ayuda
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="ayuda">
+                    Tipo de ayuda
                     <ngIf ng-if="filter_data.filter === 'ayuda'">
-                        <input type="hidden" name="relationship" value="ayudas">
+                        <input type="hidden" name="filterRel" value="ayudas">
                         <input type="hidden" name="property" value="id">
                         <input type="hidden" name="comparator" value="=">
                         <input type="hidden" name="value" ng-value="filter_data.ayuda.id">
@@ -85,10 +85,10 @@
         <div class="col-lg-2">
             <div class="form-group form-group-sm">
                 <label>
-                    Fecha de ingreso
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="fecha_creacion">
+                    Fecha de ingreso
                     <ngIf ng-if="filter_data.filter === 'fecha_creacion'">
-                        <input type="hidden" name="relationship" value="expedientes">
+                        <input type="hidden" name="filterRel" value="expedientes">
                         <input type="hidden" name="property" value="fecha_creacion">
                         <input type="hidden" name="comparator" value="between">
                         <input type="hidden" name="value[0]" ng-value="toStandardDate(filter_data.fecha_creacion.from)">

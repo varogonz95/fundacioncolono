@@ -1,179 +1,187 @@
 
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
 
-    var showModal = Modal.init('#show_modal',{
-        style:         { 'overflow-y': 'hidden', 'bottom': '0' },
-        onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
-        onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
-    });
+	var showModal = Modal.init('#show_modal',{
+		style:         { 'overflow-y': 'hidden', 'bottom': '0' },
+		onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
+		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
+	});
 
-    // Allowed search atributes
-    $scope.searchable = ['cedula', 'nombre', 'apellidos'];
+	// Allowed search atributes
+	$scope.search = {
+		property: 'cedula',
+		value: '',
+	};
 
-    $scope.formatter = Typeahead.formatter;
-    
-    $scope.expedientes = [];
-    
-    $scope.datePickers = {
-        openTo:   false,
-        openFrom: false,
-    };
+	$scope.formatter = Typeahead.formatter;
+	
+	$scope.expedientes = [];
+	
+	$scope.datePickers = {
+		openTo:   false,
+		openFrom: false,
+	};
 
-    $scope.filter_data = {
-        value:          '',
-        referente:      [],
-        ayuda:          [],
-        filter:         null,
-        // active:         false,
-        filtered:       false,
-        one:            false,
-        estado:         $scope.estados[0],
-        prioridad:      $scope.prioridades[0],
-        fecha_creacion: {from: new Date(), to: null},
-    };
+	$scope.filter_data = {
+		value:          '',
+		referente:      [],
+		ayuda:          [],
+		filter:         null,
+		// active:         false,
+		filtered:       false,
+		one:            false,
+		estado:         $scope.estados[0],
+		prioridad:      $scope.prioridades[0],
+		fecha_creacion: {from: new Date(), to: null},
+	};
 
-    $scope.total = 1;
-    $scope.page  = 1;
+	$scope.total = 1;
+	$scope.page  = 1;
 
-    $scope.sort = {
-        relationship: 'persona',
-        by:           'cedula',
-        order:        true,
-    };
-    
-    $scope.columns = {
-        ayuda:          true,
-        cedula:         true,
-        nombre:         true,
-        estado:         true,
-        apellidos:      true,
-        prioridad:      true,
-        referente:      true,
-        ubicacion:      true,
-        fecha_creacion: true
-    };
+	$scope.sort = {
+		relationship: 'persona',
+		by:           'cedula',
+		order:        true,
+	};
+	
+	$scope.columns = {
+		ayuda:          true,
+		cedula:         true,
+		nombre:         true,
+		estado:         true,
+		apellidos:      true,
+		prioridad:      true,
+		referente:      true,
+		ubicacion:      true,
+		fecha_creacion: true
+	};
 
-    $scope.doSort = function (by) {
-        $scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
-        $scope.sort.by = by;
+	$scope.doSort = function (by) {
+		$scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
+		$scope.sort.by = by;
 
-        switch ($scope.sort.by) {
-            case 'estado':
-            case 'prioridad':
-            case 'referentes':
-            case 'fecha_creacion':
-                $scope.sort.relationship = 'expedientes'
-                break;
+		switch ($scope.sort.by) {
+			case 'estado':
+			case 'prioridad':
+			case 'referentes':
+			case 'fecha_creacion':
+				$scope.sort.relationship = 'expedientes'
+				break;
 
-            default:
-                $scope.sort.relationship = 'persona'
-                
-        }
+			default:
+				$scope.sort.relationship = 'persona'
+				
+		}
 
-        $scope.index();
-    };
+		$scope.index();
+	};
 
-    $scope.filter_init = function(){
-        if (!$scope.filter_data.active) {
-            $scope.filter_data.referente = $scope.referentes[0];
-            $scope.filter_data.ayuda = $scope.ayudas[0];
-            $scope.filter_data.active = true;
-        }
-    };
+	$scope.filter_init = function(){
+		if (!$scope.filter_data.active) {
+			$scope.filter_data.referente = $scope.referentes[0];
+			$scope.filter_data.ayuda = $scope.ayudas[0];
+			$scope.filter_data.active = true;
+		}
+	};
 
-    $scope.index = function (page = 1) {
+	$scope.index = function (page = 1) {
 
-        $scope.page = page < 1 ? 1 : page;
+		$scope.page = page < 1 ? 1 : page;
 
-        var params = {
-            relationship: $scope.sort.relationship,
-            order:        $scope.sort.order ? 'asc': 'desc',
-            page:         $scope.page,
-            by:           $scope.sort.by,
-        };
+		var params = {
+			termProperty: $scope.search.property,
+			orderRel:     $scope.sort.relationship,
+			order:        $scope.sort.order ? 'asc': 'desc',
+			term:         $scope.search.value,
+			page:         $scope.page,
+			by:           $scope.sort.by,
+		};
 
-        if ($scope.filter_data.filtered){
+		if ($scope.filter_data.filtered){
 
-            params.page = $scope.filter_data.one ? 1 : $scope.page;
-            $scope.page = params.page;
-            $scope.filter_data.one = false;
+			params.page = $scope.filter_data.one ? 1 : $scope.page;
+			$scope.page = params.page;
+			$scope.filter_data.one = false;
 
-            if ($scope.search !== '') params.search = $scope.search;
-            params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
-        }
-        else params.search = $scope.search;
+			params = angular.merge(params, jQueryToJson($('#filter'), 'name'));
+			console.log(params);
+		}
 
-        Expediente('all').get(
-            params,
-            function(response){
-                $scope.total       = response.total;
-                // $scope.totalpages  = response.pages;
-                $scope.expedientes = response.expedientes;
-            });
-    };
 
-    $scope.show = function (obj) {
-        
-        obj.editable               = false;
-        obj.isSelected             = true;
-        obj.persona.editable       = false;
+		Expediente('all').get(
+			params,
+			function(response){
+				$scope.total       = response.total;
+				// $scope.totalpages  = response.pages;
+				$scope.expedientes = response.expedientes;
+			});
+	};
 
-        $scope.selected.isSelected = obj === $scope.selected;
-        // scope.ayudas.editable = false;
+	$scope.show = function (obj) {
+		
+		obj.editable               = false;
+		obj.isSelected             = true;
+		obj.persona.editable       = false;
 
-        var regions = obj.persona.ubicacion.split('/');
+		$scope.selected.isSelected = obj === $scope.selected;
+		// scope.ayudas.editable = false;
 
-        // Get Provincia from list and set to persona
-        obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
+		var regions = obj.persona.ubicacion.split('/');
 
-        Region.cantones(obj.persona.provincia.cod).then(function (response) {
-            $scope.cantones    = Region.parse(response).cantones;
-            obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
-            
-            Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-                $scope.distritos     = Region.parse(response).distritos;
-                obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
-            });
+		// Get Provincia from list and set to persona
+		obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
 
-            obj.datePickers = {
-                from: {
-                    date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
-                    open: false
-                },
-                to: { date: new Date(obj.fecha_hasta.raw), open: false }
-            };
-            
-            $scope.selected = obj;
-            showModal.show();
-            
-        });
-        
+		Region.cantones(obj.persona.provincia.cod).then(function (response) {
+			$scope.cantones    = Region.parse(response).cantones;
+			obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
+			
+			Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
+				$scope.distritos     = Region.parse(response).distritos;
+				obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
+			});
 
-        if (obj.archivado)
-            Alert.notify(
-                'Expediente archivado', 
-                'No se pueden realizar cambios al expediente mientras esté archivado. ', 
-                'info',
-                3000
-            );
-    };
+			obj.datePickers = {
+				from: {
+					date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
+					open: false
+				},
+				to: { 
+					date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
+					open: false 
+				}
+			};
+			
+			$scope.selected = obj;
+			showModal.show();
+			
+		});
+		
 
-    $scope.toStandardDate = function(date){
-        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    };
+		if (obj.archivado)
+			Alert.notify(
+				'Expediente archivado', 
+				'No se pueden realizar cambios al expediente mientras esté archivado. ', 
+				'info',
+				3000
+			);
+	};
 
-    $scope.filter_pichudo = function () {
+	$scope.toStandardDate = function(date){
+		return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	};
 
-        $scope.search          = '',
-        $scope.filter_data.one = true;
-        $scope.filter_data.filtered = true;
-        $scope.index($scope.page);
+	$scope.filter = function () {
+		$scope.search.value          = '',
+		$scope.filter_data.one      = true;
+		$scope.filter_data.filtered = true;
 
-    };
+		$scope.index($scope.page);
+	};
 
-    $scope.clear = function(){
-        $scope.search = null;
-    };
+	$scope.clear = function(){
+		$scope.search.value = null;
+		$scope.index();
+	};
 
-    $scope.index();
+	$scope.index();
 });

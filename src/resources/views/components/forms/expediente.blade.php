@@ -54,13 +54,13 @@
 	</div>
 </div>
 
-{{-- FECHAS DE PAGO Y PERÍODO DE APROBACIÓN --}}
+{{-- FECHAS DE ENTREGA Y PERÍODO DE APROBACIÓN --}}
 <ng-if ng-if="{{ $estado_model }}.id === 1">
-	<h4 class="page-header">Fechas de pago y período de aprobación</h4>
+	<h4 class="page-header">Fechas de entrega y período de aprobación</h4>
 	
 	{{-- FECHAS EN QUE RECIBE AYUDA --}}
 	<div class="form-group col-lg-push-0 col-sm-12 col-sm-push-1">
-		<h5 style="font-weight: bold">Fechas de pago:</h5>
+		<h5 style="font-weight: bold">Fechas de entrega:</h5>
 		
 		<div class="form-group col-md-12 col-sm-6 col-xs-12 nogutters">
 			<label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Primera fecha:</label>

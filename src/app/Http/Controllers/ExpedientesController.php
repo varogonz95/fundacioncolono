@@ -20,37 +20,44 @@ class ExpedientesController extends Controller{
 
 	public function all(Request $request){
 
+		$search   = [
+			'value'    => $request['term'],
+			'property' => $request['termProperty'],
+		];
+
 		$orderBy = [
-			'order' => $request['order'],
-			'by'    => $request['by'],
+			'by'           => $request['by'],
+			'order'        => $request['order'],
+			'relationship' => $request['orderRel']
 		];
 
 		$filter = [
-			'comparator' => $request['comparator'],
-			'property'   => $request['property'],
-			'value'      => $request['value'],
+			'relationship' => $request['filterRel'],
+			'comparator'   => $request['comparator'],
+			'property'     => $request['property'],
+			'value'        => $request['value'],
 		];
 
 		$filtered = [];
 		
 		if ($this->hasEmptyValues($filter))
-		$filtered = Filter::with(Expediente::class, ['persona', 'referente'])
-					->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-					->orderBy($request['relationship'], $orderBy['by'], $orderBy['order'])
+		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+					->where('persona', $search['property'], 'like', "{$search['value']}%")
+					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		else
-		$filtered = Filter::with(Expediente::class, ['persona', 'referente'])
-					->where($request['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-					->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-					->orderBy('persona', $orderBy['by'], $orderBy['order'])
+		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
+					->where('persona', $search['property'], 'like', "{$search['value']}%")
+					->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		// Iterate over items
 		$filtered->each(function($item, $index){
 			$item->meses = $item->getMeses(
-				$item->fecha_desde['formatted'],
-				$item->fecha_hasta['formatted']
+				$item->fecha_desde['raw'],
+				$item->fecha_hasta['raw']
 			);
 			$item->montoTotal = $item->getMontoTotal();
 			$item->archivado  = $item->trashed();
@@ -63,7 +70,6 @@ class ExpedientesController extends Controller{
 		return response()->json([
 			'expedientes' => $items,
 			'total'       => $pagination->total(),
-			// 'pages'       => ceil( Expediente::count()/self::MAX_RECORDS ),
 		]);
 	}
 
@@ -112,30 +118,23 @@ class ExpedientesController extends Controller{
 		try{
 			$persona->save();
 
-			// Check if Referente is 'Otro'.
-			if (filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN))
-				
-				// Create and save new Referente
-				if (filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN))
-					ReferentesService::createAssociate($expediente->referente(), $request['referente_otro']);
-				
-				// If not, then associate Expediente with first Referente (Otro)
-				else
-					ReferentesService::associate($expediente->referente(), Referente::first());
-			
-			// If not, associate Expediente with a Referente
-			else
-				ReferentesService::associate(
-					$expediente->referente(),
-					is_null($request['referente'])?
-						Referente::first() :
-						Referente::find($request['referente'])
-					);
+			ReferentesService::createOrAssociate(
+				$expediente->referente(),
+				$request['referente'],
+				$request['referente_otro'],
+				filter_var($request['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
+				filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN)
+			);
 
 			// Save Persona and Expediente altogether
 			$persona->expediente()->save($expediente);
 
-			AyudaExpedienteService::attach($expediente->ayudas(), ['ids' => $request['ayuda'], 'detalles' => $request['ayuda_detalle'], 'montos' => $request['ayuda_monto']]);
+			AyudaExpedienteService::attach(
+				$expediente->ayudas(), 
+				['ids'     => $request['ayuda'], 
+				'detalles' => $request['ayuda_detalle'], 
+				'montos'   => $request['ayuda_monto']]
+			);
 
 			DB::commit();
 			
@@ -149,24 +148,13 @@ class ExpedientesController extends Controller{
 		// Redirect and flash data with operation status
 		return redirect('expedientes')
 			->with('status', [
-				'type' => $status? 'success' : 'error',
+				'type'  => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
-				'msg' => $status? 'Se ha creado el expediente correctamente.' : 
-								  'Es posible que los datos ingresados sean incorrectos.<br>'.
-								  'Si el problema persiste, por favor contacte a soporte.',
+				'msg'   => $status? 'Se ha creado el expediente correctamente.' : 
+								    'Es posible que los datos ingresados sean incorrectos.<br>'.
+								  	'Si el problema persiste, por favor contacte a soporte.',
 			]);
 		// return $request->all();
-	}
-
-	public function show($id){
-		$expediente = Expediente::with(['persona', 'ayudas'])->find($id);
-		$expediente->montoTotal = $expediente->getMontoTotal();
-		return view('templates.expediente.show2', ['expediente' => $expediente]);
-		// return response()->json(Expediente::with(['persona', 'ayudas'])->find($id));
-	}
-
-	public function edit($id){
-		//
 	}
 
 	public function update(Request $request, $id){
@@ -180,6 +168,7 @@ class ExpedientesController extends Controller{
 			
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
 				
+				$current->referente_otro = $request['expediente']['referente_otro'];
 				$current->descripcion = $request['expediente']['descripcion'];
 				$current->fecha_desde = $request['expediente']['fecha_desde'];
 				$current->fecha_hasta = $request['expediente']['fecha_hasta'];
@@ -187,22 +176,19 @@ class ExpedientesController extends Controller{
 				$current->pago_final  = $request['expediente']['pago_final'];
 				$current->prioridad   = $request['expediente']['prioridad'];
 				$current->estado      = $request['expediente']['estado'];
-	
-				//TODO: Still need to process 'Referente' info...
-				//TODO ------------------------------------------
 
 				$current->save();
-	
+				
 				// Process attachs
-				// AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
-		
+				// AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
+				
 				// Process detachs
 				AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
 		
 				// Process updates
 				AyudaExpedienteService::update($current->ayudas(), $request['updates']);
 			}
-	
+			
 			else{
 				// Create new 'Expediente' and attach 'Historico'		
 				$current = HistoricoService::create($current, [
@@ -218,6 +204,18 @@ class ExpedientesController extends Controller{
 				
 			}
 			
+			//TODO: Still need to process 'Referente' info...
+			ReferentesService::createOrAssociate(
+				$current->referente(),
+				$request['expediente']['referente']['id'],
+				// If has referente_otro
+				filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN) ?
+				// $request['expediente']['hasReferenteOtro'] ? 
+					$request['expediente']['referente_otro'] : null, 
+				filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
+				filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
+			);
+
 			$current->referente;
 			$current->persona;
 			$current->ayudas;
@@ -283,5 +281,14 @@ class ExpedientesController extends Controller{
 		foreach ($array as $item) return empty($item);
 
 		return false;
+	}
+
+	public function test($id)
+	{
+		return Expediente::with(['ayudas'])
+					->whereHas('ayudas', function($query) use ($id){
+						$query->where('ayudas.descripcion', 'like', 'asadsadf%');
+					})
+					->get();
 	}
 }

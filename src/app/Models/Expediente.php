@@ -26,6 +26,7 @@ class Expediente extends Model{
 
 	public $timestamps = false;
 
+	//* Relationships	----------------//
 	public function persona(){
 		return $this->belongsTo('App\Models\Persona', 'persona_fk');
 	}
@@ -38,39 +39,31 @@ class Expediente extends Model{
 		return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes', 'expediente_fk', 'ayuda_fk')->withPivot(['detalle','monto']);
 	}
 
-	
+	//* Mutators and Accessors 	-----------//
 	public function getFechaCreacionAttribute($value){
 		return (new \DateTime($value))->format('d-m-Y');
 	}
 
-	public function setFechaDesdeAttribute($value){
-		if (!empty($value)){
-			$date = explode('/', $value);
-			$value = (new \DateTime("{$date[2]}/{$date[1]}/{$date[0]}"))->format('Y-m-d');
-		}
-		
-		$this->attributes['fecha_desde'] = $value;
+	public function setFechaDesdeAttribute($value){		
+		$this->attributes['fecha_desde'] = (new \DateTime($value))->format('Y-m-d');
 	}
 
 	public function setFechaHastaAttribute($value){
-		if (!empty($value)){
-			$date = explode('/', $value);
-			$value = (new \DateTime("{$date[2]}/{$date[1]}/{$date[0]}"))->format('Y-m-d');
-		}
-
-		$this->attributes['fecha_hasta'] = $value;
+		$this->attributes['fecha_hasta'] = (new \DateTime($value))->format('Y-m-d');
 	}
 
 	public function getFechaDesdeAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d-m-Y')];
+		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
 	}
 
 	public function getFechaHastaAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d-m-Y')];
+		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
 	}
 
 	public function getMeses($date1, $date2){
-		return (new \DateTime($date1))->diff(new \DateTime($date2), true)->m + 1;
+		return (new \DateTime($date1))
+				->diff(new \DateTime($date2), true)
+				->m + 1;
 	}
 
 	public function getMontoTotal(){

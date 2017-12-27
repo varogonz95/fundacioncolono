@@ -72,12 +72,12 @@
                 Desde: @{{ selected.fecha_desde.formatted }}
                 <br> Hasta: @{{ selected.fecha_hasta.formatted }}
                 <br>
-                <small class="help-block">Número de meses: @{{ selected.meses }}</small>
+                <small class="help-block">Número de meses: @{{ update.cache? 'sin calcular' : selected.meses  }}</small>
             </p>
         </div>
 
         <div class="expediente-info-item" ng-show="selected.estado === 1 && selected.pago_inicio && selected.pago_final">
-            <label>Recibe</label>
+            <label>Recibe entregas</label>
             <p style="padding: 0 10px">
                 los @{{ selected.pago_inicio }} y los @{{ selected.pago_final }} de cada mes
             </p>

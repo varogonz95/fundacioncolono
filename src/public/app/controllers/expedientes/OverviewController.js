@@ -1,5 +1,5 @@
 
-app.controller('Expedientes_OverviewController', function ($scope, Expediente, AyudaExpediente, Alert, Modal) {
+app.controller('Expedientes_OverviewController', function ($scope, $filter, Expediente, AyudaExpediente, Alert, Modal) {
 
     var modal = Modal.getInstance(),
     hasUncommitted = function () {
@@ -57,8 +57,8 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
             .then(function (value) {
                 if (value !== null){
 
-                    $scope.update.caso.fecha_desde = $scope.update.caso.datePickers.from.date.toLocaleDateString();
-                    $scope.update.caso.fecha_hasta = $scope.update.caso.datePickers.to.date.toLocaleDateString();
+                    $scope.update.caso.fecha_desde = $filter('date')($scope.update.caso.datePickers.from.date, 'yyyy/MM/dd');
+                    $scope.update.caso.fecha_hasta = $filter('date')($scope.update.caso.datePickers.to.date, 'yyyy/MM/dd');
 
                     Expediente().save(
                         {
@@ -70,10 +70,24 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
                             record: value
                         },
                         function (response) {
+
+                            console.log(response);
+
                             if (response.status){
                                 delete $scope.update.cache;
+                                
                                 $scope.update.caso = {};
                                 $scope.selected = response.data
+                                $scope.selected.datePickers = {
+                                    from: {
+                                        date: $scope.selected.fecha_desde.raw ? new Date($scope.selected.fecha_desde.raw) : new Date(),
+                                        open: false
+                                    },
+                                    to: {
+                                        date: $scope.selected.fecha_hasta.raw ? new Date($scope.selected.fecha_hasta.raw) : new Date(),
+                                        open: false
+                                    }
+                                };
 
                                 $scope.cancelAll(false);
                             }
@@ -101,7 +115,6 @@ app.controller('Expedientes_OverviewController', function ($scope, Expediente, A
             Alert.confirm('¿Desea incluir los cambios en el histórico?')
             .then(function (value) {
                 if(value !== null){
-                    console.log(value);
                     AyudaExpediente.$service.post(
                         {
                             id: $scope.selected.id,

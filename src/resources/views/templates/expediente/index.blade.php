@@ -42,7 +42,7 @@
                     <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
                 </button>
         
-                <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search = ''; index();">Ver todos</button>
+                <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search.term = ''; index();">Ver todos</button>
             </div>
         
             <!-- LINK AGREGAR NUEVO CASO -->
