@@ -10,29 +10,29 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 	$scope.page  = 1;
 
 	$scope.filter_data = {
-			value:          '',
-			filter:         null,
-			// active:         false,
-			filtered:       false,
-			one:            false,
-			activo:         $scope.activo[0],
+		value:          '',
+		filter:         null,
+		// active:         false,
+		filtered:       false,
+		one:            false,
+		activo:         $scope.activo[0],
 	};
 
 	$scope.inspectores = [];
 
 	$scope.columns = {
-			username:      true,
-			email:         true,
-			cedula:        true,
-			nombre:        true,
-			apellidos:     true,
-			activo:        true,
+		username:      true,
+		email:         true,
+		cedula:        true,
+		nombre:        true,
+		apellidos:     true,
+		activo:        true,
 	};
 
 	$scope.sort = {
-			relationship: 'persona',
-			by:           'cedula',
-			order:        true,
+		relationship: 'persona',
+		by:           'cedula',
+		order:        true,
 	};
 
 
@@ -89,14 +89,6 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 		Inspector('all').get(
 			params,
 			function (response) {
-
-				for(var i = 0; i < response.total; i++){
-					if(response.inspectores[i].activo == 0)
-						response.inspectores[i].activo = 'No';
-					else
-						response.inspectores[i].activo = 'Si';
-				}
-
 				$scope.inspectores = response.inspectores;
 				$scope.total = response.total;
 			});

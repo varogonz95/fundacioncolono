@@ -81,16 +81,4 @@
             </ul>
         </div>
     </div>
-
-    {{-- Flashed Notifications --}}
-    {{-- @if (Session::has('status'))
-        <div class="animated animatedModal-{{ Session::get('status')['type'] }}">
-            <div class="animatedModal-header">
-                <button type="button" class="close">&times;</button>
-            </div>
-            <div class="animatedModal-content">
-
-            </div>
-        </div>
-    @endif --}}
 </nav>
