@@ -14,14 +14,14 @@ class Expediente extends Model{
 	
 	protected $dates = ['fecha_eliminacion'];
 	protected $fillable = [
+		'referente_otro',
 		'descripcion', 
-		'estado', 
 		'fecha_desde', 
 		'fecha_hasta', 
 		'pago_inicio', 
 		'pago_final', 
 		'prioridad', 
-		'referente_otro'
+		'estado', 
 	];
 
 	public $timestamps = false;

@@ -29,12 +29,7 @@ class ReferentesService{
 				self::associate($relationship, Referente::first());
 		// If not, associate Expediente with a Referente
 		else
-			self::associate(
-				$relationship,
-				is_null($id)?
-					Referente::first() :
-					Referente::find($id)
-				);
+			self::associate($relationship, Referente::find($id));
 	}
 
 }
