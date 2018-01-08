@@ -1,11 +1,10 @@
 <script>
 	$(document).ready(function () {
 		swal({
-			title: "{{ session('status')['title'] }}",
-			icon: "{{ session('status')['type'] }}",
+			titleText: "{{ session('status')['title'] }}",
+			type: "{{ session('status')['type'] }}",
 			text: "{{ session('status')['msg'] }}",
-			buttons: {{ session('status')['type'] === 'error' ? 'true' : 'false' }},
-			{{ session('status')['type'] === 'error' ? '' : 'timer: 3500' }}
+			{{ session('status')['type'] === 'error' ? "showCloseButton: true, showCancelButton: true" : 'timer: 3500, showConfirmButton: false' }}
 		});
 	});
 </script>

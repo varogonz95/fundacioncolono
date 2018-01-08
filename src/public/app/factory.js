@@ -27,45 +27,18 @@ app.factory('Inspector', function (AppResource) {
     };
 });
 
-app.factory('Alert', function (AlertProvider) {
+app.factory('Alert', function (ConfirmAlert, NotifyAlert /* , PromptAlert */) {
 
     return {
-        notify: function(title, text, type = 'success', timer = 2500){
-            swal({
-                title: title,
-                text: text,
-                icon: type,
-                buttons: false,
-                content: AlertProvider.close,
-                timer: timer,
-            });
+        notify: function (title, text, type = 'info', timer = 2500) {
+            return swal(angular.extend({titleText: title, text: text, type: type, timer: timer}, NotifyAlert.config));
         },
 
-        confirm: function (title, text, type = 'info', buttons = false){
-            // returns promise
-            return swal({
-                title: !text ? null : title,
-                text: !text ? title : text,
-                content: AlertProvider.close,
-                icon: type,
-                closeOnClickOutside: false,
-                buttons: !buttons ? 
-                    (type === 'error' ? AlertProvider.dangerbtn : 
-                     type === 'warning' ? AlertProvider.warningbtn : 
-                     AlertProvider.buttons) : 
-                    buttons,
-            });
+        confirm: function (title, text, type = 'question') {
+            return swal(angular.extend({titleText: title, text: text, type: type}, ConfirmAlert.config));
         },
 
-        prompt: function (title, text, content = null, type = null, buttons = false) {
-            // returns promise
-            return swal({
-                title: !text ? null : title,
-                text: !text ? title : text,
-                icon: type,
-                content: content === null ? AlertProvider.promptContent : content,
-                buttons: buttons,
-            });
-        }
-    }
+        //Prompt alert here...
+    };
+
 });

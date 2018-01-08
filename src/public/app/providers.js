@@ -72,7 +72,7 @@ app.provider('AppResource', function () {
     }
 });
 
-app.provider('Territory', function(){
+app.provider('Territory', function (){
     
     this.resultWrapper;
     this.fields = {
@@ -170,43 +170,58 @@ app.provider('Territory', function(){
     // this.distritosUrl = 'https://services.arcgis.com/LjCtRQt1uf8M6LGR/arcgis/rest/services/Distritos_CR/FeatureServer/0';
 });
 
-app.provider('AlertProvider', function () {
+app.provider('ConfirmAlert', function () {
+    this.$get = function() {
 
-    this.$get = function () {
-
-        var buttons = this.buttons || {
-                cancel: {
-                    text: 'Cancelar',
-                    value: false,
-                    visible: true,
-                    closeModal: true
-                },
-                confirm: {
-                    text: 'Confirmar',
-                    value: true,
-                    visible: true,
-                    closeModal: true
-                },
-            },
-            promptContent = this.promptContent || {
-                element: 'input',
-                attributes: {type: 'text'},
-            },
-            closebtn = {
-                element: $.parseHTML('<button class="swal-close" title="Cerrar" onclick="swal.setActionValue({confirm: null,cancel: null});swal.close()">\u00D7</button>')[0],
-            },
-            //! *** Notice that angular.merge is deprecated, but functional in this case ***
-            dangerbtn = angular.merge({ confirm: { className: 'swal-button--danger' } }, buttons);
-            warningbtn = angular.merge({ confirm: { className: 'swal-button--warning' } }, buttons);
-
-        return {
-            buttons: buttons,
-            promptContent: promptContent,
-            close: closebtn,
-            dangerbtn: dangerbtn,
-            warningbtn: warningbtn,
+        var config = this.config ||
+        {
+            showConfirmButton: true,
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: '<b>Confirmar</b>',
+            confirmButtonColor: '#7CD1F9',
+            cancelButtonColor: '#EFEFEF',
+            cancelButtonText: '<b style="color: #868686">Cancelar</b>',
+            reverseButtons: true,
         }
-    }
+
+        return { config: config };
+    };
 });
+
+app.provider('NotifyAlert', function () {
+    this.$get = function() {
+
+        var config = this.config ||
+        {
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            confirmButtonText: '<b>Confirmar</b>',
+            // confirmButtonColor: '#7CD1F9',
+            // cancelButtonColor: '#EFEFEF',
+            cancelButtonText: '<b style="color: #868686">Cancelar</b>',
+            reverseButtons: true,
+        }
+
+        return {config: config};
+    };
+});
+
+// app.provider('PromptAlert', function () {
+//     this.$get = function() {
+
+//         var config = this.config ||
+//         {
+//             showCloseButton: true,
+//             showCancelButton: true,
+//             confirmButtonText: 'Confirmar',
+//             confirmButtonColor: '#some-color',
+//             cancelButtonText: 'Cancelar',
+//         }
+
+//         return config;
+//     };
+// });
 
 
