@@ -40,14 +40,25 @@ class ExpedientesController extends Controller{
 
 		$filtered = [];
 		
+
 		if ($this->hasEmptyValues($filter))
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+					->options(function($builder) use ($request){
+						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
+							return $builder->onlyTrashed();
+						return $builder;
+					})
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		else
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
+					->options(function($builder) use ($request){
+						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
+							return $builder->onlyTrashed();
+						return $builder;
+					})
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])

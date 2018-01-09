@@ -71,9 +71,9 @@ class Filter{
         return $this->builder;
     }
 
-    public function options($method, ...$params){
-        $this->builder = $this->builder->$method($params);
-        return $this->builder;
+    public function options(callable $method){
+        $this->builder = $method($this->builder);
+        return $this;
     }
 
     public function paginate($items, $perPage = 15, $page = null, $options = []){

@@ -7,7 +7,9 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
 	});
 
-	// Allowed search atributes
+
+	$scope.onlyTrashed = false;
+
 	$scope.search = {
 		property: 'cedula',
 		value: '',
@@ -84,12 +86,18 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		}
 	};
 
+	$scope.trashed = function(){
+		$scope.onlyTrashed = !$scope.onlyTrashed;
+		$scope.index();
+	};
+
 	$scope.index = function (page = 1) {
 
 		$scope.page = page < 1 ? 1 : page;
 
 		var params = {
 			termProperty: $scope.search.property,
+			onlyTrashed:  $scope.onlyTrashed,
 			orderRel:     $scope.sort.relationship,
 			order:        $scope.sort.order ? 'asc': 'desc',
 			term:         $scope.search.value,
@@ -104,9 +112,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 			$scope.filter_data.one = false;
 
 			params = angular.merge(params, jQueryToJson($('#filter'), 'name'));
-			console.log(params);
 		}
-
 
 		Expediente('all').get(
 			params,

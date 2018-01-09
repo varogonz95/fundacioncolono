@@ -42,6 +42,11 @@
                     <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
                 </button>
         
+                <button class="btn-outline btn btn-delete" type="button" ng-click="trashed()">
+                    Ver archivados
+                    <span class="glyphicon glyphicon-unchecked" ng-hide="onlyTrashed"></span>
+                    <span class="glyphicon glyphicon-check" ng-show="onlyTrashed"></span>
+                </button>
                 <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search.term = ''; index();">Ver todos</button>
             </div>
         
