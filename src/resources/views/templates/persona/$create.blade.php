@@ -17,20 +17,10 @@
     @slot('telefonos_model', 'telefonos')
     @slot('telefonos_value', 'telefonos')
 
-    {{-- ----------------UBICACION SLOTS------------ --}}
-    @slot('provincia_model', 'provincia')
-    @slot('provincia_options_expression', 'p as p.name for p in provincias track by p.cod')
-    @slot('provincia_onchanged_handler', 'updateCantones(provincia.cod)')
-
-    @slot('canton_model', 'canton')
-    @slot('canton_list', 'cantones')
-    @slot('canton_options_expression', 'c as c.name for c in cantones track by c.cod')
-    @slot('canton_onchanged_handler', 'updateDistritos(provincia.cod, canton.cod)')
-
-    @slot('distrito_model', 'distrito')
-    @slot('distrito_list', 'distritos')
-    @slot('distrito_options_expression', 'd as d.name for d in distritos track by d.cod')
-    {{-- --------------------------------------------- --}}
+    @slot('ubicacion')
+        field="ubicacion"
+        required
+    @endslot
 
     @slot('direccion_model', 'direccion')
     @slot('direccion_value', 'direccion')

@@ -3,6 +3,7 @@
 @push('scripts_top')
     <script src="{{ asset('app/controllers/expedientes/MainController.js') }}" charset="utf-8"></script>
     <script src="{{ asset('app/controllers/expedientes/CreateController.js') }}" charset="utf-8"></script>
+    <script id="/region-select.html" type="text/ng-template" src="{{ asset('app/templates/region-select.html') }}"></script>
 @endpush
 
 @push('scripts_bottom')

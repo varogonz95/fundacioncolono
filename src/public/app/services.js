@@ -21,15 +21,13 @@ app.service('Region', function($cacheFactory, $resource, Territory){
 		{cod: '7', name: 'LIMÓN'}
 	],
 	
-	textCache = $cacheFactory('textCache');
-	cantonesCache = $cacheFactory('cantonesCache');
-	distritosCache = $cacheFactory('distritosCache');
+	textCache = $cacheFactory('textCache'),
+	cantonesCache = $cacheFactory('cantonesCache'),
+	distritosCache = $cacheFactory('distritosCache'),
 
-	this.parseText = function(data, keepObj = false){
+	parseText = function(data){
 
 		data = data[Territory.wrapper];
-
-		// console.log(data);
 
 		var object = {
 			provincia: {
@@ -46,15 +44,13 @@ app.service('Region', function($cacheFactory, $resource, Territory){
 			},
 		};
 
-		// console.log(object);
-
 		return {
 			text: object.provincia.name + ', ' + object.canton.name + ', ' + object.distrito.name,
 			object: object,
 		};
-	};
+	},
 
-	this.parseDistritos = function (data) {
+	parseDistritos = function (data) {
 
 		var list = [];
 		data = data[Territory.wrapper];
@@ -66,9 +62,9 @@ app.service('Region', function($cacheFactory, $resource, Territory){
 			});
 
 		return list;
-	};
+	},
 
-	this.parseCantones = function (data) {
+	parseCantones = function (data) {
 
 		var list = [];
 		data = data[Territory.wrapper];
@@ -116,11 +112,12 @@ app.service('Region', function($cacheFactory, $resource, Territory){
 	// };
 
 	this.parse = function (data) {
-		if (data)
+
+		if (data[Territory.wrapper].length > 0)
 			return {
-				location: this.parseText(data),
-				cantones: this.parseCantones(data),
-				distritos: this.parseDistritos(data),
+				location: parseText(data),
+				cantones: parseCantones(data),
+				distritos: parseDistritos(data),
 			};
 		else return false;
 	};

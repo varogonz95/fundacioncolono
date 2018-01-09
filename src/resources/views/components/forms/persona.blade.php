@@ -36,23 +36,7 @@
 {{-- THIS NEEDS TO BE CHANGED TO A DIRECTIVE --}}
 <div class="form-group">
     <label class="control-label col-md-3" for="ubicacion">Ubicación:</label>
-    <div class="col-md-8 col-md-offset-1">
-        <p class="help-block">Provincia</p>
-        <select class="form-control" name="provincia" ng-model="{{ $provincia_model }}" ng-options="{{ $provincia_options_expression }}" ng-change="{{ $provincia_onchanged_handler }}" required>
-            <option value="" disabled>-Seleccionar provincia-</option>
-            <option value="1" >Limon</option>
-        </select>
-        <p class="help-block">Cantón</p>
-        <select class="form-control" name="canton" ng-model="{{ $canton_model }}" ng-options="{{ $canton_options_expression }}" ng-change="{{ $canton_onchanged_handler }}" ng-disabled="{{ $canton_list }}.length === 0" required>
-            <option value="" disabled>-Seleccionar cantón-</option>
-            <option value="1" >Pococi</option>
-        </select>
-        <p class="help-block">Distrito</p>
-        <select class="form-control" name="distrito" ng-model="{{ $distrito_model }}" ng-options="{{ $distrito_options_expression }}" ng-disabled="{{ $distrito_list }}.length === 0" required>
-            <option value="" disabled>-Seleccionar distrito-</option>
-            <option value="1">Jimenez</option>
-        </select>
-    </div>
+    <region-select {{ isset($ubicacion_options) ? $ubicacion_options : '' }}></region-select>
 </div>
 
 <!-- DIRECCION EXACTA -->
