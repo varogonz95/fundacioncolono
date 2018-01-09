@@ -79,7 +79,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="@{{ (i.isSelected)? 'active' : '' }}" ng-repeat="i in inspectores | filter: search"  ng-click="show(i)" ng-cloak>
+                    <tr ng-class="{'active' : i.isSelected}" ng-repeat="i in inspectores | filter: search"  ng-click="show(i)" ng-cloak>
 												<td ng-show="columns.cedula">@{{ i.persona.cedula }}</td>
 												<td ng-show="columns.nombre">@{{ i.persona.nombre }}</td>
 												<td ng-show="columns.apellidos">@{{ i.persona.apellidos }}</td>
