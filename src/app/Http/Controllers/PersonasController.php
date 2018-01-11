@@ -43,5 +43,10 @@ class PersonasController extends Controller{
 			'persona'   => $persona,
 		]);
 	}
+
+	public function show($id)
+	{
+		return Persona::find($id);
+	}
 	
 }

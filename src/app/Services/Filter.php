@@ -16,9 +16,6 @@ class Filter{
     private $builder = null;
     private $tableName = "";
 
-    public function __construct() {}
-    
-
     public function with($model, $with = []){
         $this->setModel($model);
         $this->builder = !empty($with)? $this->model::query()->with($with) : $this->model::query();
@@ -55,6 +52,17 @@ class Filter{
         return $this;
     }
 
+    /**
+     *! FOR TESTING PURPOSES ONLY ----------------------
+     *! If implementation is successfull, then
+     *! release for proposed stack
+     *! EOC --------------------------------------------
+     */
+    public function doesntHave($relationship){
+        $this->builder = $this->builder->doesntHave($relationship);
+        return $this;
+    }
+
     public function get(){
         if (!empty($this->orderByArray))
             return collect($this->sort(
@@ -84,6 +92,17 @@ class Filter{
         $items->each(function($e, $i) use (&$arr){$arr[] = $e;});
 
         return new LengthAwarePaginator($arr, $count, $perPage, $page);
+    }
+
+    /**
+     *! FOR TESTING PURPOSES ONLY ----------------------
+     *! If implementation is successfull, then
+     *! release for proposed stack
+     *! EOC --------------------------------------------
+     */
+    public function paginate2(int $records){
+        $this->builder = $this->builder->paginate($records);
+        return $this;
     }
 
     public function orderBy($relationship, $by, $order){

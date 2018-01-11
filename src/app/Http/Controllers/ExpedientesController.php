@@ -49,6 +49,8 @@ class ExpedientesController extends Controller{
 						return $builder;
 					})
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
+					// TODO: Check if records are not in Historico
+					// ->notIn()
 					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
@@ -60,6 +62,8 @@ class ExpedientesController extends Controller{
 						return $builder;
 					})
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
+					// TODO: Check if records are not in Historico
+					// ->notIn()
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])
 					->get();

@@ -4,11 +4,9 @@ namespace App\Services;
 
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 class UserRegistratorService{
 
-    use RegistersUsers;
 
     public static function create(array $data, $withValidation = false)
     {
@@ -18,7 +16,7 @@ class UserRegistratorService{
         return Usuario::create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => $data['password'],
         ]);
     }
 

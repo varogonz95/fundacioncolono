@@ -24,7 +24,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
                                 $scope.index($scope.page - 1);
                             modal.close();
                         }
-                        Alert.notify(null, response.msg, response.type);
+                        Alert.notify(response.title, response.msg, response.type);
                     }
                 );
         });
