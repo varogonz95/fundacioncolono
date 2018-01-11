@@ -45,7 +45,7 @@ class ExpedientesController extends Controller{
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
 					->options(function($builder) use ($request){
 						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->onlyTrashed();
+							return $builder->withTrashed();
 						return $builder;
 					})
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
@@ -56,7 +56,7 @@ class ExpedientesController extends Controller{
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
 					->options(function($builder) use ($request){
 						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->onlyTrashed();
+							return $builder->withTrashed();
 						return $builder;
 					})
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
@@ -163,7 +163,7 @@ class ExpedientesController extends Controller{
 		DB::beginTransaction();
 
 		try{
-			
+
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
 				
 				$current->fill($request['expediente']);
@@ -180,20 +180,20 @@ class ExpedientesController extends Controller{
 				AyudaExpedienteService::update($current->ayudas(), $request['updates']);
 			}
 			
-			else{
+			else
 				// Create new 'Expediente' and attach 'Historico'		
 				$current = HistoricoService::create($current, $request['expediente']);
-			}
-
-			ReferentesService::createOrAssociate(
-				$current->referente(),
-				$request['expediente']['referente']['id'],
-				!filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN) ?
+			
+				ReferentesService::createOrAssociate(
+					$current->referente(),
+					$request['expediente']['referente']['id'],
+					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN) ?
 					$request['expediente']['referente_otro'] : null,
-				filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
-				filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
-			);
-
+					filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
+					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
+				);
+				
+			$current->referente_otro = filter_var($request['expediente']['referente_otro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
 			$current->save();
 
 			$current->referente;
@@ -201,7 +201,6 @@ class ExpedientesController extends Controller{
 			$current->ayudas;
 			$current->meses      = $current->getMeses($current->fecha_desde['raw'], $current->fecha_hasta['raw']);
 			$current->montoTotal = $current->getMontoTotal();
-			// $current->archivado  = $item->trashed();
 
 			// Everything went just fine
 			DB::commit();
@@ -217,9 +216,10 @@ class ExpedientesController extends Controller{
 
 		return response()->json([
 			'status' => $status,
-			'title'  => $status? '¡Operación exitosa!':                      'Ocurrió un fallo.',
-			'msg'    => $status? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
-			'data'   => $current,
+			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'   => $status ? 'success' : 'error',
+			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
+			'expediente'   => $current,
 		]);
 	}
 
@@ -239,7 +239,12 @@ class ExpedientesController extends Controller{
 			DB::rollback();
 		}
 
-		return response()->json(['status' => $status]);
+		return response()->json([
+			'status' => $status,
+			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'   => $status ? 'success' : 'error',
+			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
+		]);
 	}
 
 	public function destroy($id){
@@ -247,8 +252,9 @@ class ExpedientesController extends Controller{
 
 		return response()->json([
 			'status' => $status,
-			'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
-			'msg'    => $status? 'Archivado correctamente.' : 'Ocurrió un fallo.',
+			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'   => $status ? 'success' : 'error',
+			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
 			// Count actual number of records, then divide by MAX_RECORDS
 			// this will give the total number of pages, which is also
 			// the last page index

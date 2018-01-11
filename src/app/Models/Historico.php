@@ -12,8 +12,8 @@ class Historico extends Model{
 
     public $timestamps = false;
 
-    public function expedientes(){
-        return $this->belongsTo('App\Models\Expediente', 'expediente_fk')->withTrashed();
+    public function expediente(){
+        return $this->belongsTo('App\Models\Expediente', 'expediente_fk')->onlyTrashed();
     }
 
 }

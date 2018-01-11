@@ -39,7 +39,7 @@ class Expediente extends Model{
 		return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes', 'expediente_fk', 'ayuda_fk')->withPivot(['detalle','monto']);
 	}
 
-	//* Mutators and Accessors 	-----------//
+	//* Mutators and Accessors ----------------------//
 	public function getFechaCreacionAttribute($value){
 		return (new \DateTime($value))->format('d-m-Y');
 	}
@@ -60,6 +60,7 @@ class Expediente extends Model{
 		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
 	}
 
+	//*	Getters	----------------------------//
 	public function getMeses($date1, $date2){
 		return (new \DateTime($date1))
 				->diff(new \DateTime($date2), true)

@@ -13,27 +13,18 @@
 
 Auth::routes();
 
-Route::get('test/{id}', 'ExpedientesController@test');
-
 Route::get('/', 'HomeController@index')->name('home');
-
-Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@update');
-
-// Route::post('historicos', 'AyudaExpedienteController@update');
-
-//Route::get('inspectores/all', 'InspectoresController@all');
-//Route::resource('inspectores', 'InspectoresController');
 
 
 Route::middleware(['auth'])->group(function(){
-
+    
     Route::get('expedientes/all','ExpedientesController@all');
-
+    Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@update');
     Route::post('expedientes/{expediente}/restore','ExpedientesController@restore');
 
     Route::resource('expedientes','ExpedientesController');
 
-    Route::resource('historicos','HistoricoController');
+    Route::get('personas/{persona}/historico','HistoricoController@show');
 
     Route::resource('personas','PersonasController');
 
