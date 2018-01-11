@@ -7,7 +7,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
 	});
 
-
 	$scope.onlyTrashed = false;
 
 	$scope.search = {
@@ -18,11 +17,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 	$scope.formatter = Typeahead.formatter;
 	
 	$scope.expedientes = [];
-	
-	$scope.datePickers = {
-		openTo:   false,
-		openFrom: false,
-	};
 
 	$scope.filter_data = {
 		value:          '',
@@ -91,9 +85,14 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		$scope.index();
 	};
 
-	$scope.index = function (page = 1) {
+	$scope.all = function () {
+		$scope.filter_data.filtered = false;
+		$scope.search.term = '';
+		$scope.index();
+	};
 
-		$scope.page = page < 1 ? 1 : page;
+	$scope.index = function (page = 1) {
+		$scope.page = page;
 
 		var params = {
 			termProperty: $scope.search.property,
@@ -106,7 +105,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		};
 
 		if ($scope.filter_data.filtered){
-
 			params.page = $scope.filter_data.one ? 1 : $scope.page;
 			$scope.page = params.page;
 			$scope.filter_data.one = false;
@@ -118,58 +116,33 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 			params,
 			function(response){
 				$scope.total       = response.total;
-				// $scope.totalpages  = response.pages;
 				$scope.expedientes = response.expedientes;
 			});
 	};
 
 	$scope.show = function (obj) {
-		
 		obj.editable               = false;
 		obj.isSelected             = true;
 		obj.persona.editable       = false;
 
 		$scope.selected.isSelected = obj === $scope.selected;
-		// scope.ayudas.editable = false;
 
-		var regions = obj.persona.ubicacion.split('/');
-
-		// Get Provincia from list and set to persona
-		obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
-
-		Region.cantones(obj.persona.provincia.cod).then(function (response) {
-			$scope.cantones    = Region.parse(response).cantones;
-			obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
-			
-			Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-				$scope.distritos     = Region.parse(response).distritos;
-				obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
-			});
-
-			obj.datePickers = {
-				from: {
-					date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
-					open: false
-				},
-				to: { 
-					date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
-					open: false 
-				}
-			};
-			
-			$scope.selected = obj;
-			showModal.show();
-			
-		});
+		obj.datePickers = {
+			from: {
+				date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
+				open: false
+			},
+			to: { 
+				date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
+				open: false 
+			}
+		};
 		
+		$scope.selected = obj;
+		showModal.show();
 
 		if (obj.archivado)
-			Alert.notify(
-				'Expediente archivado', 
-				'No se pueden realizar cambios al expediente mientras esté archivado. ', 
-				'info',
-				3000
-			);
+			Alert.notify('Expediente archivado', 'No se pueden realizar cambios al expediente mientras esté archivado. ', 'info',3000);
 	};
 
 	$scope.toStandardDate = function(date){
