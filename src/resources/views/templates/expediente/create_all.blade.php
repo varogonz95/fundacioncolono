@@ -23,13 +23,19 @@
 			{{ csrf_field() }} {{-- PERSONA --}}
 			<fieldset class="col-md-5">
 				<legend>Detalles de la persona</legend>
+				
 				{{-- PERSONA COMPONENT --}}
 				@component('components.forms.persona')
 					@slot('cedula_help')
 						<p class="help-block">
 							<small>Reemplace las equis (x) por los números de la cédula correspondiente.</small>
 						</p>
+						<p class="help-block" ng-show="invalid">
+							<span class="text-danger">Esta cédula no es válida. Por favor, ingrese otra cédula.</span>
+						</p>
 					@endslot
+
+					@slot('cedula_options', 'ng-model=cedula ng-change=validate()')
 					@slot('ubicacion_options', 'field=ubicacion required')
 				@endcomponent
 

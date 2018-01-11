@@ -35,7 +35,10 @@ app.factory('Alert', function (ConfirmAlert, NotifyAlert /* , PromptAlert */) {
         },
 
         confirm: function (title, text, type = 'question') {
-            return swal(angular.extend({titleText: title, text: text, type: type}, ConfirmAlert.config));
+            var config = ConfirmAlert.config;
+            if (type === 'warning')
+                config.confirmButtonColor = '#F8BB86';
+            return swal(angular.extend({titleText: title, text: text, type: type}, config));
         },
 
         closed: function(dismiss){

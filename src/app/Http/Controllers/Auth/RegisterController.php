@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Usuario;
 use App\Services\UserRegistratorService;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller{
+
+    use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -42,9 +43,11 @@ class RegisterController extends Controller{
 
     public function register(Request $request){
 
-        UserRegistratorService::validate($data);
+        $values = $request->all();
 
-        event(new Registered($user = $this->create($request->all())));
+        UserRegistratorService::validate($values);
+
+        event(new Registered($user = $this->create($values)));
 
         // $this->guard()->login($user);
 
