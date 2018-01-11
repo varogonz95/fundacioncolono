@@ -5,22 +5,6 @@ a{cursor:pointer}
 a.btn, a.btn-outline{text-decoration: none !important}
 hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
-.swal-close{
-    position: absolute;
-    border:none;
-    background-color: transparent;
-    color: #bbb;
-    padding: 0;
-    font-weight: bold;
-    margin: 0;
-    font-size: xx-large;
-    top: -8px;
-    right: 6px;
-    transition: color .3s;
-}
-.swal-close:hover{color: grey; transition: color .3s}
-.swal-text{text-align: center;}
-.swal-overlay{overflow: hidden}
 .swal-button--warning{background-color: #F8BC86}
 .swal-button--warning:active{background-color: #FAAD69}
 
@@ -74,6 +58,8 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
     height:35px;
     color:#444;
 }
+
+.btn-group > .btn.filter{border-radius: 4px !important;}
 
 .btn-outline{border:thin solid transparent;background-color:transparent; margin-top:2px; transition: border .3s}
 .btn-outline.btn-delete{color:#DC5353;}

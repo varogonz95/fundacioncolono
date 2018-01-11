@@ -34,25 +34,20 @@
             @include('partials._search')
         
             <!-- FILTRAR RESULTADOS -->
-            <div class="col-lg-2 row">
-                <button class="btn-outline btn btn-none" ng-init="filter_active = false" ng-click="filter_active = !filter_active; filter_init()"
-                    style="margin: 0 4px" type="button" data-toggle="collapse" data-target="#filter">
-                    <!-- <span class="glyphicon glyphicon-filter"></span> -->
-                    Filtrar
-                    <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
-                </button>
+            <div class="col-lg-5 row">
+                <div class="btn-group">
+                    <button class="btn btn-default" ng-class="{'filter': !filter_data.filter}" ng-init="filter_active = false" ng-click="filter_active = !filter_active; filter_init()" style="margin-left: 6px" type="button" data-toggle="collapse" data-target="#filter">
+                        Filtrar <span class="caret" ng-class="{'caret-right': !filter_active}"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-class="{'hidden': !filter_data.filter}" ng-click="filter()"><span class="glyphicon glyphicon-ok"></span></button>
+                </div>
         
                 <button class="btn-outline btn btn-delete" type="button" ng-click="trashed()">
                     Ver archivados
                     <span class="glyphicon glyphicon-unchecked" ng-hide="onlyTrashed"></span>
                     <span class="glyphicon glyphicon-check" ng-show="onlyTrashed"></span>
                 </button>
-                <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="filter_data.filtered = false; search.term = ''; index();">Ver todos</button>
-            </div>
-        
-            <!-- LINK AGREGAR NUEVO CASO -->
-            <div class="col-lg-2 text-right">
-                <a class="btn btn-primary btn-sm" href="{{ route('expedientes.create') }}">Agregar nuevo caso</a>
+                <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="all()">Ver todos</button>
             </div>
         </div>
 
@@ -80,14 +75,6 @@
 
         <!-- TABLA DE CASOS -->
         <div class="table-responsive col-md-12" style="overflow-y: auto; max-height: 70vh">
-
-            {{-- <span class="text-muted text-nowrap" style="padding-left: 2em">
-                @{{ 
-                    !filter_data.filtered ? 
-                        'Mostrando todos los resultados. Pág ' + page + '/' + totalpages : 
-                        'Filtrado por: ' + filter_data.filter
-                }}
-            </span> --}}
 
             <table id="expedientesindex" class="table table-hover table-striped">
                 <thead>
@@ -124,7 +111,7 @@
                         </th>
                         <th ng-show="columns.fecha_creacion">
                             <button type="button" class="btn btn-table-header" ng-class="{'asc': sort.order, 'desc': !sort.order}" ng-click="doSort('fecha_creacion')">
-                                Fecha de creación
+                                Fecha de creación {{-- (día-mes-año) --}}
                                 <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'fecha_creacion'}"></span>
                             </button>
                         </th>
@@ -137,8 +124,7 @@
                         <td ng-show="columns.apellidos">@{{ e.persona.apellidos }}</td>
                         <!-- POST RENDERIZADO DE FILA PARA REFERENTES -->
                         <td ng-show="columns.referente" ng-if="e.referente_otro !== null">@{{ e.referente_otro }}</td>
-                        <td class="text-muted" ng-show="columns.referente" ng-if="e.referente_otro === null && e.referente.id === {{ $first_referente }}">Ninguno</td>
-                        <td ng-show="columns.referente" ng-if="e.referente_otro === null && e.referente.id !== {{ $first_referente }}">
+                        <td ng-show="columns.referente" ng-if="e.referente.id !== {{ $first_referente }}">
                             <span class="text-primary glyphicon glyphicon-file"></span> @{{ e.referente.descripcion }}
                         </td>
                         <!-- ------------------------------------------ -->
@@ -156,7 +142,7 @@
                         <td ng-show="columns.prioridad">
                             <span class="label label-@{{ (e.prioridad === 1)? 'success' : (e.prioridad === 2)? 'warning' : (e.prioridad === 3)? 'danger' : '' }}">@{{ (e.prioridad === 1)? 'Baja' : (e.prioridad === 2)? 'Media' : (e.prioridad === 3)? 'Alta' : '' }}</span>
                         </td>
-                        <td ng-show="columns.fecha_creacion">@{{ e.fecha_creacion }}</td>
+                        <td {{-- class="text-center" --}} ng-show="columns.fecha_creacion">@{{ e.fecha_creacion }}</td>
                     </tr>
                 </tbody>
             </table>

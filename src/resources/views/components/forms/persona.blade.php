@@ -1,9 +1,9 @@
 <!-- CEDULA -->
-<div class="form-group" {{-- ng-class="{'has-error': newexpediente.cedula.$invalid && newexpediente.cedula.$dirty}"--}}>
+<div class="form-group">
     <label class="control-label col-md-1" for="cedula">Cédula:</label>
     <div class="col-md-8 col-md-push-3">
-        <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" ng-model="{{ $cedula_model }}" ng-value="{{ $cedula_value }}" required>
-        {{ $cedula_help }}
+        <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" {{ isset($cedula_options) ? $cedula_options : '' }} required>
+        {{ isset($cedula_help) ? $cedula_help : '' }}
     </div>
 </div>
 
@@ -11,7 +11,7 @@
 <div class="form-group">
     <label class="control-label col-md-3" for="nombre">Nombre:</label>
     <div class="col-md-8 col-md-push-1">
-        <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre" ng-model="{{ $nombre_model }}" ng-value="{{ $nombre_value }}" required>
+        <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre" {{ isset($nombre_options) ? $nombre_options : '' }} required>
     </div>
 </div>
 
@@ -19,7 +19,7 @@
 <div class="form-group">
     <label class="control-label col-md-3" for="apellidos">Apellidos:</label>
     <div class="col-md-8 col-md-push-1">
-        <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los apellidos" ng-model="{{ $apellidos_model }}" ng-value="{{ $apellidos_value }}" required>
+        <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los apellidos" {{ isset($apellidos_options) ? $apellidos_options : '' }} required>
     </div>
 </div>
 
@@ -27,24 +27,23 @@
 <div class="form-group">
     <label class="control-label col-md-3" for="telefonos">Teléfono(s):</label>
     <div class="col-md-8 col-md-push-1">
-        <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios" ng-model="{{ $telefonos_model }}">
-        </textarea>
+        <textarea name="telefonos" class="noresize form-control" rows="5" cols="50" placeholder="Separe por comas (,) o espacios" {{ isset($telefonos_options) ? $telefonos_options : '' }} ></textarea>
     </div>
 </div>
 
 <!-- UBICACION -->
-{{-- THIS NEEDS TO BE CHANGED TO A DIRECTIVE --}}
 <div class="form-group">
     <label class="control-label col-md-3" for="ubicacion">Ubicación:</label>
-    <region-select {{ isset($ubicacion_options) ? $ubicacion_options : '' }}></region-select>
+    <div class="col-md-8 col-md-offset-1">
+        <region-select {{ isset($ubicacion_options) ? $ubicacion_options : '' }}></region-select>
+    </div>
 </div>
 
 <!-- DIRECCION EXACTA -->
 <div class="form-group">
-    <label class="control-label col-md-3" for="direccion" style="width:150px">Dirección exacta:</label>
+    <label class="control-label col-md-3" for="direccion">Dirección exacta:</label>
     <div class="col-md-8 col-md-push-1">
-        <textarea name="direccion" class="noresize form-control" rows="5" cols="50" ng-model="{{ $direccion_model }}" required>
-        </textarea>
+        <textarea name="direccion" class="noresize form-control" rows="5" cols="50" {{ isset($direccion_options) ? $direccion_options : '' }} required></textarea>
     </div>
 </div>
 
@@ -52,7 +51,6 @@
 <div class="form-group">
     <label class="control-label col-sm-3" for="contactos">Contacto(s):</label>
     <div class="col-md-8 col-md-push-1">
-        <textarea name="contactos" class="noresize form-control" rows="5" cols="50" ng-model="{{ $contactos_model }}">
-        </textarea>
+        <textarea name="contactos" class="noresize form-control" rows="5" cols="50" {{ isset($contactos_options) ? $contactos_options : '' }}></textarea>
     </div>
 </div>

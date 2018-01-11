@@ -1,39 +1,40 @@
 @component('components.forms.persona')
 
-    @slot('cedula_model', 'update.persona.cedula')
-    @slot('cedula_value', 'selected.persona.cedula')
-    @slot('cedula_help', '')
-        {{-- ADD OVERRIDE OPTION TO ENABLE CEDULA FIELD EDITION --}}
-    {{-- @endslot --}}
+    @slot('cedula_options')
+        ng-model="update.persona.cedula"
+        ng-value="selected.persona.cedula"
+    @endslot
 
-    @slot('nombre_model', 'update.persona.nombre')
-    @slot('nombre_value', 'selected.persona.nombre')
+    @slot('nombre_options')
+        ng-model="update.persona.nombre"
+        ng-value="selected.persona.nombre"
+    @endslot
 
-    @slot('apellidos_model', 'update.persona.apellidos')
-    @slot('apellidos_value', 'selected.persona.apellidos')
+    @slot('apellidos_options')
+        ng-model="update.persona.apellidos"
+        ng-value="selected.persona.apellidos"
+    @endslot
 
-    @slot('telefonos_model', 'update.persona.telefonos')
-    @slot('telefonos_value', 'selected.persona.telefonos')
+    @slot('telefonos_options')
+        ng-model="update.persona.telefonos"
+        ng-value="selected.persona.telefonos"
+    @endslot
 
-    {{-- ----------------UBICACION SLOTS------------ --}}
-    @slot('provincia_model', 'update.persona.provincia')
-    @slot('provincia_options_expression', 'p as p.name for p in provincias track by p.cod')
-    @slot('provincia_onchanged_handler', 'updateCantones(update.persona.provincia.cod)')
+    @slot('ubicacion_options')
+        ng-model="update.persona.ubicacion"
+        ng-value="selected.persona.ubicacion"
+        field="ubicacion"
+        required
+    @endslot
 
-    @slot('canton_model', 'update.persona.canton')
-    @slot('canton_list', 'cantones')
-    @slot('canton_options_expression', 'c as c.name for c in cantones track by c.cod')
-    @slot('canton_onchanged_handler', 'updateDistritos(update.persona.provincia.cod, update.persona.canton.cod)')
+    @slot('direccion_options')
+        ng-model="update.persona.direccion"
+        ng-value="selected.persona.direccion"
+    @endslot
 
-    @slot('distrito_model', 'update.persona.distrito')
-    @slot('distrito_list', 'distritos')
-    @slot('distrito_options_expression', 'd as d.name for d in distritos track by d.cod')
-    {{-- --------------------------------------------- --}}
-
-    @slot('direccion_model', 'update.persona.direccion')
-    @slot('direccion_value', 'selected.persona.direccion')
-
-    @slot('contactos_model', 'update.persona.contactos')
-    @slot('contactos_value', 'selected.persona.contactos')
+    @slot('contactos_options')
+        ng-model="update.persona.contactos"
+        ng-value="selected.persona.contactos"
+    @endslot
 
 @endcomponent

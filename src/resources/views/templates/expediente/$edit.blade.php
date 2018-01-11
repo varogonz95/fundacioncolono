@@ -1,7 +1,9 @@
 @component('components.forms.expediente')
 
-	@slot('descripcion_model', 'update.caso.descripcion')
-	@slot('descripcion_value', 'selected.descripcion')
+	@slot('descripcion_options')
+		ng-model="update.caso.descripcion"
+		ng-value="selected.descripcion"
+	@endslot
 
 	@slot('hasReferenteOtro_model', 'update.caso.hasReferenteOtro')
 	@slot('hasReferenteOtro_init_expression', 'update.caso.hasReferenteOtro = update.caso.referente_otro !== null')
@@ -17,23 +19,41 @@
 	@slot('referentes_list', 'referentes')
 	@slot('referentes_limit', '20')
 
-	@slot('prioridad_model', 'update.caso.prioridad_selected')
-	@slot('prioridad_list', 'prioridades')
-
-	@slot('estado_model', 'update.caso.estado_selected')
-	@slot('estados_list', 'estados')
-
-	@slot('pago_inicio_model', 'update.caso.pago_inicio')
-	@slot('pago_inicio_value', 'selected.pago_inicio')
-
-	@slot('pago_final_model', 'update.caso.pago_final')
-	@slot('pago_final_value', 'selected.pago_final')
+	@slot('prioridad_options')
+        ng-model="update.caso.prioridad_selected"
+        ng-options="p.name for p in prioridades track by p.id"
+	@endslot
 	
-	@slot('fecha_desde_model', 'update.caso.datePickers.from.date')
-	@slot('fecha_desde_is_open', 'update.caso.datePickers.from.open')
+	@slot('estado_options')
+        ng-model="update.caso.estado_selected"
+        ng-options="e.name for e in estados track by e.id"
+    @endslot
+
+	@slot('approval_on', 'update.caso.estado_selected.id === 1')
+
+	@slot('pago_inicio_options')
+		ng-model="update.caso.pago_inicio"
+		ng-value="selected.pago_inicio"
+	@endslot
 	
-	@slot('fecha_hasta_model', 'update.caso.datePickers.to.date')
-	@slot('fecha_hasta_is_open', 'update.caso.datePickers.to.open')
-	@slot('fecha_hasta_min_date', 'update.caso.datePickers.from.date')
+	@slot('pago_final_options')
+		ng-model="update.caso.pago_final"
+		ng-value="selected.pago_final"
+	@endslot
+
+    @slot('fecha_desde_options')
+        ng-model="update.caso.datePickers.from.date"
+        ng-click="update.caso.datePickers.from.open = true"
+        is-open="update.caso.datePickers.from.open"
+        ng-required="update.caso.estado_selected.id === 1"
+    @endslot
+    
+    @slot('fecha_hasta_options')
+        ng-model="update.caso.datePickers.to.date"
+        ng-click="update.caso.datePickers.to.open = true"
+        is-open="update.caso.datePickers.to.open"
+        datepicker-options="{minDate: update.caso.datePickers.from.date}"
+        ng-required="update.caso.estado_selected.id === 1"
+    @endslot
 
 @endcomponent

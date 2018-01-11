@@ -1,4 +1,4 @@
-<div class="row col-lg-4 col-lg-offset-3">
+<div class="row col-lg-3 col-lg-offset-3">
 	<form>
 		<div class="input-group">
 			<input type="text" class="form-control" placeholder="Buscar por @{{ search.property }}" ng-model="search.value" ng-change="index()"/>

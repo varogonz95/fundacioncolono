@@ -3,13 +3,12 @@
 <div class="form-group">
 	<label class="col-sm-2" for="descripcion">Descripcion:</label>
 	<div class="col-sm-12">
-		<textarea name="descripcion" class="noresize form-control" rows="5" cols="50" placeholder="Anote en detalle la descripción del caso" ng-model="{{  $descripcion_model  }}" required>
-			{{ $descripcion_value }}
-		</textarea>
+		<textarea name="descripcion" class="noresize form-control" rows="5" cols="50" placeholder="Anote en detalle la descripción del caso" {{  isset($descripcion_options) ? $descripcion_options : ''  }} required></textarea>
 	</div>
 </div>
 
 {{-- REFERENTE --}}
+{{-- Quizá se pueda pasar a una directiva para simplificar la implementacion del componente --}}
 <div class="form-group col-sm-pull-2">
 	<label class="text-right col-sm-4" for="referente">Referente:</label>
 	<div class="col-sm-8">
@@ -30,7 +29,7 @@
 		<input type="text" name="referente" placeholder="-Seleccione un referente-" class="form-control"
 			autocomplete="off" ng-model="{{ $referente_model }}" ng-hide="{{ $hasReferenteOtro_model }}"
 			uib-typeahead="r.id as r.descripcion for r in {{ $referentes_list }} | filter:$viewValue | limitTo:{{ $referentes_limit }}"
-			typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, {{ $referentes_list }}, 'id', 'descripcion')">
+			typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, {{ $referentes_list }}, 'id', 'descripcion')" {{ isset($referente_typeahead_options) ? $referente_typeahead_options : '' }}>
 		<input type="hidden" name="referente" ng-value="{{ $hasReferenteOtro_model }}? 1 : {{ $referente_model }}">
 	</div>
 	
@@ -40,7 +39,7 @@
 <div class="form-group col-sm-pull-2">
 	<label class="text-right col-sm-4" for="prioridad">Prioridad:</label>
 	<div class="col-sm-8">
-		<select class="form-control" name="prioridad" ng-model="{{ $prioridad_model }}" ng-options="p.name for p in {{ $prioridad_list }} track by p.id" convert-to-number required>
+		<select class="form-control" name="prioridad" {{ isset($prioridad_options) ? $prioridad_options : '' }} convert-to-number required>
 			<option value="" disabled selected>-Seleccionar prioridad-</option>
 		</select>
 	</div>
@@ -48,14 +47,14 @@
 
 {{-- ESTADO --}}
 <div class="form-group col-sm-pull-2">
-	<label class="text-right col-sm-4" for="estado" ng-model="{{ $estado_model }}" required>Estado de aprobación:</label>
+	<label class="text-right col-sm-4" for="estado" required>Estado de aprobación:</label>
 	<div class="col-sm-8">
-		<select class="form-control" name="estado" ng-model="{{ $estado_model }}" ng-options="e.name for e in {{ $estados_list }} track by e.id" convert-to-number required></select>
+		<select class="form-control" name="estado" {{ isset($estado_options) ? $estado_options : '' }} convert-to-number required></select>
 	</div>
 </div>
 
 {{-- FECHAS DE ENTREGA Y PERÍODO DE APROBACIÓN --}}
-<ng-if ng-if="{{ $estado_model }}.id === 1">
+<ng-if ng-if="{{ $approval_on }}">
 	<h4 class="page-header">Fechas de entrega y período de aprobación</h4>
 	
 	{{-- FECHAS EN QUE RECIBE AYUDA --}}
@@ -65,14 +64,14 @@
 		<div class="form-group col-md-12 col-sm-6 col-xs-12 nogutters">
 			<label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Primera fecha:</label>
 			<div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-				<input type="number" name="pago_inicio" class="form-control" min="1" max="30" ng-model="{{ $pago_inicio_model }}" ng-value="{{ $pago_inicio_value }}" ng-required="{{ $estado_model }}.id === 1">
+				<input type="number" name="pago_inicio" class="form-control" min="1" max="30" {{ isset($pago_inicio_options) ? $pago_inicio_options : '' }}>
 			</div>
 		</div>
 		
 		<div class="form-group col-lg-12 col-md-pull-0 col-md-12 col-sm-6 col-sm-pull-1 col-xs-12 nogutters">
 			<label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Segunda fecha:</label>
 			<div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-				<input type="number" name="pago_final" class="form-control" min="1" max="30" ng-model="{{ $pago_final_model }}" ng-value="{{ $pago_final_value }}" ng-required="{{ $estado_model }}.id === 1">
+				<input type="number" name="pago_final" class="form-control" min="1" max="30" {{ isset($pago_inicio_options) ? $pago_inicio_options : '' }}>
 			</div>
 		</div>
 	</div>
@@ -84,24 +83,14 @@
 		<div class="form-group col-sm-6 col-xs-12 nogutters">
 			<label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Desde: </label>
 			<div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-				<input 
-					class="form-control" type="text" name="fecha_desde" 
-					ng-model="{{ $fecha_desde_model }}" ng-click="{{ $fecha_desde_is_open }} = true"
-					uib-datepicker-popup="dd/MM/yyyy" is-open="{{ $fecha_desde_is_open }}"
-					ng-required="{{ $estado_model }}.id === 1"
-				>
+				<input class="form-control" type="text" name="fecha_desde" uib-datepicker-popup="dd/MM/yyyy" {{ isset($fecha_desde_options) ? $fecha_desde_options : ''}}>
 			</div>
 		</div>
 
 		<div class="form-group col-md-pull-0 col-sm-6 col-sm-pull-2 col-xs-12 nogutters">
 			<label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Hasta: </label>
 			<div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-				<input 
-					class="form-control" type="text" name="fecha_hasta" 
-					ng-model="{{ $fecha_hasta_model }}" ng-click="{{ $fecha_hasta_is_open }} = true"
-					uib-datepicker-popup="dd/MM/yyyy" is-open="{{ $fecha_hasta_is_open }}" datepicker-options="{minDate: {{ $fecha_hasta_min_date }}}"
-					ng-required="{{ $estado_model }}.id === 1"
-				>
+				<input class="form-control" type="text" name="fecha_hasta" uib-datepicker-popup="dd/MM/yyyy" {{ isset($fecha_hasta_options) ? $fecha_hasta_options : ''}}>
 			</div>
 		</div>
 	</div>
