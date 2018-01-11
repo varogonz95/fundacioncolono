@@ -38,6 +38,11 @@ app.factory('Alert', function (ConfirmAlert, NotifyAlert /* , PromptAlert */) {
             return swal(angular.extend({titleText: title, text: text, type: type}, ConfirmAlert.config));
         },
 
+        closed: function(dismiss){
+            if (dismiss) return dismiss === 'esc' || dismiss === 'cancel' || dismiss === 'close' || dismiss === 'overlay';
+            return false;
+        }
+
         //Prompt alert here...
     };
 
