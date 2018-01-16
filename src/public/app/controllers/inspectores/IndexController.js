@@ -21,7 +21,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 	$scope.inspectores = [];
 
 	$scope.columns = {
-			username:      true,
+			ubicacion:      true,
 			email:         true,
 			cedula:        true,
 			nombre:        true,
@@ -52,6 +52,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 					case 'cedula':
 					case 'nombre':
 					case 'apellidos':
+					case 'ubicacion':
 							$scope.sort.relationship = 'persona'
 							break;
 				 case 'activo':
@@ -123,7 +124,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 						obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
 					});
 
-				$scope.selected = obj;
+				copy(obj, $scope.selected);
 				showModal.show();
 
 			});

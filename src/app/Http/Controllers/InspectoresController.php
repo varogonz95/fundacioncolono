@@ -111,13 +111,13 @@ class InspectoresController extends Controller{
 			$status = false;
 			DB::rollback();
         }
-        
+
         return redirect()
             ->route('inspectores.create')
 			->with('status', [
 				'type' => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
-				'msg' => $status? 'Se ha creado el expediente correctamente.' : 
+				'msg' => $status? 'Se ha creado el expediente correctamente.' :
 								  'Es posible que los datos ingresados sean incorrectos.<br>'.
 								  'Si el problema persiste, por favor contacte a soporte.',
 			]);
@@ -158,7 +158,31 @@ class InspectoresController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        //
+
+      $status = true;
+
+      if($request['estado'] == 'Si'){
+        $estado = 0;
+      }else{
+        $estado = 1;
+      }
+
+       try{
+         DB::table('inspectores')
+         ->where('id', $id)
+         ->update(['activo' => $estado ]);
+       }
+      catch(\Exception $e){
+        $status = false;
+      }
+
+       return response()->json([
+         'status' => $status,
+         'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
+         'msg'    => $status? 'La operación finalizó correctamente.' : 'Ocurrió un fallo.',
+         'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
+       ]);
+
     }
 
     /**
@@ -167,9 +191,11 @@ class InspectoresController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
-        //
-    }
+
+   public function destroy($id){
+     //
+   }
+
 
     private function hasEmptyValues($array){
 

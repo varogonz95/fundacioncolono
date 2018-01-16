@@ -4,6 +4,7 @@
 	<script src="{{ asset('app/controllers/inspectores/MainController.js') }}" charset="utf-8"></script>
 	<script src="{{ asset('app/controllers/inspectores/IndexController.js') }}" charset="utf-8"></script>
 	<script src="{{ asset('app/controllers/personas/EditController.js') }}"></script>
+	<script src="{{ asset('app/controllers/inspectores/EditController.js') }}"></script>
 @endpush
 
 @push('scripts_bottom')
@@ -31,7 +32,7 @@
 								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.cedula">Cédula</label>
 								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.nombre">Nombre</label>
 								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
-								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.username">Usuario</label>
+								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.ubicacion">Ubicación</label>
 								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.email">Correo</label>
 								<label class="checkbox-inline"> <input type="checkbox" ng-model="columns.activo">Activo</label>
 						</div>
@@ -61,9 +62,9 @@
 														Apellidos <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'apellidos'}"></span>
 													</button>
 												</th>
-												<th ng-show="columns.username">
-													<button type="button" class="btn btn-table-header" ng-class="{'asc': sort.order, 'desc': !sort.order}" ng-click="doSort('username')">
-														Usuario <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'username'}"></span>
+												<th ng-show="columns.ubicacion">
+													<button type="button" class="btn btn-table-header" ng-class="{'asc': sort.order, 'desc': !sort.order}" ng-click="doSort('ubicacion')">
+														Ubicación <span class="glyphicon" ng-class="{'glyphicon-menu-down': sort.by === 'ubicacion'}"></span>
 													</button>
 												</th>
                         <th ng-show="columns.email">
@@ -83,7 +84,7 @@
 												<td ng-show="columns.cedula">@{{ i.persona.cedula }}</td>
 												<td ng-show="columns.nombre">@{{ i.persona.nombre }}</td>
 												<td ng-show="columns.apellidos">@{{ i.persona.apellidos }}</td>
-												<td ng-show="columns.username">@{{ i.usuario.username }}</td>
+												<td ng-show="columns.ubicacion" region-text path="i.persona.ubicacion"></td>
                         <td ng-show="columns.email">@{{ i.usuario.email }}</td>
                         <td ng-show="columns.activo">@{{ i.activo }}</td>
                     </tr>

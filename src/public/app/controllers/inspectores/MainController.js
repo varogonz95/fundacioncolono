@@ -10,6 +10,11 @@ app.controller('Inspectores_MainController', function($scope, Region) {
 			{ id: 0, name: 'No' },
 	];
 
+	$scope.update = {
+			persona: {},
+			usuario: {},
+	};
+
 	$scope.provincias = Region.provincias();
 
 });

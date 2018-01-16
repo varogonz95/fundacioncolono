@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::resource('personas','PersonasController');
 
+    Route::resource('usuarios','UsuariosController');
+
     Route::resource('referentes','ReferentesController');
 
     Route::resource('ayudas','AyudasController');
