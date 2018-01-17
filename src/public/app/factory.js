@@ -9,6 +9,10 @@ app.factory('Persona', function (AppResource) {
     return AppResource.extends('personas/:cedula', {cedula: '@cedula'});
 });
 
+app.factory('Usuario', function (AppResource) {
+    return AppResource.extends('usuarios/:id', {id: '@id'});
+});
+
 app.factory('Referente', function(AppResource){
     return AppResource.extends('referentes/:id', {id: '@id'});
 });
@@ -22,8 +26,8 @@ app.factory('AyudaExpediente', function (AppResource) {
 });
 app.factory('Inspector', function (AppResource) {
     return function (optional) {
-        if (optional) return { get: AppResource.extends('inspectores' + (optional[0] === '/' ? optional : '/' + optional)).get};
-        else return AppResource.extends('inspectores');
+      if (optional) return AppResource.extends('inspectores/:id' + (optional[0] === '/' ? optional : '/' + optional), { id: '@id' });
+      else return AppResource.extends('inspectores/:id', {id: '@id'});
     };
 });
 

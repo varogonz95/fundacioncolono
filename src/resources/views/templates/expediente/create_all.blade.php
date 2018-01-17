@@ -35,8 +35,16 @@
 						</p>
 					@endslot
 
-					@slot('cedula_options', 'ng-model=cedula ng-change=validate()')
-					@slot('ubicacion_options', 'field=ubicacion required')
+					@slot('cedula_options')
+						ng-model="cedula"
+						ng-change="validate()"
+					@endslot
+
+					@slot('ubicacion_options')
+						ng-model="ubicacion"
+						field="ubicacion"
+						required
+					@endslot
 				@endcomponent
 
 			</fieldset>

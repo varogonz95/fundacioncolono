@@ -53,9 +53,6 @@
 
         <!-- COLUMNAS VISIBLES -->
         <nav class="navbar navbar-default navbar-sm col-md-10 col-md-offset-1" style="margin-top: 1.5em" role="navigation">
-            <span class="navbar-text">
-                <b>Columnas visibles</b>
-            </span>
             <div class="navbar-form" style="padding-top:4px">
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
                 <label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombre">Nombre</label>

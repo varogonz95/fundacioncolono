@@ -247,7 +247,7 @@ class ExpedientesController extends Controller{
 			'status' => $status,
 			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
 			'type'   => $status ? 'success' : 'error',
-			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
+			'msg'    => $status ? 'Se restauró el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
 		]);
 	}
 
@@ -258,7 +258,7 @@ class ExpedientesController extends Controller{
 			'status' => $status,
 			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
 			'type'   => $status ? 'success' : 'error',
-			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+			'msg'    => $status ? 'Se archivó el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
 			// Count actual number of records, then divide by MAX_RECORDS
 			// this will give the total number of pages, which is also
 			// the last page index

@@ -1,4 +1,4 @@
-app.controller('Inspectores_IndexController', function($scope, Inspector, Modal) {
+app.controller('Inspectores_IndexController', function($scope, Inspector, Region, Typeahead, Modal) {
 
 	var showModal = Modal.init('#show_modal',{
 			style:         {'overflow-y': 'hidden', 'bottom': '0'},
@@ -10,18 +10,18 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 	$scope.page  = 1;
 
 	$scope.filter_data = {
-			value:          '',
-			filter:         null,
-			// active:         false,
-			filtered:       false,
-			one:            false,
-			activo:         $scope.activo[0],
+		value:          '',
+		filter:         null,
+		// active:         false,
+		filtered:       false,
+		one:            false,
+		activo:         $scope.activo[0],
 	};
 
 	$scope.inspectores = [];
 
 	$scope.columns = {
-			username:      true,
+			ubicacion:      true,
 			email:         true,
 			cedula:        true,
 			nombre:        true,
@@ -30,9 +30,9 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 	};
 
 	$scope.sort = {
-			relationship: 'persona',
-			by:           'cedula',
-			order:        true,
+		relationship: 'persona',
+		by:           'cedula',
+		order:        true,
 	};
 
 
@@ -52,6 +52,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 					case 'cedula':
 					case 'nombre':
 					case 'apellidos':
+					case 'ubicacion':
 							$scope.sort.relationship = 'persona'
 							break;
 				 case 'activo':
@@ -89,14 +90,6 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 		Inspector('all').get(
 			params,
 			function (response) {
-
-				for(var i = 0; i < response.total; i++){
-					if(response.inspectores[i].activo == 0)
-						response.inspectores[i].activo = 'No';
-					else
-						response.inspectores[i].activo = 'Si';
-				}
-
 				$scope.inspectores = response.inspectores;
 				$scope.total = response.total;
 			});
@@ -114,19 +107,19 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Modal)
 				// Get Provincia from list and set to persona
 				obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
 
-				Region.getCantones(obj.persona.provincia.cod).then(function (response) {
-						$scope.cantones    = Region.toList(response.data);
-						obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
+				Region.cantones(obj.persona.provincia.cod).then(function (response) {
+					$scope.cantones    = Region.parse(response).cantones;
+					obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
 
-						Region.getDistritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-								$scope.distritos     = Region.toList(response.data);
-								obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
-						});
-				});
+					Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
+						$scope.distritos     = Region.parse(response).distritos;
+						obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
+					});
 
-				$scope.selected = obj;
-
+				copy(obj, $scope.selected);
 				showModal.show();
+
+			});
     };
 
 	$scope.filter_activo = function () {

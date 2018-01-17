@@ -20,7 +20,7 @@
         <div class="form-group">
             <label class="col-md-3">Monto base:</label>
             <div class="col-md-2">
-                <input type="text" name="ayuda_monto[@{{$index}}]" ng-value="i.monto">
+                <input class="form-control"ype="text" name="ayuda_monto[@{{$index}}]" ng-value="i.monto">
             </div>
         </div>
 

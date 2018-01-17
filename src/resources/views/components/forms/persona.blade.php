@@ -41,8 +41,8 @@
 
 <!-- DIRECCION EXACTA -->
 <div class="form-group">
-    <label class="control-label col-md-3" for="direccion">Dirección exacta:</label>
-    <div class="col-md-8 col-md-push-1">
+    <label class="control-label col-md-4" for="direccion">Dirección exacta:</label>
+    <div class="col-md-8">
         <textarea name="direccion" class="noresize form-control" rows="5" cols="50" {{ isset($direccion_options) ? $direccion_options : '' }} required></textarea>
     </div>
 </div>
