@@ -33,7 +33,6 @@ class CreateExpedientesTable extends Migration{
 
             $table->timestamp('fecha_creacion')->nullable();
             $table->softDeletes('fecha_eliminacion');
-            // $table->boolean('activo')->default(true);
 
             // Table constraints
             $table->foreign('persona_fk')
