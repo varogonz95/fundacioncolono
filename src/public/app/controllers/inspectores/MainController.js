@@ -1,4 +1,4 @@
-app.controller('Inspectores_MainController', function($scope, Region) {
+app.controller('Inspectores_MainController', function ($scope, Region) {
 
 	$scope.selected = {};
 
@@ -6,13 +6,13 @@ app.controller('Inspectores_MainController', function($scope, Region) {
 	$scope.total = 1;
 
 	$scope.activo = [
-			{ id: 1, name: 'Sí' },
-			{ id: 0, name: 'No' },
+		{ id: 1, name: 'Sí' },
+		{ id: 0, name: 'No' },
 	];
 
 	$scope.update = {
-			persona: {},
-			usuario: {},
+		persona: {},
+		usuario: {},
 	};
 
 	$scope.provincias = Region.provincias();

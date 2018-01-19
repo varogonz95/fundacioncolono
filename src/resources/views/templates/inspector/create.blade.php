@@ -39,6 +39,7 @@
 				@component('components.forms.persona', ['withOcupacionInput' => true])
 					@slot('ubicacion_options')
 						required
+						ng-model="ubicacion"
 						field="ubicacion"
 					@endslot
 				@endcomponent

@@ -18,9 +18,7 @@ class CreateInspectoresTable extends Migration
 
             $table->char('persona_fk', 9);
             $table->unsignedInteger('usuario_fk');
-
-            $table->boolean('activo')->default(true);
-
+            $table->softDeletes('fecha_eliminacion');
 
             // constraints
             $table->foreign('persona_fk')
