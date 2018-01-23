@@ -7,14 +7,14 @@ use App\Models\Expediente;
 
 class HistoricoService{
 	
-	public static function create($current, $new){
+	public static function create($current, $new, $with = []) {
 
 		/**
 		 * TODO a. Associate current Expediente to Historico
 		 * TODO b. Create Expediente with updated data
-		 * TODO c. Attach previous Ayudas >>Pending<<
+		 * TODO c. Attach previous Ayudas
 		 * TODO d. Delete current Expediente
-		 * //// e. Save new expediente
+		 * TODO e. Save new expediente
 		 * TODO f. Return new Expediente
 		*/
 
@@ -32,17 +32,21 @@ class HistoricoService{
 		$expediente->persona()->associate($current->persona->cedula);
 		// Associate Referente
 		$expediente->referente()->associate($current->referente->id);
+        
+        //* e.
+        $expediente->save();
 
 		//* c.
-		// Attach Ayudas
-		//! Parse attachments list to array of indexes and fillable attributes
-		// AyudaExpedienteService::attach($expediente->ayudas(), );
+		AyudaExpedienteService::attach($expediente->ayudas(), [
+            'ids'      => $current->ayudas->pluck('id'), 
+            'montos'   => $current->ayudas->pluck('pivot.monto'),
+            'detalles' => $current->ayudas->pluck('pivot.detalle'), 
+        ]);
 
 		//* d.
-		$current->delete();
-
-		//* e.
-		//// $expediente->save();
+        $current->delete();
+        
+        foreach ($with as $index => $item) $expediente->$item;
 
 		//* f.
 		return $expediente;

@@ -1,5 +1,5 @@
 
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Alert, Modal) {
 
 	var showModal = Modal.init('#show_modal',{
 		style:         { 'overflow-y': 'hidden', 'bottom': '0' },
@@ -13,8 +13,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		property: 'cedula',
 		value: '',
 	};
-
-	$scope.formatter = Typeahead.formatter;
 	
 	$scope.expedientes = [];
 
@@ -121,11 +119,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 	};
 
 	$scope.show = function (obj) {
-		obj.editable               = false;
-		obj.isSelected             = true;
-		obj.persona.editable       = false;
-
-		$scope.selected.isSelected = obj === $scope.selected;
 
 		obj.datePickers = {
 			from: {
@@ -136,9 +129,12 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 				date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
 				open: false 
 			}
-		};
-		
-		$scope.selected = obj;
+		} || obj.datePickers;
+
+		$scope.selected.isSelected = false;
+		obj.isSelected             = true;
+		$scope.selected            = obj;
+
 		showModal.show();
 
 		if (obj.archivado)

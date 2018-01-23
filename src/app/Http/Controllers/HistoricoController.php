@@ -25,7 +25,7 @@ class HistoricoController extends Controller
 		$currentQuery = $currentBuilder->toSql();
 		$current = $currentBuilder->first();
 
-		$historicoBuilder = Historico::with(['expediente.persona'])
+		$historicoBuilder = Historico::with(['expediente.referente', 'expediente.ayudas'])
 			->whereHas('expediente.persona', function ($query) use ($id){
 				$query->where('cedula', $id);
 			});

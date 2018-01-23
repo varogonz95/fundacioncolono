@@ -1,6 +1,4 @@
-app.controller('Expedientes_CreateController', function($scope, Persona, Typeahead) {
-
-    $scope.formatter = Typeahead.formatter;
+app.controller('Expedientes_CreateController', function($scope, Persona) {
 
     $scope.items = [];
     $scope.invalid = false;

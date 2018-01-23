@@ -29,8 +29,8 @@
         </div>
 
         <div class="form-group">
-            <label class="col-md-3 col-md-offset-1">Detalle:</label>
-            <div class="col-md-10 col-md-offset-1">
+            <label class="col-md-3">Detalle:</label>
+            <div class="col-md-11">
                 <textarea cols="50" rows="5" class="form-control noresize" ng-model="detalle"></textarea>
             </div>
         </div>

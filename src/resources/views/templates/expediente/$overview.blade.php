@@ -17,7 +17,7 @@
                 <span class="glyphicon glyphicon-refresh"></span>
                 <span class="hidden-xs">Restaurar</span>
             </button>
-            <a href="expedientes/@{{ selected.id }}/history" target="_blank" class="btn btn-outline btn-sm btn-edit" title="Historial de cambios">
+            <a href="personas/@{{ selected.persona.cedula }}/historico" target="_blank" class="btn btn-outline btn-sm btn-edit" title="Historial de cambios">
                 <span class="glyphicon glyphicon-time"></span>
                 <span class="hidden-xs">Historial de cambios</span>
             </a>

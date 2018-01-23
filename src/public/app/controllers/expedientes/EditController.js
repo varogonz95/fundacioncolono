@@ -1,11 +1,10 @@
-app.controller('Expedientes_EditController', function ($scope, Expediente, Typeahead) {
-
-	$scope.formatter = Typeahead.formatter;
-
+app.controller('Expedientes_EditController', function ($scope, Expediente) {
+    
 	$scope.estado = $scope.estados[0];
 	
 	$scope.edit = function (){
-		copy($scope.selected, $scope.update.caso);
+		// copy($scope.selected, $scope.update.caso);
+		copy($scope.selected, $scope.update.caso, ['persona', 'ayudas']);
 
 		$scope.update.caso.estado_selected = find('id', $scope.update.caso.estado, $scope.estados);
 		$scope.update.caso.prioridad_selected = find('id', $scope.update.caso.prioridad, $scope.prioridades);

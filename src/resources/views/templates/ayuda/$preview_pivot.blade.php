@@ -1,6 +1,4 @@
-<p class="ayudas-empty" ng-show="items.length === 0">
-    Aún no tiene ayudas asignadas
-</p>
+<p class="ayudas-empty" ng-show="items.length === 0"> Aún no tiene ayudas asignadas </p>
 
 {{-- UIBOOTSTRAP ACCORDION --}}
 <uib-accordion close-others="true">
@@ -11,8 +9,7 @@
         <uib-accordion-heading>
             <span>@{{ i.ayuda.descripcion }}</span>
             <button class="pull-right btn-sm btn-outline btn btn-delete" ng-click="remove($index)">
-                <span class="glyphicon glyphicon-minus"></span>
-                Quitar
+                Quitar <span class="glyphicon glyphicon-minus"></span>
             </button>
         </uib-accordion-heading>
 

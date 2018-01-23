@@ -15,7 +15,8 @@ app.directive('regionSelect', function (AppResource, Region) {
 			Region.cantones(scope.provincia.cod).then(function(data){
 				scope.cantones = Region.parse(data).cantones;
 				scope.ngModel = scope.provincia.cod + '/0/0'
-			});
+			})
+			.catch(function(){});
 		};
 
 		scope.updateDistritos = function () {
@@ -24,7 +25,8 @@ app.directive('regionSelect', function (AppResource, Region) {
 			Region.distritos(scope.provincia.cod, scope.canton.cod).then(function (data) {
 				scope.distritos = Region.parse(data).distritos;
 				scope.ngModel = scope.provincia.cod + '/' + scope.canton.cod + '/0';
-			});
+			})
+			.catch(function(){});
 		};
 
 		scope.updateDistrito = function () {
@@ -52,9 +54,12 @@ app.directive('regionSelect', function (AppResource, Region) {
 							s.cantones = Region.parse(c).cantones;
 							Region.distritos(s.provincia.cod, s.canton.cod).then(function(d){
 								s.distritos = Region.parse(d).distritos;
-							});
-						});
-					});
+							})
+							.catch(function(){});
+						})
+						.catch(function(){});
+					})
+					.catch(function(){});
 			}
 		});
 	};
@@ -89,6 +94,11 @@ app.directive('regionText', function (Region) {
 						Region.text(data[0], data[1], data[2])
 						.then(function (response) {
 							s.ubicacion = Region.parse(response).location.text;
+						})
+						.catch(function (err) {
+							element.addClass("text-muted");
+							s.ubicacion = 'No se pudo obtener la ubicación.';
+							console.error('Could not retrieve region data from service.\nMaybe bad connection?');
 						});
 				}
 			});

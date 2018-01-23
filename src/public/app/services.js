@@ -133,10 +133,11 @@ app.service('Modal', function(){
 		return instance;
 	};
 
-	// etc...
-
-	this.getInstance = function(){
+	this.setSettings = function(settings, mergeSettings = false){
+		instance.applySettings(settings, mergeSettings);
 		return instance;
 	};
+
+	this.getInstance = function() { return instance; };
 
 });

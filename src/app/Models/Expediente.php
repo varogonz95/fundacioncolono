@@ -14,7 +14,7 @@ class Expediente extends Model{
 	
 	protected $dates = ['fecha_eliminacion'];
 	protected $fillable = [
-		'referente_otro',
+        'referente_otro',
 		'descripcion', 
 		'fecha_desde', 
 		'fecha_hasta', 
@@ -45,11 +45,11 @@ class Expediente extends Model{
 	}
 
 	public function setFechaDesdeAttribute($value){		
-		$this->attributes['fecha_desde'] = (new \DateTime($value))->format('Y-m-d');
+		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? $value['raw'] : (new \DateTime($value))->format('Y-m-d');
 	}
 
 	public function setFechaHastaAttribute($value){
-		$this->attributes['fecha_hasta'] = (new \DateTime($value))->format('Y-m-d');
+		$this->attributes['fecha_hasta'] = gettype($value) === 'array' ? $value['raw'] : (new \DateTime($value))->format('Y-m-d');
 	}
 
 	public function getFechaDesdeAttribute($value){

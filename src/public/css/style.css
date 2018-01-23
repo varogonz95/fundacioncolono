@@ -10,6 +10,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
 .ayudas-empty{border:2px dashed #c5c5c5; padding: 1em; text-align: center; font-size: large; border-radius: 6px; color: #666}
 
+.form-group .control-label{text-align: left;}
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
 .form-control:-ms-.form-control-placeholder {font-style:italic}
 .form-control:-moz-placeholder {font-style:italic}
@@ -113,6 +114,8 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .expediente-archived-overlay{height: 100%; position: fixed; width: 100%;}
 .expediente-archived{position: relative; top: 25vh; margin: auto; min-width: 25%; max-width: 30%; box-shadow: 0 0 8px #666 !important;}
 .expediente-archived > .panel-body{padding: 2em 1.5em; font-size: large}
+
+#selectedexpediente.editing > header .btn{display: none}
 
 #selectedayuda .expediente-info.text-expanded{position: absolute}
 

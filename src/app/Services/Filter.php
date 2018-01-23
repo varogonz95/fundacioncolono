@@ -52,6 +52,17 @@ class Filter{
         return $this;
     }
 
+	/**
+     *! FOR TESTING PURPOSES ONLY ----------------------
+     *! If implementation is successfull, then
+     *! release for proposed stack
+     *! EOC --------------------------------------------
+     */
+    public function notIn($relationship){
+        $this->builder = $this->builder->whereNotIn($relationship);
+        return $this;
+    }
+
     /**
      *! FOR TESTING PURPOSES ONLY ----------------------
      *! If implementation is successfull, then

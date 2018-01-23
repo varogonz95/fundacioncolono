@@ -2,9 +2,8 @@
     <header>
         <h3>
             Detalles del caso
-            <small>
-                @{{ (selected.editable)? '(en edición)' : '' }}
-            </small>
+            <small>@{{ (selected.editable)? '(en edición)' : '' }}</small>
+            <button class="btn btn-sm btn-outline btn-update pull-right"><span class="glyphicon glyphicon-alert hidden-xs"></span> Pendiente de entrega</button>
         </h3>
         <hr>
     </header>

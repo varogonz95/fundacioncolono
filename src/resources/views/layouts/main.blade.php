@@ -9,14 +9,12 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/principal.css') }}">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 
     <!-- Scripts top -->
     <script src="{{ asset('js/angularjs/angular.1.6.4.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular-animate.1.6.4.min.js') }}"></script>
     <script src="{{ asset('js/angularjs/angular-resource.1.6.4.js') }}"></script>
-    <script src="{{ asset('js/angularjs-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js') }}"></script>
+    <script src="{{ asset('js/ui-bootstrap-tpls-2.5.0.min.js') }}"></script>
     <script src="{{ asset('app/app.js') }}"></script>
     <script src="{{ asset('app/providers.js') }}"></script>
     <script src="{{ asset('app/services.js') }}"></script>
@@ -30,7 +28,7 @@
     
     @include('partials._navbar')
     
-    <main class="container-fluid" style="padding-top:50px" ng-app="App" ng-controller="@yield('controller')_MainController" ng-cloak>
+    <main class="container-fluid" style="padding-top:50px" ng-app="App" ng-cloak>
         <div class="row" style="padding-top: 2em; padding-bottom: 1em">
             @yield('content')
         </div>
@@ -39,11 +37,8 @@
     
     <!-- Scripts Bottom -->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap3.min.js') }}"></script>
-    <!-- <script src="{{ asset('js/sweetalert.min.js') }}"></script> -->
-    <script src="https://unpkg.com/sweetalert2@7.3.4/dist/sweetalert2.all.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" charset="utf-8"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     @stack('scripts_bottom')
 </body>
 </html>

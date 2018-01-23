@@ -116,7 +116,6 @@ class ExpedientesController extends Controller{
 			$expediente->fill($request->all());
 
 			// Create Persona from request
-			//	---> Parse 'ubicacion' attribute
 			$persona = Persona::create($request->all());
 
 			// Manage Referente relationship with Expediente
@@ -154,7 +153,7 @@ class ExpedientesController extends Controller{
 				'type'  => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
 				'msg'   => $status? 'Se ha creado el expediente correctamente.' : 
-								    'Es posible que los datos ingresados sean incorrectos.\n'.
+									'Es posible que los datos ingresados sean incorrectos.\n'.
 								  	'Si el problema persiste, por favor contacte a soporte.',
 			]);
 	}
@@ -162,7 +161,7 @@ class ExpedientesController extends Controller{
 	public function update(Request $request, $id){
 		
 		$status = true;
-		$current = Expediente::find($id);
+		$current = Expediente::with(['ayudas', 'persona', 'referente'])->find($id);
 
 		DB::beginTransaction();
 
@@ -171,23 +170,9 @@ class ExpedientesController extends Controller{
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
 				
 				$current->fill($request['expediente']);
-				
-				/**
-				* TODO: Process attachs
-				* TODO: AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
-				*/
-				
-				// Process detachs
-				AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
-		
-				// Process updates
-				AyudaExpedienteService::update($current->ayudas(), $request['updates']);
-			}
-			
-			else
-				// Create new 'Expediente' and attach 'Historico'		
-				$current = HistoricoService::create($current, $request['expediente']);
-			
+				$current->referente_otro = filter_var($request['expediente']['referente_otro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
+
+				//* Process Referente info
 				ReferentesService::createOrAssociate(
 					$current->referente(),
 					$request['expediente']['referente']['id'],
@@ -197,12 +182,25 @@ class ExpedientesController extends Controller{
 					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
 				);
 				
-			$current->referente_otro = filter_var($request['expediente']['referente_otro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
-			$current->save();
+				$current->save();
+			}
+			
+			else 
+				$current = HistoricoService::create($current, $request['expediente']);
+			
+			//* Process attachs
+			AyudaExpedienteService::attach($current->ayudas(), [
+				'ids'      => collect($request['attachs'])->pluck('id'), 
+				'montos'   => collect($request['attachs'])->pluck('pivot.monto'),
+				'detalles' => collect($request['attachs'])->pluck('pivot.detalle'), 
+			]);
 
-			$current->referente;
-			$current->persona;
-			$current->ayudas;
+			//* Process detachs
+			AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
+			
+			//* Process updates
+			AyudaExpedienteService::update($current->ayudas(), $request['updates']);
+
 			$current->meses      = $current->getMeses($current->fecha_desde['raw'], $current->fecha_hasta['raw']);
 			$current->montoTotal = $current->getMontoTotal();
 
@@ -219,11 +217,11 @@ class ExpedientesController extends Controller{
 		}
 
 		return response()->json([
-			'status' => $status,
-			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
-			'type'   => $status ? 'success' : 'error',
-			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
-			'expediente'   => $current,
+			'expediente' => $current,
+			'status'     => $status,
+			'title'      => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'       => $status ? 'success' : 'error',
+			'msg'        => $status ? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
 		]);
 	}
 
