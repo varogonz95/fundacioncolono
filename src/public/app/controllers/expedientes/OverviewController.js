@@ -10,25 +10,25 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 			return false;
 		};
 
-	$scope.delete = function () {
-		Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
-			.then(function (result) {
-				if (result.value)
-					Expediente().delete({ id: $scope.selected.id },
-						function (response) {
-							if (response.status) {
-								$scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
-								if ($scope.page !== response.last && $scope.expedientes.length > 0)
-									$scope.index($scope.page);
-								else if ($scope.expedientes.length === 0)
-									$scope.index($scope.page - 1);
-								modal.close();
-							}
-							Alert.notify(response.title, response.msg, response.type);
-						}
-					);
-			});
-	};
+    $scope.delete = function () {
+        Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
+        .then(function(result) {
+            if (result.value)
+                Expediente().delete({ id: $scope.selected.id },
+                    function (response) {
+                        if (response.status) {
+                            $scope.expedientes.splice(getIndex($scope.expedientes, $scope.selected), 1);
+                            if ($scope.page !== response.last && $scope.expedientes.length > 0) 
+                                $scope.index($scope.page);
+                            else if ($scope.expedientes.length === 0)
+                                $scope.index($scope.page - 1);
+                            modal.close();
+                        }
+                        Alert.notify(response.title, response.msg, response.type);
+                    }
+                );
+        });
+    };
 
 	// Mostrar mensaje de respuesta
 	$scope.restore = function () {

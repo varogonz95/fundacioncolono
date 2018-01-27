@@ -16,7 +16,7 @@ class CreateHistoricoExpedientesTable extends Migration
         Schema::create('historico_expedientes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('expediente_fk');
-            $table->timestamp('fecha_modificacion');
+            $table->timestamp('fecha_modificacion')->nullable();
 
             $table->foreign('expediente_fk')
                   ->references('id')->on('expedientes')
