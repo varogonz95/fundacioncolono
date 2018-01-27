@@ -9,9 +9,6 @@ class AyudasSeeder extends Seeder{
      * @return void
      */
     public function run(){
-
-        $faker = Faker\Factory::create();
-
         DB::table('ayudas')->insert([
             ['descripcion' => 'Alimentación'],
             ['descripcion' => 'Construcción'],

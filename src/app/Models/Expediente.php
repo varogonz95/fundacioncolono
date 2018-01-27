@@ -17,7 +17,7 @@ class Expediente extends Model{
 		'referente_otro',
 		'descripcion', 
 		'fecha_desde', 
-		'fecha_hasta', 
+		'fecha_hasta',
 		'pago_inicio', 
 		'pago_final', 
 		'prioridad', 

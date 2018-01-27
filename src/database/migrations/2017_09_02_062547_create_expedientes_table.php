@@ -31,7 +31,7 @@ class CreateExpedientesTable extends Migration{
             $table->date('fecha_desde')->nullable();
             $table->date('fecha_hasta')->nullable();
 
-            $table->timestamp('fecha_creacion')->nullable();
+            $table->timestamp('fecha_creacion');
             $table->softDeletes('fecha_eliminacion');
 
             // Table constraints
