@@ -23,7 +23,8 @@ class CreateVisitasTable extends Migration
             // $table->date('fecha_seleccion')->nullable();
             // Fecha en la que se da por concluida la visita
             $table->date('fecha_visita')->nullable();
-
+            $table->date('fecha_asignado')->useCurrent();
+            
             $table->text('observaciones');
 
             // Soft delete for inspector

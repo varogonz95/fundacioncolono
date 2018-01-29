@@ -18,8 +18,8 @@ class Expediente extends Model{
 		'descripcion', 
 		'fecha_desde', 
 		'fecha_hasta',
-		'pago_inicio', 
-		'pago_final', 
+		'entrega_inicio', 
+		'entrega_final', 
 		'prioridad', 
 		'estado', 
 	];

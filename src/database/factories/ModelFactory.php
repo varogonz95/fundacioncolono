@@ -42,17 +42,23 @@ $factory->define(App\Models\Referente::class, function (Faker\Generator $faker) 
 |--------------------------------------------------------------------------
 */
 $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker) {
-	$hasReferente = $faker->boolean;
-	$referentes = App\Models\Referente::all();
-	$referente_otro = $referentes[0];
+	$hasReferente     = $faker->boolean;
+	$referentes       = App\Models\Referente::all();
+	$referente_otro   = $referentes[0];
 	$referentes_count = count($referentes);
-
+	$estado           = $faker->numberBetween(0,3);
+	$tmp_meses = $faker->numberBetween(1,3);
+	$fecha_desde = $faker->dateTime("+ $tmp_meses months");
     return [
-		'referente_otro' => $hasReferente ? null : ($faker->boolean? $faker->company : "{$faker->firstName} {$faker->lastname}"),
-		'referente_fk'	 => $hasReferente ? $referentes[$faker->numberBetween(1, $referentes_count - 1)]->id : $referente_otro->id,
-        'descripcion'    => $faker->text(500),
-		'persona_fk'     => function(){ return factory(App\Models\Persona::class)->create()->cedula; },
-        'prioridad'      => $faker->numberBetween(1,3),
-        'estado'         => $faker->numberBetween(0,3),
+		'referente_otro'    => $hasReferente ? null : ($faker->boolean? $faker->company: "{$faker->firstName} {$faker->lastname}"),
+		'referente_fk'	    => $hasReferente ? $referentes[$faker->numberBetween(1, $referentes_count - 1)]->id: $referente_otro->id,
+        'descripcion' 		=> $faker->text(500),
+		'persona_fk'        => function(){ return factory(App\Models\Persona::class)->create()->cedula; },
+        'prioridad'   		=> $faker->numberBetween(1,3),
+		'estado'            => $estado,
+		'entrega_inicio'    => $estado === 1 ? $faker->numberBetween(1,15) : null,
+		'entrega_final'     => $estado === 1 ? $faker->numberBetween(16,30) : null,
+		'fecha_desde'       => $estado === 1 ? $fecha_desde : null,
+		'fecha_hasta'       => $estado === 1 ? $faker->dateTimeInInterval($fecha_desde, '+ 10 months') : null,
     ];
 });
