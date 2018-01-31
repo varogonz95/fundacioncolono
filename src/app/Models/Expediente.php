@@ -47,11 +47,19 @@ class Expediente extends Model{
 	}
 
 	public function setFechaDesdeAttribute($value){		
-		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? $value['raw'] : (new \DateTime($value))->format('Y-m-d');
+		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? 
+			$value['raw'] : 
+			gettype($value) === 'string' ?
+				(new \DateTime($value))->format('Y-m-d') :
+				$value;
 	}
 
 	public function setFechaHastaAttribute($value){
-		$this->attributes['fecha_hasta'] = gettype($value) === 'array' ? $value['raw'] : (new \DateTime($value))->format('Y-m-d');
+		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? 
+			$value['raw'] : 
+			gettype($value) === 'string' ?
+				(new \DateTime($value))->format('Y-m-d') :
+				$value;
 	}
 
 	public function getFechaDesdeAttribute($value){

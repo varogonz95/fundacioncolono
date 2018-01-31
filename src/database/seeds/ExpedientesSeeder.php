@@ -16,7 +16,7 @@ class ExpedientesSeeder extends Seeder
 		$ayudas = App\Models\Ayuda::all();
 		$ayudas_count = count($ayudas);
 
-		factory(App\Models\Expediente::class, 10)->create()
+		factory(App\Models\Expediente::class, 600)->create()
 		->each(function($expediente) use($faker, $ayudas, $ayudas_count) {
 
 			//* Attach ayudas
