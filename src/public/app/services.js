@@ -138,6 +138,8 @@ app.service('Modal', function(){
 		return instance;
 	};
 
+	this.getSettings = function(){ return instance.getSettings(); };
+
 	this.getInstance = function() { return instance; };
 
 });

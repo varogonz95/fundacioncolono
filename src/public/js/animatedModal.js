@@ -26,9 +26,11 @@
             onAfterShow: function(){},
             onBeforeClose: function(){},
             onAfterClose: function(){},
-        }, options),
+		}, options),
+		
+		open = false,
 
-        init = function(){
+		init = function(){
 
            for (var variable in overlay)
                 if (overlay.hasOwnProperty(variable)) {
@@ -43,46 +45,57 @@
                     break;
                 }
 
-            e.show = show;
-            e.close = close;
-            e.applyStyle = applyStyle;
-            e.applySettings = applySettings;
+			e.show = show;
+			e.close = close;
+			e.applyStyle = applyStyle;
+			e.applySettings = applySettings;
+			e.getSettings = function () { return settings; };
+			e.isOpen = function () { return open; };
+			e.keypress(function(evt){ if (evt.keyCode === 27 && document.activeElement === e[0]) close(); });
 
             applySettings();
             applyStyle();
 
-            e.find('.close-animatedModal').click(close);
+            e.find('.close-animatedModal').click(function(){close();});
         },
 
         show = function(){
-
-            settings.onBeforeShow();
-
+			
+			settings.onBeforeShow();
+			
             overlay.css('display', 'block');
             overlay.removeClass('animated fadeOut')
             .addClass('animated fadeIn');
-
+			
             e.css('display','block');
             e.removeClass(settings.animatedOut)
-            .addClass(settings.animatedIn);
-
+			.addClass(settings.animatedIn)
+			.focus();
+			
             settings.onAfterShow();
-
+			
+			open = true;
+			
             if(typeof settings.toCenter === 'boolean')
                 if (settings.toCenter) toCenter();
             else if (typeof settings.toCenter === 'object')
                     if (settings.toCenter.apply) toCenter(settings.toCenter.relativeTo);
         },
 
-        close = function(){
-			settings.onBeforeClose();
-			
-            overlay.css('display', 'none');
-            e.removeClass(settings.animatedIn)
-			 .addClass(settings.animatedOut);
+		close = function (forceCallbacks = false, before = function () { }, after = function () { }) {
 
-            settings.onAfterClose();			
-        }
+			if (forceCallbacks) before();
+			else settings.onBeforeClose();
+
+			overlay.css('display', 'none');
+			e.removeClass(settings.animatedIn)
+			.addClass(settings.animatedOut);
+
+			if (forceCallbacks) after();
+			else settings.onAfterClose();
+
+			open = false;
+		}
 
         applySettings = function(conf, merge = true){
             settings = (merge)? $.extend(true, settings, conf) : settings = conf;

@@ -1,14 +1,29 @@
 
 app.controller('Expedientes_OverviewController', function ($scope, $filter, Expediente, AyudaExpediente, Alert, Modal) {
 
-	var modal = Modal.getInstance()/* .applySettings({onAfterClose: function(){ $scope.selected = {}; }}, true) */,
-		hasUncommitted = function () {
-			for (var i = 0; i < $scope.selected.ayudas.length; i++)
-				if ($scope.selected.ayudas[i].editable)
-					return true;
+	var resetAll = function (){
+		$scope.update.caso = {};
+		$scope.update.persona = {};
+		delete $scope.update.cache;
 
-			return false;
-		};
+		$scope.selected.editable = false;
+		$scope.selected.persona.editable = false;
+
+		$scope.resetAyudas();
+	},
+
+	modal = Modal.setSettings({
+		onBeforeClose: function() {
+			$scope.$apply(resetAll);
+			$('body').css('overflow-y', 'auto');
+		}}, true),
+
+	hasUncommitted = function () {
+		for (var i = 0; i < $scope.selected.ayudas.length; i++)
+			if ($scope.selected.ayudas[i].editable)
+				return true;
+		return false;
+	};
 
     $scope.delete = function () {
         Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
@@ -21,8 +36,8 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
                             if ($scope.page !== response.last && $scope.expedientes.length > 0) 
                                 $scope.index($scope.page);
                             else if ($scope.expedientes.length === 0)
-                                $scope.index($scope.page - 1);
-                            modal.close();
+								$scope.index($scope.page - 1);
+							modal.close(true, function () { $('body').css('overflow-y', 'auto'); });
                         }
                         Alert.notify(response.title, response.msg, response.type);
                     }
@@ -30,7 +45,6 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
         });
     };
 
-	// Mostrar mensaje de respuesta
 	$scope.restore = function () {
 		Expediente('restore').$service.post(
 			{ id: $scope.selected.id },
@@ -77,7 +91,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 											open: false
 										}
 									};
-									$scope.resetAll(false);
+									$scope.resetAyudas(false);
 								}
 								Alert.notify(response.title, response.msg, response.type);
 							}
@@ -115,7 +129,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 											open: false
 										}
 									};
-									$scope.resetAll(false);
+									$scope.resetAyudas(false);
 							}
 							Alert.notify(response.title, response.msg, response.type);
 						}
@@ -124,13 +138,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 			});
 	};
 
-    $scope.close = function(){
-        $scope.selected = {};
-    };
-
-	$scope.resetAll = function (withCache = true) {
-
-		// Set everything back to its initial state
+	$scope.resetAyudas = function (withCache = true) {
 
 		// Empty update lists
 		$scope.update.ayudas.attachs = [];
@@ -141,10 +149,8 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 		if (withCache)
 			for (var i = 0; i < $scope.selected.ayudas.length; i++) {
 				$scope.selected.ayudas[i] = $scope.selected.ayudas[i].cache || $scope.selected.ayudas[i];
-
-				// $scope.selected.ayudas[i].editable = false;
-				// $scope.selected.ayudas[i].changed = false;
-				// $scope.selected.ayudas[i].removed = false;
+				delete $scope.selected.ayudas[i].update;
+				delete $scope.selected.ayudas[i].removed;
 			}
 	};
 

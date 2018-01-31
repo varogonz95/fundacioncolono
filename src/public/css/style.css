@@ -43,10 +43,12 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .noresize{resize: none;}
 .text-length-toggle{max-height: 20px; min-height: 20px}
 .text-collapsed{max-height: calc(3 * 1.42857143em + 20px);min-height: calc(3 * 1.42857143em + 20px);}
-/* .nowrap{white-space: nowrap;} */
 
-/*#nav-top{font-family: 'Raleway'}*/
+#filter {background-color: #fafafa; border: thin solid #ddd; border-radius: 4px}
+
 #show_modal{height: calc(100% - 50px);}
+#show_modal .animatedModal-content{ overflow-y: auto; height: calc(100vh - 100px); }
+
 #nav-top .filters > li:not(:first-child){text-indent: 5px;}
 #nav-top .filters > li:not(:first-child) input{margin: 4px 10px}
 
@@ -97,8 +99,6 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
     transition:border .3s;
     padding: 1em;
     margin-bottom: 15px;
-    /* max-height: 50vh;
-    overflow-y: auto; */
 }
 .expediente-info.cached{border:thin solid #dfdfdf}
 .expediente-info .btn-group > .btn{border-radius: 3px !important; margin: 2px 4px}
@@ -117,8 +117,6 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 
 #selectedexpediente.editing > header .btn{display: none}
 
-#selectedayuda .expediente-info.text-expanded{position: absolute}
-
 #ayudaModal{border-radius: 3px; box-shadow: 0 0 6px #666; margin-top: -20px}
 #ayudaModal .content{padding: 1em 0;}
 #ayudaModal .content .form-group{margin-left: 0; margin-right: 0}
@@ -132,14 +130,9 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .animatedModal-footer, .animatedModal-header{
     padding: .5em;
     background: #f6f6f6;
-    border-color:  #efefef;
+    border-color:  #eaeaea;
     max-height: 50px;
     min-height: 50px;
-}
-
-#show_modal .animatedModal-content{
-    overflow-y: auto;
-    height: calc(100vh - 100px);
 }
 
 .change-state {

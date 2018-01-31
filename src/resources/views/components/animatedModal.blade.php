@@ -1,4 +1,4 @@
-<div {{ isset($id) ? 'id='.$id : '' }} class="animatedModal animated container" {{ isset($ngController) ? 'ng-controller='.$ngController : '' }}>
+<div {{ isset($id) ? 'id='.$id : '' }} class="animatedModal animated container" tabindex="1" {{ isset($ngController) ? 'ng-controller='.$ngController : '' }}>
 
     <header class="animatedModal-header row">
         {{ isset($header_content) ? $header_content : '' }}

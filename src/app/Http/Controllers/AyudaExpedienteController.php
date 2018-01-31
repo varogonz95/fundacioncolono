@@ -50,6 +50,7 @@ class AyudaExpedienteController extends Controller {
 			$status = false;
 			// Rollback transaction
 			DB::rollback();
+			throw $e;
 		}
 		
 		$expediente->meses      = $expediente->getMeses($expediente->fecha_desde['raw'], $expediente->fecha_hasta['raw']);

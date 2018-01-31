@@ -3,7 +3,6 @@ app.controller('Expedientes_EditController', function ($scope, Expediente) {
 	$scope.estado = $scope.estados[0];
 	
 	$scope.edit = function (){
-		// copy($scope.selected, $scope.update.caso);
 		copy($scope.selected, $scope.update.caso, ['persona', 'ayudas']);
 
 		$scope.update.caso.estado_selected = find('id', $scope.update.caso.estado, $scope.estados);
@@ -18,11 +17,10 @@ app.controller('Expedientes_EditController', function ($scope, Expediente) {
 		// Save current state
 		$scope.update.cache = $scope.update.cache || angular.copy($scope.selected);
 
-		// Set Expediente with new data
-		
 		// parse attributes...
 		$scope.update.caso.estado                = $scope.update.caso.estado_selected.id;
 		$scope.update.caso.prioridad             = $scope.update.caso.prioridad_selected.id;
+		$scope.update.caso.referente	         = find('id', $scope.update.caso.referente_selected, $scope.referentes);
 		$scope.update.caso.fecha_hasta.formatted = $scope.update.caso.datePickers.to.date.toLocaleDateString();
 		$scope.update.caso.fecha_desde.formatted = $scope.update.caso.datePickers.from.date.toLocaleDateString();
 

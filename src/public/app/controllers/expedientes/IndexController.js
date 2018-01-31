@@ -19,9 +19,8 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 	$scope.filter_data = {
 		value:          '',
 		referente:      [],
-		ayuda:          [],
+		ayuda:          null,
 		filter:         null,
-		// active:         false,
 		filtered:       false,
 		one:            false,
 		estado:         $scope.estados[0],
@@ -85,6 +84,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 
 	$scope.all = function () {
 		$scope.filter_data.filtered = false;
+		$scope.filter_data.filter = null;
 		$scope.search.term = '';
 		$scope.index();
 	};
@@ -132,8 +132,8 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 		} || obj.datePickers;
 
 		$scope.selected.isSelected = false;
-		obj.isSelected             = true;
-		$scope.selected            = obj;
+		obj.isSelected = true;
+		$scope.selected = obj;
 
 		showModal.show();
 

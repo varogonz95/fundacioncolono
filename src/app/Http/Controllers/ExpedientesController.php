@@ -35,10 +35,10 @@ class ExpedientesController extends Controller{
 			'relationship' => $request['filterRel'],
 			'comparator'   => $request['comparator'],
 			'property'     => $request['property'],
-			'value'        => $request['value'],
+			'value'        => $request['comparator'] === 'like' ? "{$request['value']}%" : $request['value'],
 		];
 
-		$filtered = [];
+		$filtered;
 		
 
 		if ($this->hasEmptyValues($filter))
@@ -49,8 +49,7 @@ class ExpedientesController extends Controller{
 						return $builder;
 					})
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
-					// TODO: Check if records are not in Historico
-					// ->notIn()
+					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
@@ -62,18 +61,14 @@ class ExpedientesController extends Controller{
 						return $builder;
 					})
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-					// TODO: Check if records are not in Historico
-					// ->notIn()
+					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		// Iterate over items
 		$filtered->each(function($item, $index){
-			$item->meses = $item->getMeses(
-				$item->fecha_desde['raw'],
-				$item->fecha_hasta['raw']
-			);
+			$item->meses      = $item->getMeses($item->fecha_desde['raw'], $item->fecha_hasta['raw']);
 			$item->montoTotal = $item->getMontoTotal();
 			$item->archivado  = $item->trashed();
 		});
@@ -170,7 +165,7 @@ class ExpedientesController extends Controller{
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
 				
 				$current->fill($request['expediente']);
-				$current->referente_otro = filter_var($request['expediente']['referente_otro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
+				$current->referente_otro = filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
 
 				//* Process Referente info
 				ReferentesService::createOrAssociate(

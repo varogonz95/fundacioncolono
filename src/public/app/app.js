@@ -1,3 +1,4 @@
+
 var app = angular.module('App',['ngAnimate', 'ngResource', 'ui.bootstrap']);
 
 app.config(['uibPaginationConfig',function(conf){
@@ -43,7 +44,6 @@ app.config(function (TerritoryProvider) {
 
 	TerritoryProvider.resultWrapper = 'features';
 });
-
 
 
 // SOME BUILT-IN FUNCTIONS

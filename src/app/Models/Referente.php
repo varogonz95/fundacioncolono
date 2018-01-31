@@ -8,6 +8,6 @@ class Referente extends Model{
 
     public $timestamps = false;
 
-    public $fillable = ['descripcion'];
+    protected $fillable = ['descripcion'];
 
 }

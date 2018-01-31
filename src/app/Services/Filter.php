@@ -25,7 +25,7 @@ class Filter{
     public function where($relationship, $property, $comparator, $value){
         if ($this->getTableName() === $relationship)
             if (gettype($value) === 'array')
-                $this->builder = $this->builder->whereBetween($property, [$value[0], $value[1]]);
+                $this->builder = $this->builder->whereBetween($property, $value);
                 
             else
                 $this->builder = $this->builder->where($property, $comparator, $value);
@@ -58,19 +58,12 @@ class Filter{
      *! release for proposed stack
      *! EOC --------------------------------------------
      */
-    public function notIn($relationship){
-        $this->builder = $this->builder->whereNotIn($relationship);
-        return $this;
-    }
-
-    /**
-     *! FOR TESTING PURPOSES ONLY ----------------------
-     *! If implementation is successfull, then
-     *! release for proposed stack
-     *! EOC --------------------------------------------
-     */
-    public function doesntHave($relationship){
-        $this->builder = $this->builder->doesntHave($relationship);
+    public function notIn($relationship, $foreign = null, $local = null, $comparator = "<>"){
+        $this->builder = $this->builder->whereNotIn($this->model->getKeyName(), function ($query) use ($relationship, $local, $foreign, $comparator) {
+			$query->select($foreign ? : $this->model->getForeignKey())
+				  ->from((new $relationship)->getTable())
+				  ->where($foreign ? : $this->model->getForeignKey(), $comparator, $local ? : $this->model->getKeyName());
+		});
         return $this;
     }
 
@@ -105,16 +98,9 @@ class Filter{
         return new LengthAwarePaginator($arr, $count, $perPage, $page);
     }
 
-    /**
-     *! FOR TESTING PURPOSES ONLY ----------------------
-     *! If implementation is successfull, then
-     *! release for proposed stack
-     *! EOC --------------------------------------------
-     */
-    public function paginate2(int $records){
-        $this->builder = $this->builder->paginate($records);
-        return $this;
-    }
+    /* public function paginate(int $records){
+        return $this->builder->paginate($records);
+    } */
 
     public function orderBy($relationship, $by, $order){
         if ($this->getTableName() !== $relationship)

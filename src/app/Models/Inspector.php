@@ -11,8 +11,8 @@ class Inspector extends Model{
 
     const DELETED_AT = 'fecha_eliminacion';
 
-    public $table = 'inspectores';
     public $timestamps = false;
+    protected $table = 'inspectores';
     private $dates = ['fecha_eliminacion'];
 
 

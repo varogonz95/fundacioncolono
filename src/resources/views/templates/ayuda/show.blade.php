@@ -3,18 +3,17 @@
         <h3>
             Ayudas solicitadas
             <small class="text-nowrap">Monto total asignado: @{{ selected.montoTotal | currency:"‎₡" }}</small>
-            <ngIf ng-if="!selected.archivado">
+            <ng-show ng-show="!selected.archivado">
                 <button class="btn btn-sm btn-show btn-outline">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Agregar ayuda
+                    <span class="glyphicon glyphicon-plus"></span> Agregar ayuda
                 </button>
                 <button class="btn btn-sm btn-outline btn-update" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="updateAyudas()">
                     Guardar cambios
                 </button>
-                <button class="btn btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="resetAll()">
+                <button class="btn btn-sm btn-outline btn-none" ng-show="update.ayudas.attachs.length > 0 || update.ayudas.detachs.length > 0 || update.ayudas.updates.length > 0" ng-click="resetAyudas()">
                     Cancelar
                 </button>
-            </ngIf>
+            </ng-show>
         </h3>
         <hr>
     </header>
@@ -61,16 +60,14 @@
                 <p class="lead">@{{ ayuda.pivot.monto | currency:"‎₡" }}</p>
                 <label>Descripcion:</label>
                 <br>
-                <p ng-class="{'text-collapsed': !ayuda.pivot.text_expanded}" ng-init="ayuda.pivot.text_expanded = false">
+                <p ng-class="{'text-collapsed': !ayuda.pivot.text_expanded}">
                     <span ng-init="ayuda.pivot.detalle_tmp = ayuda.pivot.detalle.substring(0,200)">@{{ ayuda.pivot.detalle_tmp }}</span>
                     <span ng-show="ayuda.pivot.detalle.length > 200 && ayuda.pivot.detalle_tmp.length <= 200" class="text-length-toggle">
-                        ...
-                        <br>
+                        ...<br>
                         <a class="text-nowrap" href="#" ng-click="ayuda.pivot.detalle_tmp = ayuda.pivot.detalle; ayuda.pivot.text_expanded = true">ver más &raquo;</a>
                     </span>
                     <span ng-show="ayuda.pivot.detalle_tmp.length > 200" style="max-height: 20px; min-height: 20px">
-                        <br>
-                        <a class="text-nowrap" href="#" ng-click="ayuda.pivot.detalle_tmp = ayuda.pivot.detalle.substring(0,200); ayuda.pivot.text_expanded = false">&laquo; ver menos</a>
+                        <br><a class="text-nowrap" href="#" ng-click="ayuda.pivot.detalle_tmp = ayuda.pivot.detalle.substring(0,200); ayuda.pivot.text_expanded = false">&laquo; ver menos</a>
                     </span>
                 </p>
             </div>

@@ -29,7 +29,7 @@
             <!-- <h2 class="lead">Índice de Casos</h2> -->
     
             <!-- BUSQUEDA -->
-            <div class="col-lg-12">
+            <div class="controls col-lg-12">
             
                 @include('partials._search')
             
@@ -49,10 +49,15 @@
                     </button>
                     <button class="btn-outline btn btn-edit" type="button" ng-show="filter_data.filtered" ng-click="all()">Ver todos</button>
                 </div>
-            </div>
+			</div>
+			
+			<!-- FILTRO DE BUSQUEDA -->
+			<div class="collapse col-md-8 col-md-offset-2" id="filter">
+				@include('partials._filter')
+			</div>
     
             <!-- COLUMNAS VISIBLES -->
-            <nav class="navbar navbar-default navbar-sm col-md-10 col-md-offset-1" style="margin-top: 1.5em" role="navigation">
+            <nav class="navbar navbar-default navbar-sm col-md-10 col-md-offset-1" style="margin-top: .5em" role="navigation">
                 <div class="navbar-form" style="padding-top:4px">
                     <label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
                     <label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombre">Nombre</label>
@@ -64,11 +69,6 @@
                     <label class="checkbox-inline"><input type="checkbox" ng-model="columns.fecha_creacion">Fecha de creación</label>
                 </div>
             </nav>
-    
-            <!-- FILTRO DE BUSQUEDA -->
-            <div class="collapse col-md-12" id="filter" style="background-color: #fafafa;">
-                @include('partials._filter')
-            </div>
     
             <!-- TABLA DE CASOS -->
             <div class="table-responsive col-md-12" style="overflow-y: auto; max-height: 70vh">

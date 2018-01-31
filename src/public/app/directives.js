@@ -2,6 +2,9 @@ app.directive('regionSelect', function (AppResource, Region) {
 
 	var link = function (scope, element, attrs) {
 
+		attrs.fillWith = attrs.fillWith || 0;
+		attrs.partial = attrs.partial !== undefined;
+
 		scope.required = attrs.required;
 		scope.provincias = Region.provincias();
 		scope.cantones = [];
@@ -14,7 +17,8 @@ app.directive('regionSelect', function (AppResource, Region) {
 
 			Region.cantones(scope.provincia.cod).then(function(data){
 				scope.cantones = Region.parse(data).cantones;
-				scope.ngModel = scope.provincia.cod + '/0/0'
+				if (attrs.partial) scope.ngModel = scope.provincia.cod ;
+				else scope.ngModel = scope.provincia.cod + '/' + attrs.fillWith + '/' + attrs.fillWith;
 			})
 			.catch(function(){});
 		};
@@ -24,7 +28,8 @@ app.directive('regionSelect', function (AppResource, Region) {
 
 			Region.distritos(scope.provincia.cod, scope.canton.cod).then(function (data) {
 				scope.distritos = Region.parse(data).distritos;
-				scope.ngModel = scope.provincia.cod + '/' + scope.canton.cod + '/0';
+				if (attrs.partial) scope.ngModel = scope.provincia.cod + '/' + scope.canton.cod;
+				else scope.ngModel = scope.provincia.cod + '/' + scope.canton.cod + '/' + attrs.fillWith;
 			})
 			.catch(function(){});
 		};
@@ -44,7 +49,7 @@ app.directive('regionSelect', function (AppResource, Region) {
 		scope.$watch('ngValue', function(n, o, s){
 			if (n) {
 				var i = n.split('/'), r;
-				if (i[0] !== '0' && i[1] !== '0' && i[2] !== '0')
+				if (i[0] !== attrs.fillWith && i[1] !== attrs.fillWith && i[2] !== attrs.fillWith)
 					Region.text(i[0], i[1], i[2]).then(function(t){
 						r = Region.parse(t).location.object;
 						s.provincia = r.provincia;
@@ -68,6 +73,7 @@ app.directive('regionSelect', function (AppResource, Region) {
 		link:        link,
 		scope: {
 			field:   '@?',
+			partial: '=?',
 			ngValue: '=?',
 			ngModel: '=',
 		},

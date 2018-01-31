@@ -18,7 +18,7 @@ class HistoricoController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id){
-		$currentBuilder = Expediente::with(['persona'])->whereHas('persona', function($query) use ($id){
+		$currentBuilder = Expediente::with(['persona', 'ayudas'])->whereHas('persona', function($query) use ($id){
 			$query->where('cedula', $id);
 		});
 		

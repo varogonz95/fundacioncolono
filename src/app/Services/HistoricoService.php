@@ -7,7 +7,7 @@ use App\Models\Expediente;
 
 class HistoricoService{
 	
-	public static function create($current, $new, $with = []) {
+	public static function create($current, $new, $loadRelationships = []) {
 
 		/**
 		 * TODO a. Associate current Expediente to Historico
@@ -46,7 +46,7 @@ class HistoricoService{
 		//* d.
         $current->delete();
         
-        foreach ($with as $index => $item) $expediente->$item;
+        $expediente->load($loadRelationships);
 
 		//* f.
 		return $expediente;

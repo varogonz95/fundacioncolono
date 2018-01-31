@@ -31,20 +31,24 @@ app.factory('Inspector', function (AppResource) {
     };
 });
 
-app.factory('Alert', function (ConfirmAlert, NotifyAlert /* , PromptAlert */) {
+app.factory('Alert', function (Modal, ConfirmAlert, NotifyAlert /* , PromptAlert */) {
+
+	var GlobalConfig = {onClose: function () { 
+		//* Regain animatedModal focus on Alert close
+		Modal.getInstance().focus();
+	 }};
 
     return {
         notify: function (title, text, type = 'info', timer = 2500) {
-            return swal(angular.extend({titleText: title, text: text, type: type, timer: timer}, NotifyAlert.config));
+            return swal(angular.extend({titleText: title, text: text, type: type, timer: timer}, NotifyAlert.config, GlobalConfig));
         },
 
         confirm: function (title, text, type = 'question') {
-            return swal(angular.extend({titleText: title, text: text, type: type}, ConfirmAlert.setButtonColor(type)));
+            return swal(angular.extend({titleText: title, text: text, type: type}, ConfirmAlert.setButtonColor(type), GlobalConfig));
         },
 
         closed: function(dismiss){
-            if (dismiss) return dismiss === 'esc' || dismiss === 'cancel' || dismiss === 'close' || dismiss === 'overlay';
-            return false;
+            return dismiss === 'esc' || dismiss === 'cancel' || dismiss === 'close' || dismiss === 'overlay';
         }
 
         //Prompt alert here...
