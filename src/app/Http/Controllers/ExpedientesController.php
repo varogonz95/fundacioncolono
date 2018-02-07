@@ -68,7 +68,7 @@ class ExpedientesController extends Controller{
 
 		// Iterate over items
 		$filtered->each(function($item, $index){
-			$item->meses      = $item->getMeses($item->fecha_desde['raw'], $item->fecha_hasta['raw']);
+			$item->meses      = $item->getMeses();
 			$item->montoTotal = $item->getMontoTotal();
 			$item->archivado  = $item->trashed();
 		});
@@ -126,12 +126,7 @@ class ExpedientesController extends Controller{
 			$persona->expediente()->save($expediente);
 
 			// Attach Ayudas to Expediente
-			AyudaExpedienteService::attach(
-				$expediente->ayudas(), 
-				['ids'     => $request['ayuda'], 
-				'detalles' => $request['ayuda_detalle'], 
-				'montos'   => $request['ayuda_monto']]
-			);
+			AyudaExpedienteService::attach($expediente->ayudas(), $request['ayudas']);
 
 			DB::commit();
 		}
@@ -184,11 +179,7 @@ class ExpedientesController extends Controller{
 				$current = HistoricoService::create($current, $request['expediente']);
 			
 			//* Process attachs
-			AyudaExpedienteService::attach($current->ayudas(), [
-				'ids'      => collect($request['attachs'])->pluck('id'), 
-				'montos'   => collect($request['attachs'])->pluck('pivot.monto'),
-				'detalles' => collect($request['attachs'])->pluck('pivot.detalle'), 
-			]);
+			AyudaExpedienteService::attach($current->ayudas(), $request['attachs']);
 
 			//* Process detachs
 			AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
@@ -196,7 +187,7 @@ class ExpedientesController extends Controller{
 			//* Process updates
 			AyudaExpedienteService::update($current->ayudas(), $request['updates']);
 
-			$current->meses      = $current->getMeses($current->fecha_desde['raw'], $current->fecha_hasta['raw']);
+			$current->meses      = $current->getMeses();
 			$current->montoTotal = $current->getMontoTotal();
 
 			// Everything went just fine

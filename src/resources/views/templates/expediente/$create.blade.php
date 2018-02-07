@@ -26,8 +26,8 @@
 
     @slot('approval_on', 'estado.id === 1')
 
-    @slot('pago_inicio_options', 'ng-required=estado.id === 1')
-    @slot('pago_final_options', 'ng-required=estado.id === 1')
+    @slot('entrega_inicio_options', 'ng-required=estado.id === 1')
+    @slot('entrega_final_options', 'ng-required=estado.id === 1')
     
     @slot('fecha_desde_options')
         ng-model="datePickers.from.date"

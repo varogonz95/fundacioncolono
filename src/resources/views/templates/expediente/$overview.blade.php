@@ -39,6 +39,6 @@
     @include('templates.expediente.show')
     
     <!-- INFORMACION DE LAS AYUDAS -->
-    @include('templates.ayuda.show')
+	@include('templates.ayuda.show')
         
 @endcomponent

@@ -8,7 +8,7 @@
 	{{-- ------------------------- REFERENTE CONFIG ------------------------- --}}
 	{{-- -------------------------------------------------------------------- --}}
 	@slot('hasReferenteOtro_model', 'update.caso.hasReferenteOtro')
-	@slot('hasReferenteOtro_init_expression', 'update.caso.hasReferenteOtro = update.caso.referente_otro !== null')
+	@slot('hasReferenteOtro_init_expression', "update.caso.hasReferenteOtro = update.caso.referente_otro || !update.caso.referente_otro && update.caso.referente.id === $first_referente")
 	@slot('hasReferenteOtro_value', 'update.caso.hasReferenteOtro')
 
 	@slot('referente_otro_model', 'update.caso.referente_otro')

@@ -1,7 +1,22 @@
 
-app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente) {
+app.controller('Ayudas_EditController', function ($scope, Alert, Modal) {
+	
+	Modal.setSettings({
+		onBeforeShow: function() {
+			$('body').css('overflow-y', 'hidden');
+			$scope.items = [];
+			for (var i = 0; i < $scope.ayudas.length; i++) {
+				var exists = false;
+				for (var j = 0; j < $scope.selected.ayudas.length; j++)
+					if($scope.ayudas[i].id === $scope.selected.ayudas[j].id) {
+						exists = true;
+						break;
+					}
+				if (!exists) $scope.items.push($scope.ayudas[i]);
+			}
+		}}, true);
 
-    $scope.remove = function(ayuda){
+    $scope.removeAsigned = function(ayuda){
         ayuda.removed = true;
         $scope.update.ayudas.detachs.push(ayuda);
     };
@@ -61,5 +76,21 @@ app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente
             ayuda.added = false;
         }
     };    
+
+	$scope.modalinit = function(){
+		$('#addAyudasModal').appendTo('body');
+	};
+
+	$scope.removeNew = function(index) {
+
+		//return back item to list
+		$scope.items.push({id: $scope.update.ayudas.attachs[index].id, descripcion: $scope.update.ayudas.attachs[index].descripcion});
+
+		// remove item
+		$scope.update.ayudas.attachs.splice(index, 1);
+
+		console.log($scope.update.ayudas.attachs);
+		console.log($scope.items);
+	};
 
 });

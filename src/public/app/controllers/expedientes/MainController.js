@@ -1,8 +1,4 @@
-
-/**
-*   Controller for entity 'Expediente'
-*/
-app.controller('Expedientes_MainController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead) {
+app.controller('Expedientes_MainController', function ($scope, Referente, Ayuda, Typeahead) {
 
     $scope.formatter = Typeahead.formatter;
 

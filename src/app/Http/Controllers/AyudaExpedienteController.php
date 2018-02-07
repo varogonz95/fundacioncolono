@@ -11,8 +11,7 @@ use Illuminate\Http\Request;
 
 class AyudaExpedienteController extends Controller {
 
-
-	public function update(Request $request, $id){
+	public function __invoke(Request $request, $id){
 		
 		$status = true;
 		$expediente = Expediente::with(['ayudas', 'persona', 'referente'])->find($id);
@@ -22,11 +21,7 @@ class AyudaExpedienteController extends Controller {
 		try{
 
 			//* Process attachs
-			AyudaExpedienteService::attach($expediente->ayudas(), [
-				'ids'      => collect($request['attachs'])->pluck('id'),
-				'montos'   => collect($request['attachs'])->pluck('pivot.monto'),
-				'detalles' => collect($request['attachs'])->pluck('pivot.detalle'),
-			]);
+			AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
 	
 			//* Process detachs
 			AyudaExpedienteService::detach($expediente->ayudas(), $request['detachs']);
@@ -64,15 +59,5 @@ class AyudaExpedienteController extends Controller {
 			'msg'        => $status ? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
 		]);
 
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Request $request, $id){
-		return $request->all();
 	}
 }

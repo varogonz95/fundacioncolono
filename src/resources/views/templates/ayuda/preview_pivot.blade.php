@@ -4,10 +4,10 @@
 <uib-accordion close-others="true">
     <div uib-accordion-group class="addayudas panel-default" ng-repeat="i in items">
 
-        <input type="hidden" name="ayuda[@{{$index}}]" ng-value="i.ayuda.id">
+        <input type="hidden" name="ayudas[@{{$index}}][id]" ng-value="i.id">
 
         <uib-accordion-heading>
-            <span>@{{ i.ayuda.descripcion }}</span>
+            <span>@{{ i.descripcion }}</span>
             <button class="pull-right btn-sm btn-outline btn btn-delete" ng-click="remove($index)">
                 Quitar <span class="glyphicon glyphicon-minus"></span>
             </button>
@@ -15,16 +15,16 @@
 
 
         <div class="form-group">
-            <label class="col-md-3">Monto base:</label>
-            <div class="col-md-2">
-                <input class="form-control"ype="text" name="ayuda_monto[@{{$index}}]" ng-value="i.monto">
+            <label class="control-label col-md-4">Monto base:</label>
+            <div class="col-md-3 col-lg-pull-1">
+                <input class="form-control"ype="text" name="ayudas[@{{$index}}][monto]" ng-value="i.monto">
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-md-12">Detalle:</label>
             <div class="col-md-11">
-                <textarea name="ayuda_detalle[@{{$index}}]" class="form-control noresize" cols="5" rows="5">@{{ i.detalle }}</textarea>
+                <textarea name="ayudas[@{{$index}}][detalle]" class="form-control noresize" cols="5" rows="5">@{{ i.detalle }}</textarea>
             </div>
         </div>
     </div>

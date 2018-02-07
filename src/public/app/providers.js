@@ -24,7 +24,10 @@ app.provider('AppResource', function () {
 				}
 			},
 
-			getUrl = function () { return protocol + '://' + host + ':' + port + '/' + extras; },
+			getUrl = function () { 
+                var url = protocol + '://' + host + ':' + port + '/' + extras;
+                return url[url.length] === '/' ? url : url + '/';
+            },
 
 			extend = function (route, placeholders) {
 

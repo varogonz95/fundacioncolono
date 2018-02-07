@@ -19,7 +19,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::middleware(['auth'])->group(function(){
     
     Route::get('expedientes/all','ExpedientesController@all');
-    Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController@update');
+    Route::post('expedientes/{expediente}/ayudas', 'AyudaExpedienteController');
     Route::post('expedientes/{expediente}/restore','ExpedientesController@restore');
 
     Route::resource('expedientes','ExpedientesController');

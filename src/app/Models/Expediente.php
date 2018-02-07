@@ -47,32 +47,20 @@ class Expediente extends Model{
 	}
 
 	public function setFechaDesdeAttribute($value){		
-		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? 
-			$value['raw'] : 
-			gettype($value) === 'string' ?
-				(new \DateTime($value))->format('Y-m-d') :
-				$value;
+        gettype($value) !== 'object' ? 
+            (new \DateTime($value))->format('Y-m-d') :
+            $value;
 	}
 
 	public function setFechaHastaAttribute($value){
-		$this->attributes['fecha_desde'] = gettype($value) === 'array' ? 
-			$value['raw'] : 
-			gettype($value) === 'string' ?
-				(new \DateTime($value))->format('Y-m-d') :
-				$value;
-	}
-
-	public function getFechaDesdeAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
-	}
-
-	public function getFechaHastaAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
+        gettype($value) !== 'object' ? 
+            (new \DateTime($value))->format('Y-m-d') :
+            $value;
 	}
 
 	//*	Getters	----------------------------//
-	public function getMeses($date1, $date2){
-		$diff = (new \DateTime($date1))->diff(new \DateTime($date2), true); 
+	public function getMeses(){
+		$diff = (new \DateTime($this->fecha_desde))->diff(new \DateTime($this->fecha_hasta), true); 
 		return ($diff->m + 1) + ($diff->y * 11);
 	}
 

@@ -1,11 +1,7 @@
 
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Alert, Modal) {
 
-	var showModal = Modal.init('#show_modal',{
-		style:         { 'overflow-y': 'hidden', 'bottom': '0' },
-		onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
-		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
-	});
+	var showModal = Modal.init('#show_modal',{style:{ 'overflow-y': 'hidden', 'bottom': '0' }});
 
 	$scope.onlyTrashed = false;
 
@@ -119,18 +115,6 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 	};
 
 	$scope.show = function (obj) {
-
-		obj.datePickers = {
-			from: {
-				date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
-				open: false
-			},
-			to: { 
-				date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
-				open: false 
-			}
-		} || obj.datePickers;
-
 		$scope.selected.isSelected = false;
 		obj.isSelected = true;
 		$scope.selected = obj;
@@ -138,11 +122,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 		showModal.show();
 
 		if (obj.archivado)
-			Alert.notify('Expediente archivado', 'No se pueden realizar cambios al expediente mientras esté archivado. ', 'info',3000);
-	};
-
-	$scope.toStandardDate = function(date){
-		return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+			Alert.notify('Expediente archivado', 'No se pueden realizar cambios al expediente mientras esté archivado. ', 'info', 3000);
 	};
 
 	$scope.filter = function () {

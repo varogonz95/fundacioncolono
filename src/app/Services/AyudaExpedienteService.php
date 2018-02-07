@@ -5,12 +5,12 @@ namespace App\Services;
 class AyudaExpedienteService{
 	
 	public static function attach($ayudas, $attachs){
-		for ($i=0, $count = count($attachs['ids']); $i < $count; $i++)
+		for ($i=0, $count = count($attachs); $i < $count; $i++)
             $ayudas->attach(
-                $attachs['ids'][$i],
+                $attachs[$i]['id'],
 				[
-					'detalle' => $attachs['detalles'][$i],
-					'monto'   => $attachs['montos'][$i]
+					'detalle' => $attachs[$i]['detalle'],
+					'monto'   => $attachs[$i]['monto']
 				]
 			);
 	}

@@ -42,7 +42,7 @@ uib-accordion .addayudas:only-child{border-radius: 4px !important;}
 .controls{margin-top:4px; margin-bottom: 1em;}
 .noresize{resize: none;}
 .text-length-toggle{max-height: 20px; min-height: 20px}
-.text-collapsed{max-height: calc(3 * 1.42857143em + 20px);min-height: calc(3 * 1.42857143em + 20px);}
+.text-collapsed{max-height: calc(5 * 1.42857143em + 20px)}
 
 #filter {background-color: #fafafa; border: thin solid #ddd; border-radius: 4px}
 

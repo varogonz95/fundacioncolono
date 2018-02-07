@@ -68,8 +68,8 @@
         <div class="expediente-info-item" ng-show="selected.estado === 1">
             <label>Aprobado</label>
             <p style="padding: 0 10px">
-                Desde: @{{ selected.fecha_desde.formatted }}
-                <br> Hasta: @{{ selected.fecha_hasta.formatted }}
+                Desde: @{{ selected.fecha_desde | date : 'dd-MM-yyyy'}}
+                <br> Hasta: @{{ selected.fecha_hasta | date : 'dd-MM-yyyy'}}
                 <br>
                 <small class="help-block">Número de meses: @{{ update.cache? 'sin calcular' : selected.meses  }}</small>
             </p>

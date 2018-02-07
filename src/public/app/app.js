@@ -1,3 +1,4 @@
+Date.prototype.toStandardDate = function () { return this.toISOString().substring(0, 10); };
 
 var app = angular.module('App',['ngAnimate', 'ngResource', 'ui.bootstrap']);
 
@@ -45,6 +46,7 @@ app.config(function (TerritoryProvider) {
 	TerritoryProvider.resultWrapper = 'features';
 });
 
+// app.filter('standardate')
 
 // SOME BUILT-IN FUNCTIONS
 function jQueryToJson(obj, key){
@@ -85,14 +87,8 @@ function find(key, value, array) {
 }
 
 function getIndex(list, object){
-	var i = 0,
-	found = false;
+	for (var i = 0; i < list.length; i++)
+		if (angular.equals(list[i], object)) return i;
 
-	for (;i < list.length; i++)
-		if (angular.equals(list[i], object)) {
-			found = true;
-			break;
-		}
-
-	return found? i : -1;
+	return -1;
 };

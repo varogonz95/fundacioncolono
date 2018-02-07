@@ -112,3 +112,47 @@ app.directive('regionText', function (Region) {
 		},
 	};
 });
+
+app.directive('addAyudasModal', function (AppResource) {
+    var link = function (scope, element, atts) {
+		
+		scope.monto = scope.detalle = null;
+
+		scope.getIndex = function (item, items) {
+			for (var i = 0; i < items.length; i++)
+				if (angular.equals(items[i], item)) return i;
+
+			return -1;
+		};
+
+		scope.add = function(){
+
+			var push = {};
+			push[scope.value] = scope.selected[scope.value];
+			push[scope.label] = scope.selected[scope.label];
+			push.monto = scope.monto;
+			push.detalle = scope.detalle;
+
+			scope.repository.push(push);
+	
+			scope.items.splice(scope.getIndex(scope.selected, scope.items), 1);
+			scope.selected = scope.items[0];
+	
+			scope.monto = scope.detalle = null;
+		};
+    };
+
+    return {
+        scope: {
+            items: '=',
+			repository: '=',
+			label: '@',
+			value: '@',
+		},
+		replace: true,
+        transclude: true,
+        restrict: 'E',
+        link: link,
+        templateUrl: AppResource.getUrl() + '/app/templates/add-ayudas-modal.html'
+    }
+});

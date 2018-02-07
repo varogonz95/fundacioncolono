@@ -64,14 +64,14 @@
 		<div class="form-group col-md-12 col-sm-6 col-xs-12 nogutters">
 			<label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Primera fecha:</label>
 			<div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-				<input type="number" name="pago_inicio" class="form-control" min="1" max="30" {{ isset($entrega_inicio_options) ? $entrega_inicio_options : '' }}>
+				<input type="number" name="entrega_inicio" class="form-control" min="1" max="30" {{ isset($entrega_inicio_options) ? $entrega_inicio_options : '' }}>
 			</div>
 		</div>
 		
 		<div class="form-group col-lg-12 col-md-pull-0 col-md-12 col-sm-6 col-sm-pull-1 col-xs-12 nogutters">
 			<label class="text-muted text-nowrap control-label col-lg-4 col-md-5 col-sm-4 col-xs-6" style="font-weight: 100; text-align: left">Segunda fecha:</label>
 			<div class="col-lg-4 col-md-5 col-sm-4 col-xs-6">
-				<input type="number" name="pago_final" class="form-control" min="1" max="30" {{ isset($entrega_final_options) ? $entrega_final_options : '' }}>
+				<input type="number" name="entrega_final" class="form-control" min="1" max="30" {{ isset($entrega_final_options) ? $entrega_final_options : '' }}>
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,8 @@
 
 app.controller('Expedientes_OverviewController', function ($scope, $filter, Expediente, AyudaExpediente, Alert, Modal) {
 
+	$scope.items = [];
+
 	var resetAll = function (){
 		$scope.update.caso = {};
 		$scope.update.persona = {};
@@ -24,7 +26,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 				return true;
 		return false;
 	};
-
+	
     $scope.delete = function () {
         Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
         .then(function(result) {
@@ -64,9 +66,6 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 				.then(function (result) {
 
 					if (result.value || result.dismiss === 'cancel') {
-						$scope.update.caso.fecha_desde = $filter('date')($scope.update.caso.datePickers.from.date, 'yyyy/MM/dd');
-						$scope.update.caso.fecha_hasta = $filter('date')($scope.update.caso.datePickers.to.date, 'yyyy/MM/dd');
-
 						Expediente().save(
 							{
 								id: $scope.selected.id,
@@ -121,11 +120,11 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 									copy(response.expediente, $scope.selected);
 									$scope.selected.datePickers = {
 										from: {
-											date: $scope.selected.fecha_desde.raw ? new Date($scope.selected.fecha_desde.raw) : new Date(),
+											date: $scope.selected.fecha_desde ? new Date($scope.selected.fecha_desde) : new Date(),
 											open: false
 										},
 										to: {
-											date: $scope.selected.fecha_hasta.raw ? new Date($scope.selected.fecha_hasta.raw) : new Date(),
+											date: $scope.selected.fecha_hasta ? new Date($scope.selected.fecha_hasta) : new Date(),
 											open: false
 										}
 									};
@@ -139,6 +138,14 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 	};
 
 	$scope.resetAyudas = function (withCache = true) {
+
+		console.log($scope.update.ayudas.attachs);
+		console.log($scope.items);
+
+		for (var i = 0; i < $scope.update.ayudas.attachs.length; i++)
+			$scope.items.push({id:$scope.update.ayudas.attachs[i].id, descripcion:$scope.update.ayudas.attachs[i].descripcion});
+
+		console.log($scope.items);
 
 		// Empty update lists
 		$scope.update.ayudas.attachs = [];

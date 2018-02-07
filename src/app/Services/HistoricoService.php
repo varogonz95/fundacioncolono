@@ -37,11 +37,7 @@ class HistoricoService{
         $expediente->save();
 
 		//* c.
-		AyudaExpedienteService::attach($expediente->ayudas(), [
-            'ids'      => $current->ayudas->pluck('id'), 
-            'montos'   => $current->ayudas->pluck('pivot.monto'),
-            'detalles' => $current->ayudas->pluck('pivot.detalle'), 
-        ]);
+		AyudaExpedienteService::attach($expediente->ayudas(), $current->ayudas);
 
 		//* d.
         $current->delete();

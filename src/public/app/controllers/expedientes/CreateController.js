@@ -1,6 +1,6 @@
 app.controller('Expedientes_CreateController', function($scope, Persona) {
 
-    $scope.items = [];
+	$scope.items = [];
     $scope.invalid = false;
     $scope.estado = $scope.estados[0];
 
@@ -15,28 +15,12 @@ app.controller('Expedientes_CreateController', function($scope, Persona) {
 		});
     };
 
-    $scope.add = function(){
-
-		$scope.items.push({
-			ayuda: $scope.ayuda_selected,
-			monto: $scope.monto,
-			detalle: $scope.detalle,
-		});
-
-		$scope.ayudas.splice(getIndex($scope.ayudas, $scope.ayuda_selected), 1);
-		$scope.ayuda_selected = $scope.ayudas[0];
-
-		$scope.monto = null;
-		$scope.detalle = null;
-	};
-
 	$scope.remove = function(index) {
 
 		//return back item to list
-		$scope.ayudas.push($scope.items[index].ayuda);
+		$scope.ayudas.push({id: $scope.items[index].id, descripcion: $scope.items[index].descripcion});
 
 		// remove item
 		$scope.items.splice(index, 1);
-	}
-
+	};
 });

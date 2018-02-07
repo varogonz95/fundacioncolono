@@ -4,7 +4,7 @@
         {{ isset($header_content) ? $header_content : '' }}
     </header>
 
-    <section class="animatedModal-content row {{ isset($content_classes) ? $content_classes : '' }}">
+    <section class="animatedModal-content row {{ !isset($content_classes) ?: $content_classes }}">
         {{ $slot }}
     </section>
 
