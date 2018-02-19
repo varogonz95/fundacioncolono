@@ -50,14 +50,17 @@ class Filter{
             );
     
         return $this;
+	}
+	
+    public function in($relationship, $foreign = null, $local = null, $comparator = "="){
+        $this->builder = $this->builder->whereIn($this->model->getKeyName(), function ($query) use ($relationship, $local, $foreign, $comparator) {
+			$query->select($foreign ? : $this->model->getForeignKey())
+				  ->from((new $relationship)->getTable())
+				  ->where($foreign ? : $this->model->getForeignKey(), $comparator, $local ? : $this->model->getKeyName());
+		});
+        return $this;
     }
-
-	/**
-     *! FOR TESTING PURPOSES ONLY ----------------------
-     *! If implementation is successfull, then
-     *! release for proposed stack
-     *! EOC --------------------------------------------
-     */
+	
     public function notIn($relationship, $foreign = null, $local = null, $comparator = "<>"){
         $this->builder = $this->builder->whereNotIn($this->model->getKeyName(), function ($query) use ($relationship, $local, $foreign, $comparator) {
 			$query->select($foreign ? : $this->model->getForeignKey())
@@ -83,12 +86,12 @@ class Filter{
         return $this->builder;
     }
 
-    public function options(callable $method){
-        $this->builder = $method($this->builder);
+    public function options(callable $callback){
+        $this->builder = $callback($this->builder) ?: $this->builder;
         return $this;
     }
 
-    public function paginate($items, $perPage = 15, $page = null, $options = []){
+    public function paginate($items, $perPage = 15, $page = null){
         $arr = [];
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $count = $items->count();

@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Models\Historico;
 use App\Models\Expediente;
+use App\Services\ReferentesService;
 
-class HistoricoService{
+class HistoricoService {
 	
-	public static function create($current, $new, $loadRelationships = []) {
+	public static function create($current, $new) {
 
 		/**
 		 * TODO a. Associate current Expediente to Historico
@@ -31,19 +32,17 @@ class HistoricoService{
 		// Associate to Persona
 		$expediente->persona()->associate($current->persona->cedula);
 		// Associate Referente
-		$expediente->referente()->associate($current->referente->id);
+		$expediente->referente()->associate($new['referente']['id']);
         
         //* e.
         $expediente->save();
 
 		//* c.
-		AyudaExpedienteService::attach($expediente->ayudas(), $current->ayudas);
+		AyudaExpedienteService::attach($expediente->ayudas(), $current->ayudas, true);
 
 		//* d.
         $current->delete();
         
-        $expediente->load($loadRelationships);
-
 		//* f.
 		return $expediente;
 	}

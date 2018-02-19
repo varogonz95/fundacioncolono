@@ -3,7 +3,7 @@
 	{{-- ADD AYUDAS MODAL (ANGULARJS DIRECTIVE) --}}
 	<div id="addAyudasModal" class="modal fade" tabindex="-1" role="dialog" ng-init="modalinit()">
 		<div class="modal-dialog" role="document">
-			<add-ayudas-modal items="items" repository="update.ayudas.attachs" label="descripcion" value="id"></add-ayudas-modal>
+			<add-ayudas-modal items="ayudas" repository="update.ayudas.attachs" label="descripcion" value="id"></add-ayudas-modal>
 		</div>
 	</div>
 

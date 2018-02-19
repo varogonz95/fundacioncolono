@@ -1,7 +1,7 @@
 
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Alert, Modal) {
 
-	var showModal = Modal.init('#show_modal',{style:{ 'overflow-y': 'hidden', 'bottom': '0' }});
+	var showModal = Modal.init('#show_modal',{style:{ 'overflow-y': 'hidden', 'bottom': '0', 'left': '0' }});
 
 	$scope.onlyTrashed = false;
 
