@@ -1,6 +1,8 @@
 
 @component('components.forms.expediente')
-
+	
+{{-- ------------------------- REFERENTE CONFIG ------------------------- --}}
+{{-- -------------------------------------------------------------------- --}}
     @slot('hasReferenteOtro_model', 'hasReferenteOtro')
     @slot('hasReferenteOtro_init_expression', 'hasReferenteOtro = false')
     @slot('hasReferenteOtro_value', 'hasReferenteOtro')
@@ -12,7 +14,9 @@
 
     @slot('referente_model', 'referente')
     @slot('referentes_list', 'referentes')
-    @slot('referentes_limit', '20')
+	@slot('referentes_limit', '-20')
+{{-- -------------------------------------------------------------------- --}}
+{{-- -------------------------------------------------------------------- --}}
 
     @slot('prioridad_options')
         ng-model="prioridad"
@@ -34,6 +38,7 @@
         ng-click="datePickers.from.open = true"
         uib-datepicker-popup="dd/MM/yyyy"
         is-open="datePickers.from.open"
+        datepicker-options="datePickerOptions.from"
         ng-required="estado.id === 1"
     @endslot
     
@@ -42,7 +47,7 @@
         ng-click="datePickers.to.open = true"
         uib-datepicker-popup="dd/MM/yyyy"
         is-open="datePickers.to.open"
-        datepicker-options="{minDate: datePickers.from.date}"
+        datepicker-options="datePickerOptions.to"
         ng-required="estado.id === 1"
     @endslot
 

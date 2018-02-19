@@ -60,9 +60,8 @@
             </label>
             <br>
             <input 
-                type="text" placeholder="-Seleccione un referente-" class="form-control" autocomplete="off" 
-                ng-model="filter_data.referente" ng-hide="filter_data.referente.id === {{ $first_referente }}"
-                uib-typeahead="r.id as r.descripcion for r in referentes | filter:$viewValue | limitTo: 20"
+                type="text" placeholder="-Seleccione un referente-" class="form-control" autocomplete="off"
+                ng-model="filter_data.referente" uib-typeahead="r.id as r.descripcion for r in referentes | filter: $viewValue | limitTo: -20"
                 typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, referentes, 'id', 'descripcion')"
             />
 		</div>

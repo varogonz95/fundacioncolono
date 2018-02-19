@@ -38,16 +38,11 @@ class ExpedientesController extends Controller{
 			'value'        => $request['comparator'] === 'like' ? "{$request['value']}%" : $request['value'],
 		];
 
-		$filtered;
-		
+		$filtered = null;
 
 		if ($this->hasEmptyValues($filter))
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-					->options(function($builder) use ($request){
-						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->withTrashed();
-						return $builder;
-					})
+					->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
@@ -55,11 +50,7 @@ class ExpedientesController extends Controller{
 
 		else
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-					->options(function($builder) use ($request){
-						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->withTrashed();
-						return $builder;
-					})
+					->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
 					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
@@ -109,6 +100,7 @@ class ExpedientesController extends Controller{
 			// Instantiate Expediente and fill with request data
 			$expediente = new Expediente;
 			$expediente->fill($request->all());
+			$expediente->referente_otro = !filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN) ? $expediente->referente_otro : null;
 
 			// Create Persona from request
 			$persona = Persona::create($request->all());
@@ -157,26 +149,24 @@ class ExpedientesController extends Controller{
 
 		try{
 
+			$current->fill($request['expediente']);
+			$current->referente->id  = $request['expediente']['referente']['id'];
+			$current->referente_otro = filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
+
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
-				
-				$current->fill($request['expediente']);
-				$current->referente_otro = filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
 
 				//* Process Referente info
 				ReferentesService::createOrAssociate(
 					$current->referente(),
-					$request['expediente']['referente']['id'],
-					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN) ?
-					$request['expediente']['referente_otro'] : null,
-					filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
-					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
+					$current->referente->id,
+					$current->referente_otro,
+					filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)
 				);
 				
 				$current->save();
 			}
 			
-			else 
-				$current = HistoricoService::create($current, $request['expediente']);
+			else $current = HistoricoService::create($current, $current->toArray());
 			
 			//* Process attachs
 			AyudaExpedienteService::attach($current->ayudas(), $request['attachs']);
@@ -190,7 +180,8 @@ class ExpedientesController extends Controller{
 			$current->meses      = $current->getMeses();
 			$current->montoTotal = $current->getMontoTotal();
 
-			// Everything went just fine
+			$current->load(filter_var($request['record'], FILTER_VALIDATE_BOOLEAN) ? ['ayudas', 'referente'] : 'ayudas');
+
 			DB::commit();
 		}
 

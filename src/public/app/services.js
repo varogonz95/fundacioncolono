@@ -1,11 +1,9 @@
 
 app.service('Typeahead', function(){
 	this.formatter = function(model, list, select, label){
-		for (var i = 0; i < list.length; i++) {
-			if (model === list[i][select]) {
+		for (var i = 0; i < list.length; i++)
+			if (model === list[i][select]) 
 				return list[i][label];
-			}
-		}
 	};
 });
 

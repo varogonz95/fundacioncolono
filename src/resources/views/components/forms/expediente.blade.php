@@ -19,16 +19,18 @@
 		</label>
 		<ng-show ng-show="{{ $hasReferenteOtro_model }}">
 			<input class="form-control" type="text" name="referente_otro" placeholder="Nombre del referente" ng-model="{{ $referente_otro_model }}">
-			<label style="font-weight:100;font-size:12px;">
-				Agregar a opciones:
-				<input type="checkbox" ng-model="{{ $newReferente_model }}" ng-init="{{ $newReferente_init_expression }}">
-				<input type="hidden" name="newReferente" ng-value="{{ $newReferente_value }}">
-			</label>
+			@if(isset($newReferente_model) && isset($newReferente_value) && isset($newReferente_init_expression))
+				<label style="font-weight:100;font-size:12px;">
+					Agregar a opciones:
+					<input type="checkbox" ng-model="{{ $newReferente_model }}" ng-init="{{ $newReferente_init_expression }}">
+					<input type="hidden" name="newReferente" ng-value="{{ $newReferente_value }}">
+				</label>
+			@endif
 			<p class="text-muted"><small>Deje en blanco si el caso no tiene referentes.</small></p>
 		</ng-show>
 
 		<input type="text" name="referente" placeholder="-Seleccione un referente-" class="form-control"
-			autocomplete="off" ng-model="{{ $referente_model }}" ng-hide="{{ $hasReferenteOtro_model }}"
+			autocomplete="off" ng-model="{{ $referente_model }}" ng-hide="{{ $hasReferenteOtro_model }}" typeahead-append-to-body="true"
 			uib-typeahead="r.id as r.descripcion for r in {{ $referentes_list }} | filter:$viewValue | limitTo:{{ $referentes_limit }}"
 			typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, {{ $referentes_list }}, 'id', 'descripcion')" {{ isset($referente_typeahead_options) ? $referente_typeahead_options : '' }}>
 		<input type="hidden" name="referente" ng-value="{{ $hasReferenteOtro_model }}? 1 : {{ $referente_model }}">
@@ -83,14 +85,14 @@
 		<div class="form-group col-sm-6 col-xs-12 nogutters">
 			<label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Desde: </label>
 			<div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-				<input class="form-control" type="text" name="fecha_desde" uib-datepicker-popup="dd/MM/yyyy" {{ isset($fecha_desde_options) ? $fecha_desde_options : ''}}>
+				<input class="form-control" type="text" name="fecha_desde" uib-datepicker-popup="dd-MM-yyyy" {{ isset($fecha_desde_options) ? $fecha_desde_options : ''}}>
 			</div>
 		</div>
 
 		<div class="form-group col-md-pull-0 col-sm-6 col-sm-pull-2 col-xs-12 nogutters">
 			<label class="control-label text-muted col-lg-6 col-md-12 col-sm-2 col-xs-3" style="font-weight: 100; text-align: left">Hasta: </label>
 			<div class="col-lg-10 col-md-12 col-sm-5 col-xs-6">
-				<input class="form-control" type="text" name="fecha_hasta" uib-datepicker-popup="dd/MM/yyyy" {{ isset($fecha_hasta_options) ? $fecha_hasta_options : ''}}>
+				<input class="form-control" type="text" name="fecha_hasta" uib-datepicker-popup="dd-MM-yyyy" {{ isset($fecha_hasta_options) ? $fecha_hasta_options : ''}}>
 			</div>
 		</div>
 	</div>
