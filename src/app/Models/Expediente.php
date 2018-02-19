@@ -25,8 +25,6 @@ class Expediente extends Model{
 	];
 
 	public $timestamps = false;
-	// TODO Set date format for DB storage...
-	// protected $dateFormat = '':
 
 	//* Relationships	----------------//
 	public function persona(){
@@ -47,13 +45,13 @@ class Expediente extends Model{
 	}
 
 	public function setFechaDesdeAttribute($value){		
-        gettype($value) !== 'object' ? 
+        $this->attributes['fecha_desde'] = gettype($value) !== 'object' ? 
             (new \DateTime($value))->format('Y-m-d') :
             $value;
 	}
 
 	public function setFechaHastaAttribute($value){
-        gettype($value) !== 'object' ? 
+        $this->attributes['fecha_hasta'] = gettype($value) !== 'object' ? 
             (new \DateTime($value))->format('Y-m-d') :
             $value;
 	}

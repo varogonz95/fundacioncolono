@@ -1,7 +1,10 @@
 
 app.controller('Expedientes_IndexController', function ($scope, Expediente, Alert, Modal) {
 
-	var showModal = Modal.init('#show_modal',{style:{ 'overflow-y': 'hidden', 'bottom': '0' }});
+	var showModal = Modal.init('#show_modal',{
+		style:{ 'overflow-y': 'hidden', 'bottom': '0', 'left': '0' },
+		onBeforeShow: function() {$('body').css('overflow-y', 'hidden');}
+	});
 
 	$scope.onlyTrashed = false;
 
@@ -21,7 +24,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Aler
 		one:            false,
 		estado:         $scope.estados[0],
 		prioridad:      $scope.prioridades[0],
-		fecha_creacion: {from: new Date(), to: null},
+		fecha_creacion: {from: new Date(), to: new Date()},
 	};
 
 	$scope.total = 1;

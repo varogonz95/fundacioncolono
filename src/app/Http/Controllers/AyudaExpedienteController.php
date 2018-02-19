@@ -17,8 +17,12 @@ class AyudaExpedienteController extends Controller {
 		$expediente = Expediente::with(['ayudas', 'persona', 'referente'])->find($id);
 
 		DB::beginTransaction();
-		
+
 		try{
+			
+			//* Create new record into Historico if record is true
+			if (filter_var($request['record'], FILTER_VALIDATE_BOOLEAN))
+				$expediente = HistoricoService::create($expediente, $expediente->toArray());
 
 			//* Process attachs
 			AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
@@ -32,10 +36,6 @@ class AyudaExpedienteController extends Controller {
 			//* Reload Ayudas
 			$expediente->load('ayudas');
 
-			//* Create new record into Historico if record is true
-			if (filter_var($request['record'], FILTER_VALIDATE_BOOLEAN))
-				$expediente = HistoricoService::create($expediente, $expediente->toArray(), ['ayudas', 'persona', 'referente']);
-
 			// All good to commit :)
 			DB::commit();
 		}
@@ -48,7 +48,7 @@ class AyudaExpedienteController extends Controller {
 			throw $e;
 		}
 		
-		$expediente->meses      = $expediente->getMeses($expediente->fecha_desde['raw'], $expediente->fecha_hasta['raw']);
+		$expediente->meses      = $expediente->getMeses($expediente->fecha_desde, $expediente->fecha_hasta);
 		$expediente->montoTotal = $expediente->getMontoTotal();
 
 		return response()->json([
@@ -57,6 +57,7 @@ class AyudaExpedienteController extends Controller {
 			'title'      => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
 			'type'       => $status ? 'success' : 'error',
 			'msg'        => $status ? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
+			'debug'        => $request->all(),
 		]);
 
 	}

@@ -1,8 +1,6 @@
 
 app.controller('Expedientes_OverviewController', function ($scope, $filter, Expediente, AyudaExpediente, Alert, Modal) {
 
-	$scope.items = [];
-
 	var resetAll = function (){
 		$scope.update.caso = {};
 		$scope.update.persona = {};
@@ -80,16 +78,6 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 									delete $scope.update.cache;
 									$scope.update.caso = {};
 									copy(response.expediente, $scope.selected);
-									$scope.selected.datePickers = {
-										from: {
-											date: $scope.selected.fecha_desde.raw ? new Date($scope.selected.fecha_desde.raw) : new Date(),
-											open: false
-										},
-										to: {
-											date: $scope.selected.fecha_hasta.raw ? new Date($scope.selected.fecha_hasta.raw) : new Date(),
-											open: false
-										}
-									};
 									$scope.resetAyudas(false);
 								}
 								Alert.notify(response.title, response.msg, response.type);
@@ -109,26 +97,16 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 				if (result.value || result.dismiss === 'cancel') {
 					AyudaExpediente.$service.post(
 						{
-								id: $scope.selected.id,
-								attachs: $scope.update.ayudas.attachs,
-								detachs: $scope.update.ayudas.detachs,
-								updates: $scope.update.ayudas.updates,
-								record: !!result.value
+							id: $scope.selected.id,
+							attachs: $scope.update.ayudas.attachs,
+							detachs: $scope.update.ayudas.detachs,
+							updates: $scope.update.ayudas.updates,
+							record: !!result.value
 						},
 						function (response) {
 							if (response.status) {
-									copy(response.expediente, $scope.selected);
-									$scope.selected.datePickers = {
-										from: {
-											date: $scope.selected.fecha_desde ? new Date($scope.selected.fecha_desde) : new Date(),
-											open: false
-										},
-										to: {
-											date: $scope.selected.fecha_hasta ? new Date($scope.selected.fecha_hasta) : new Date(),
-											open: false
-										}
-									};
-									$scope.resetAyudas(false);
+								copy(response.expediente, $scope.selected);
+								$scope.resetAyudas(false);
 							}
 							Alert.notify(response.title, response.msg, response.type);
 						}
@@ -138,14 +116,6 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
 	};
 
 	$scope.resetAyudas = function (withCache = true) {
-
-		console.log($scope.update.ayudas.attachs);
-		console.log($scope.items);
-
-		for (var i = 0; i < $scope.update.ayudas.attachs.length; i++)
-			$scope.items.push({id:$scope.update.ayudas.attachs[i].id, descripcion:$scope.update.ayudas.attachs[i].descripcion});
-
-		console.log($scope.items);
 
 		// Empty update lists
 		$scope.update.ayudas.attachs = [];

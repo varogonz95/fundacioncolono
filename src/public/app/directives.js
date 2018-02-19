@@ -135,8 +135,8 @@ app.directive('addAyudasModal', function (AppResource) {
 
 			scope.repository.push(push);
 	
-			scope.items.splice(scope.getIndex(scope.selected, scope.items), 1);
-			scope.selected = scope.items[0];
+			// scope.items.splice(scope.getIndex(scope.selected, scope.items), 1);
+			scope.selected = null;
 	
 			scope.monto = scope.detalle = null;
 		};

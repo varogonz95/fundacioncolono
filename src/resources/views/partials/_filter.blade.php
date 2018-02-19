@@ -60,9 +60,8 @@
             </label>
             <br>
             <input 
-                type="text" placeholder="-Seleccione un referente-" class="form-control" autocomplete="off" 
-                ng-model="filter_data.referente" ng-hide="filter_data.referente.id === {{ $first_referente }}"
-                uib-typeahead="r.id as r.descripcion for r in referentes | filter:$viewValue | limitTo: 20"
+                type="text" placeholder="-Seleccione un referente-" class="form-control" autocomplete="off"
+                ng-model="filter_data.referente" uib-typeahead="r.id as r.descripcion for r in referentes | filter: $viewValue | limitTo: -20"
                 typeahead-show-hint="true" typeahead-min-length="0" typeahead-input-formatter="formatter($model, referentes, 'id', 'descripcion')"
             />
 		</div>
@@ -75,8 +74,8 @@
 					<input type="hidden" name="filterRel" value="expedientes">
 					<input type="hidden" name="property" value="fecha_creacion">
 					<input type="hidden" name="comparator" value="between">
-					<input type="hidden" name="value[0]" ng-value="toStandardDate(filter_data.fecha_creacion.from)">
-					<input type="hidden" name="value[1]" ng-value="toStandardDate(filter_data.fecha_creacion.to)">
+					<input type="hidden" name="value[0]" ng-value="filter_data.fecha_creacion.from.toStandardDate()">
+					<input type="hidden" name="value[1]" ng-value="filter_data.fecha_creacion.to.toStandardDate()">
 				</ng-if>
 			</label>
 			<br>

@@ -22,7 +22,7 @@
 		</section>
 	</ng-repeat>
 </div>
-<ng-show ng-show="update.ayudas.attachs.length > 0">
+<ng-show ng-show="update.ayudas.attachs.length > 0 && selected.ayudas.length > 0">
 	<h4 style="text-indent: 1em">Previamente asignado</h4>
 	<hr>
 </ng-show>
