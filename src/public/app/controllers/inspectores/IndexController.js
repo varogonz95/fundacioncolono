@@ -10,23 +10,24 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 	$scope.page  = 1;
 
 	$scope.filter_data = {
-		value:          '',
-		filter:         null,
-		// active:         false,
-		filtered:       false,
-		one:            false,
-		activo:         $scope.activo[0],
+		value:     '',
+		filter:    null,
+		// active: false,
+		filtered: false,
+		one:      false,
 	};
 
 	$scope.inspectores = [];
 
 	$scope.columns = {
-			ubicacion:      true,
+			ubicacion:     true,
 			email:         true,
 			cedula:        true,
 			nombre:        true,
 			apellidos:     true,
 			activo:        true,
+			observaciones: true,
+			fecha_visita:  true,
 	};
 
 	$scope.sort = {
@@ -53,23 +54,23 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 					case 'nombre':
 					case 'apellidos':
 					case 'ubicacion':
-							$scope.sort.relationship = 'persona'
-							break;
-				 case 'activo':
-							$scope.sort.relationship = 'inspectores'
-							break;
+						$scope.sort.relationship = 'persona'
+						break;
+					 case 'activo':
+						 $scope.sort.relationship = 'inspector'
+					     break;
+					 case 'estado':
+						 $scope.sort.relationship = 'expediente'
+					     break;
 					default:
-							$scope.sort.relationship = 'usuario'
+						$scope.sort.relationship = 'usuario'
 			}
-
-			console.log($scope.sort);
-
 			$scope.index();
 	  };
 
 
 	  $scope.index = function (page = 1){
-		$scope.page = (page < 1) ? 1 : page;
+		$scope.page = page;
 
 		var params = {
 				relationship: $scope.sort.relationship,
@@ -95,42 +96,23 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 			});
 		};
 
-		$scope.show = function (obj) {
-				obj.editable               = false;
-				obj.isSelected             = true;
-				obj.persona.editable       = false;
-				$scope.selected.isSelected = obj === $scope.selected;
-				// scope.ayudas.editable = false;
-
-				var regions = obj.persona.ubicacion.split('/');
-
-				// Get Provincia from list and set to persona
-				obj.persona.provincia = Region.find($scope.provincias, 'cod', regions[0]);
-
-				Region.cantones(obj.persona.provincia.cod).then(function (response) {
-					$scope.cantones    = Region.parse(response).cantones;
-					obj.persona.canton = Region.find($scope.cantones, 'cod', regions[1]);
-
-					Region.distritos(obj.persona.provincia.cod, obj.persona.canton.cod).then(function (response) {
-						$scope.distritos     = Region.parse(response).distritos;
-						obj.persona.distrito = Region.find($scope.distritos, 'cod', regions[2]);
-					});
-
-				copy(obj, $scope.selected);
-				showModal.show();
-
-			});
-    };
+	$scope.show = function (obj) {
+			obj.editable               = false;
+			obj.isSelected             = true;
+			obj.persona.editable       = false;
+			$scope.selected.isSelected = obj === $scope.selected;
+		
+			copy(obj, $scope.selected);
+			showModal.show();
+	};
 
 	$scope.filter_activo = function () {
-			$scope.search          = '',
+	  $scope.search          = '',
       $scope.filter_data.one = true;
       $scope.filter_data.filtered = true;
       $scope.index($scope.page);
-			console.log("asdasd");
 	};
 
 
 	$scope.index();
-
 });

@@ -32,17 +32,35 @@
 
 			<div class="col-md-1 hidden-xs hidden-sm"></div>
 
-			{{-- PERSONA --}}
+			{{ csrf_field() }} {{-- PERSONA --}}
 			<fieldset class="col-md-5">
-				<legend>Detalles del inspector</legend>
-				{{-- IMPORT FORM COMPONENT FOR PERSONA --}}
-				@component('components.forms.persona', ['withOcupacionInput' => true])
+				<legend>Detalles de la persona</legend>
+				
+				{{-- PERSONA COMPONENT --}}
+				@component('components.forms.persona')
+					@slot('cedula_help')
+						<p class="help-block">
+							<small>Reemplace las equis (x) por los números de la cédula correspondiente.</small>
+						</p>
+						<p class="help-block" ng-show="invalid">
+							<span class="text-danger">Esta cédula no es válida. Por favor, ingrese otra cédula.</span>
+						</p>
+					@endslot
+
+					@slot('cedula_options')
+						ng-model="cedula"
+						ng-change="validate()"
+					@endslot
+
 					@slot('ubicacion_options')
-						required
+						ng-model="ubicacion"
 						field="ubicacion"
+						required
 					@endslot
 				@endcomponent
-			 </fieldset>
+
+			</fieldset>
+			
 		</form>
 	</section>
 @endsection

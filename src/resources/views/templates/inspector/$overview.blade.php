@@ -23,7 +23,7 @@
 
 
   <!-- INFORMACION DE LOS EXPEDIENTES ASIGNADOS -->
-  @include('templates.inspector_expediente.show')
+  @include('templates.visita.show')
 
   <!-- INFORMACION DEL INSPECTOR -->
   @include('templates.inspector.show')

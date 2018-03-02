@@ -18,40 +18,20 @@ class InspectoresController extends Controller{
 	const MAX_RECORDS = 16;
 
 	public function all(Request $request){
-	  $orderBy = [
-  			'order' => $request['order'],
-  			'by' => $request['by'],
-  		];
-
-  		$filter = [
-  			'comparator' => $request['comparator'],
-  			'property'   => $request['property'],
-  			'value'      => $request['value'],
-  		];
-
-	  $filtered = [];
-
-	  if ($this->hasEmptyValues($filter))
-			$filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
-		  ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-		  ->orderBy($request['relationship'], $orderBy['by'], $orderBy['order'])
-		  ->get();
-	  else
-		$filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
-		  ->where($request['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-		  ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-		  ->orderBy('persona', $orderBy['by'], $orderBy['order'])
-		  ->get();
-
-
-  		// Paginate , passing the filtered items and the max records per page
-  		$pagination = Filter::paginate($filtered, self::MAX_RECORDS);
-  		$items = $pagination->items();
+	  
+        $pagination = Inspector::with(['persona', 'usuario', 'visitas'])->paginate(self::MAX_RECORDS);
+          
+        $items = $pagination->items();
+        foreach ($items as $item) {
+            // $item->activo = $item->usuario->trashed();
+            foreach ($item->visitas as $visita) {
+                $visita->expediente->persona;
+            }
+        }
 
 	  return response()->json([
-		'inspectores' => $items,
-		'total'       => $pagination->total(),
-		// 'pages'       => ceil( Expediente::count()/self::MAX_RECORDS ),
+        'inspectores' => $items,
+        'total' => 10
 	  ]);
 	}
 
@@ -148,11 +128,7 @@ class InspectoresController extends Controller{
 
       $status = true;
 
-      if($request['estado'] == 'Si'){
-        $estado = 0;
-      }else{
-        $estado = 1;
-      }
+       $request['estado'] == 'Sí' ? $estado = 0 : $estado = 1; 
 
        try{
          DB::table('inspectores')

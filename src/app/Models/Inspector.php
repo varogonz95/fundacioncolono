@@ -18,4 +18,8 @@ class Inspector extends Model{
     public function usuario(){
         return $this->belongsTo('App\Models\Usuario', 'usuario_fk');
     }
+
+    public function visitas(){
+        return $this->hasMany('App\Models\Visita', 'inspector_fk');
+    }
 }
