@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Persona extends Model{
 
-    public $primaryKey = 'cedula';
-    public $timestamps = false;
+	public $timestamps = false;
     public $incrementing = false;
+    protected $primaryKey = 'cedula';
 
-    public $fillable = [
+    protected $fillable = [
         'cedula', 
         'nombre', 
         'apellidos', 

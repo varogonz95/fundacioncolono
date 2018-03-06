@@ -2,9 +2,8 @@
     <header>
         <h3>
             Detalles del caso
-            <small>
-                @{{ (selected.editable)? '(en edición)' : '' }}
-            </small>
+            <button class="btn btn-sm btn-outline btn-update" title="Pendiente de entrega"><span class="glyphicon glyphicon-alert"></span> <span class="hidden-xs">Pendiente de entrega</span></button>
+            <small>@{{ (selected.editable)? '(en edición)' : '' }}</small>
         </h3>
         <hr>
     </header>
@@ -69,17 +68,17 @@
         <div class="expediente-info-item" ng-show="selected.estado === 1">
             <label>Aprobado</label>
             <p style="padding: 0 10px">
-                Desde: @{{ selected.fecha_desde.formatted }}
-                <br> Hasta: @{{ selected.fecha_hasta.formatted }}
+                Desde: @{{ selected.fecha_desde | date : 'dd-MM-yyyy'}}
+                <br> Hasta: @{{ selected.fecha_hasta | date : 'dd-MM-yyyy'}}
                 <br>
                 <small class="help-block">Número de meses: @{{ update.cache? 'sin calcular' : selected.meses  }}</small>
             </p>
         </div>
 
-        <div class="expediente-info-item" ng-show="selected.estado === 1 && selected.pago_inicio && selected.pago_final">
+        <div class="expediente-info-item" ng-show="selected.estado === 1">
             <label>Recibe entregas</label>
             <p style="padding: 0 10px">
-                los @{{ selected.pago_inicio }} y los @{{ selected.pago_final }} de cada mes
+                los @{{ selected.entrega_inicio }} y los @{{ selected.entrega_final }} de cada mes
             </p>
         </div>
 

@@ -8,7 +8,7 @@ class Historico extends Model{
     
     const CREATED_AT = 'fecha_modificacion';
 
-    public $table = 'historico_expedientes';
+    protected $table = 'historico_expedientes';
 
     public $timestamps = false;
 

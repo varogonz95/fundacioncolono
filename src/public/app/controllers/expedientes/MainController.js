@@ -1,8 +1,6 @@
+app.controller('Expedientes_MainController', function ($scope, Referente, Ayuda, Typeahead) {
 
-/*
-*   Controller for entity 'Expediente'
-*/
-app.controller('Expedientes_MainController', function ($scope, Expediente, Referente, Ayuda, Region) {
+    $scope.formatter = Typeahead.formatter;
 
     $scope.selected = {
         datePickers: {
@@ -10,7 +8,8 @@ app.controller('Expedientes_MainController', function ($scope, Expediente, Refer
             to:   { date: null, open: false },
         },
         //* Attributes are populated when a record is selected
-    };
+	};
+
     $scope.update = {
         caso:    {},
         persona: {},

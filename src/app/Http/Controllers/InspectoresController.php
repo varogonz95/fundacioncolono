@@ -19,11 +19,14 @@ class InspectoresController extends Controller{
 
 	public function all(Request $request){
 	  
-        $pagination = Inspector::with(['persona', 'usuario', 'visitas'])->paginate(self::MAX_RECORDS);
+		$pagination = Inspector::with(['persona', 'usuario', 'visitas'])
+		->withTrashed()
+		->paginate(self::MAX_RECORDS);
           
-        $items = $pagination->items();
+		$items = $pagination->items();
+		
         foreach ($items as $item) {
-            // $item->activo = $item->usuario->trashed();
+            $item->activo = !$item->trashed();
             foreach ($item->visitas as $visita) {
                 $visita->expediente->persona;
             }
@@ -31,7 +34,7 @@ class InspectoresController extends Controller{
 
 	  return response()->json([
         'inspectores' => $items,
-        'total' => 10
+        'total' => $pagination->total()
 	  ]);
 	}
 
@@ -124,46 +127,33 @@ class InspectoresController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
-
-      $status = true;
-
-       $request['estado'] == 'Sí' ? $estado = 0 : $estado = 1; 
-
-       try{
-         DB::table('inspectores')
-         ->where('id', $id)
-         ->update(['activo' => $estado ]);
-       }
-      catch(\Exception $e){
-        $status = false;
-      }
-
-       return response()->json([
-         'status' => $status,
-         'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
-         'msg'    => $status? 'La operación finalizó correctamente.' : 'Ocurrió un fallo.',
-         'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
-       ]);
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function update(Request $request, $id) {
+		// return response()->json([
+		//   'status' => $status,
+		//   'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
+		//   'msg'    => $status? 'La operación finalizó correctamente.' : 'Ocurrió un fallo.',
+		// ]);
+	}
 
    public function destroy($id){
-     //
+	   $status = Inspector::destroy($id) === 1;
+
+	   return response()->json([
+		'status' => $status,
+		'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+		'type'   => $status ? 'success' : 'error',
+		'msg'    => $status ? 'Se desactivó esta cuenta de inspector correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+		// Count actual number of records, then divide by MAX_RECORDS
+		// this will give the total number of pages, which is also
+		// the last page index
+		'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
+	]);
    }
 
 
     private function hasEmptyValues($array){
-
-  		foreach ($array as $item) return empty($item);
-
-  		return false;
+		foreach ($array as $item) return empty($item);
+		
+		return false;
   	}
 }

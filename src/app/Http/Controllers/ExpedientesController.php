@@ -35,45 +35,31 @@ class ExpedientesController extends Controller{
 			'relationship' => $request['filterRel'],
 			'comparator'   => $request['comparator'],
 			'property'     => $request['property'],
-			'value'        => $request['value'],
+			'value'        => $request['comparator'] === 'like' ? "{$request['value']}%" : $request['value'],
 		];
 
-		$filtered = [];
-		
+		$filtered = null;
 
 		if ($this->hasEmptyValues($filter))
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-					->options(function($builder) use ($request){
-						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->withTrashed();
-						return $builder;
-					})
+					->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
-					// TODO: Check if records are not in Historico
-					// ->notIn()
+					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		else
 		$filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-					->options(function($builder) use ($request){
-						if (filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN))
-							return $builder->withTrashed();
-						return $builder;
-					})
+					->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
 					->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-					// TODO: Check if records are not in Historico
-					// ->notIn()
+					->notIn(\App\Models\Historico::class, 'expediente_fk')
 					->where('persona', $search['property'], 'like', "{$search['value']}%")
 					->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])
 					->get();
 
 		// Iterate over items
 		$filtered->each(function($item, $index){
-			$item->meses = $item->getMeses(
-				$item->fecha_desde['raw'],
-				$item->fecha_hasta['raw']
-			);
+			$item->meses      = $item->getMeses();
 			$item->montoTotal = $item->getMontoTotal();
 			$item->archivado  = $item->trashed();
 		});
@@ -114,9 +100,9 @@ class ExpedientesController extends Controller{
 			// Instantiate Expediente and fill with request data
 			$expediente = new Expediente;
 			$expediente->fill($request->all());
+			$expediente->referente_otro = !filter_var($request['newReferente'], FILTER_VALIDATE_BOOLEAN) ? $expediente->referente_otro : null;
 
 			// Create Persona from request
-			//	---> Parse 'ubicacion' attribute
 			$persona = Persona::create($request->all());
 
 			// Manage Referente relationship with Expediente
@@ -132,12 +118,7 @@ class ExpedientesController extends Controller{
 			$persona->expediente()->save($expediente);
 
 			// Attach Ayudas to Expediente
-			AyudaExpedienteService::attach(
-				$expediente->ayudas(), 
-				['ids'     => $request['ayuda'], 
-				'detalles' => $request['ayuda_detalle'], 
-				'montos'   => $request['ayuda_monto']]
-			);
+			AyudaExpedienteService::attach($expediente->ayudas(), $request['ayudas']);
 
 			DB::commit();
 		}
@@ -154,7 +135,7 @@ class ExpedientesController extends Controller{
 				'type'  => $status? 'success' : 'error',
 				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
 				'msg'   => $status? 'Se ha creado el expediente correctamente.' : 
-								    'Es posible que los datos ingresados sean incorrectos.\n'.
+									'Es posible que los datos ingresados sean incorrectos.\n'.
 								  	'Si el problema persiste, por favor contacte a soporte.',
 			]);
 	}
@@ -162,51 +143,45 @@ class ExpedientesController extends Controller{
 	public function update(Request $request, $id){
 		
 		$status = true;
-		$current = Expediente::find($id);
+		$current = Expediente::with(['ayudas', 'persona', 'referente'])->find($id);
 
 		DB::beginTransaction();
 
 		try{
 
+			$current->fill($request['expediente']);
+			$current->referente->id  = $request['expediente']['referente']['id'];
+			$current->referente_otro = filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
+
 			if (!filter_var($request['record'], FILTER_VALIDATE_BOOLEAN)) {
-				
-				$current->fill($request['expediente']);
-				
-				/**
-				* TODO: Process attachs
-				* TODO: AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
-				*/
-				
-				// Process detachs
-				AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
-		
-				// Process updates
-				AyudaExpedienteService::update($current->ayudas(), $request['updates']);
-			}
-			
-			else
-				// Create new 'Expediente' and attach 'Historico'		
-				$current = HistoricoService::create($current, $request['expediente']);
-			
+
+				//* Process Referente info
 				ReferentesService::createOrAssociate(
 					$current->referente(),
-					$request['expediente']['referente']['id'],
-					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN) ?
-					$request['expediente']['referente_otro'] : null,
-					filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN),
-					filter_var($request['expediente']['newReferente'], FILTER_VALIDATE_BOOLEAN)
+					$current->referente->id,
+					$current->referente_otro,
+					filter_var($request['expediente']['hasReferenteOtro'], FILTER_VALIDATE_BOOLEAN)
 				);
 				
-			$current->referente_otro = filter_var($request['expediente']['referente_otro'], FILTER_VALIDATE_BOOLEAN) ? $request['expediente']['referente_otro'] : null;
-			$current->save();
+				$current->save();
+			}
+			
+			else $current = HistoricoService::create($current, $current->toArray());
+			
+			//* Process attachs
+			AyudaExpedienteService::attach($current->ayudas(), $request['attachs']);
 
-			$current->referente;
-			$current->persona;
-			$current->ayudas;
-			$current->meses      = $current->getMeses($current->fecha_desde['raw'], $current->fecha_hasta['raw']);
+			//* Process detachs
+			AyudaExpedienteService::detach($current->ayudas(), $request['detachs']);
+			
+			//* Process updates
+			AyudaExpedienteService::update($current->ayudas(), $request['updates']);
+
+			$current->meses      = $current->getMeses();
 			$current->montoTotal = $current->getMontoTotal();
 
-			// Everything went just fine
+			$current->load(filter_var($request['record'], FILTER_VALIDATE_BOOLEAN) ? ['ayudas', 'referente'] : 'ayudas');
+
 			DB::commit();
 		}
 
@@ -219,11 +194,11 @@ class ExpedientesController extends Controller{
 		}
 
 		return response()->json([
-			'status' => $status,
-			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
-			'type'   => $status ? 'success' : 'error',
-			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
-			'expediente'   => $current,
+			'expediente' => $current,
+			'status'     => $status,
+			'title'      => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'       => $status ? 'success' : 'error',
+			'msg'        => $status ? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
 		]);
 	}
 

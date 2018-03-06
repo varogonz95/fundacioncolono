@@ -1,15 +1,30 @@
 
 app.controller('Expedientes_OverviewController', function ($scope, $filter, Expediente, AyudaExpediente, Alert, Modal) {
 
-    var modal = Modal.getInstance(),
-    hasUncommitted = function () {
-        for (var i = 0; i < $scope.selected.ayudas.length; i++)
-            if ($scope.selected.ayudas[i].editable)
-                return true;
+	var resetAll = function (){
+		$scope.update.caso = {};
+		$scope.update.persona = {};
+		delete $scope.update.cache;
 
-        return false;
-    };
+		$scope.selected.editable = false;
+		$scope.selected.persona.editable = false;
 
+		$scope.resetAyudas();
+	},
+
+	modal = Modal.setSettings({
+		onBeforeClose: function() {
+			$scope.$apply(resetAll);
+			$('body').css('overflow-y', 'auto');
+		}}, true),
+
+	hasUncommitted = function () {
+		for (var i = 0; i < $scope.selected.ayudas.length; i++)
+			if ($scope.selected.ayudas[i].editable)
+				return true;
+		return false;
+	};
+	
     $scope.delete = function () {
         Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
         .then(function(result) {
@@ -21,8 +36,8 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
                             if ($scope.page !== response.last && $scope.expedientes.length > 0) 
                                 $scope.index($scope.page);
                             else if ($scope.expedientes.length === 0)
-                                $scope.index($scope.page - 1);
-                            modal.close();
+								$scope.index($scope.page - 1);
+							modal.close(true, function () { $('body').css('overflow-y', 'auto'); });
                         }
                         Alert.notify(response.title, response.msg, response.type);
                     }
@@ -30,116 +45,90 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
         });
     };
 
-    // Mostrar mensaje de respuesta
-    $scope.restore = function(){
-        Expediente('restore').$service.post(
-            {id: $scope.selected.id},
-            function (response) {
-                $scope.selected.archivado = !response.status;
-        });
-    };
+	$scope.restore = function () {
+		Expediente('restore').$service.post(
+			{ id: $scope.selected.id },
+			function (response) {
+				if (response.status)
+					$scope.selected.archivado = false;
+				Alert.notify(response.title, response.msg, response.type);
+			});
+	};
 
-    $scope.updateCaso = function () {
-        if (hasUncommitted())
-            Alert.notify('Aún tiene cambios sin confirmar.','Confirme sus cambios antes de guardar.','warning', 3000);
-        else
-            Alert.confirm(null, '¿Desea incluir los cambios en el histórico?')
-            .then(function (result) {
+	$scope.updateCaso = function () {
+		if (hasUncommitted())
+			Alert.notify('Aún tiene cambios sin confirmar.', 'Confirme sus cambios antes de guardar.', 'warning', 3000);
 
-                if (result.value || result.dismiss === 'cancel'){
-                    $scope.update.caso.fecha_desde = $filter('date')($scope.update.caso.datePickers.from.date, 'yyyy/MM/dd');
-                    $scope.update.caso.fecha_hasta = $filter('date')($scope.update.caso.datePickers.to.date, 'yyyy/MM/dd');
+		else
+			Alert.confirm(null, '¿Desea incluir los cambios en el histórico?')
+				.then(function (result) {
 
-                    Expediente().save(
-                        {
-                            id:         $scope.selected.id,
-                            expediente: $scope.update.caso,
-                            attachs:    $scope.update.ayudas.attachs,
-                            detachs:    $scope.update.ayudas.detachs,
-                            updates:    $scope.update.ayudas.updates,
-                            record:     !!result.value
-                        },
-                        function (response) {
-                            if (response.status){
-                                delete $scope.update.cache;
-                                
-                                $scope.update.caso = {};
-                                $scope.selected = response.expediente
-                                $scope.selected.datePickers = {
-                                    from: {
-                                        date: $scope.selected.fecha_desde.raw ? new Date($scope.selected.fecha_desde.raw) : new Date(),
-                                        open: false
-                                    },
-                                    to: {
-                                        date: $scope.selected.fecha_hasta.raw ? new Date($scope.selected.fecha_hasta.raw) : new Date(),
-                                        open: false
-                                    }
-                                };
+					if (result.value || result.dismiss === 'cancel') {
+						Expediente().save(
+							{
+								id: $scope.selected.id,
+								expediente: $scope.update.caso,
+								attachs: $scope.update.ayudas.attachs,
+								detachs: $scope.update.ayudas.detachs,
+								updates: $scope.update.ayudas.updates,
+								record: !!result.value
+							},
+							function (response) {
+								if (response.status) {
+									delete $scope.update.cache;
+									$scope.update.caso = {};
+									copy(response.expediente, $scope.selected);
+									$scope.resetAyudas(false);
+								}
+								Alert.notify(response.title, response.msg, response.type);
+							}
+						);
+					}
+				});
+	};
 
-                                $scope.cancelAll(false);
-                            }
-                            Alert.notify(response.title,response.msg,response.type);
-                        }
-                    );
-                }
-            });
-    };
-    
-    $scope.updateAyudas = function () {
-        
-        if (hasUncommitted())
-            Alert.notify('Aún tiene cambios sin confirmar.','Confirme sus cambios antes de guardar.','warning');
-        else
-            Alert.confirm(null, '¿Desea incluir los cambios en el histórico?')
-            .then(function (result) {
-                if (result.value || result.dismiss === 'cancel'){
-                    AyudaExpediente.$service.post(
-                        {
-                            id: $scope.selected.id,
-                            attachs: $scope.update.ayudas.attachs,
-                            detachs: $scope.update.ayudas.detachs,
-                            updates: $scope.update.ayudas.updates,
-                            record: !!result.value
-                        },
-                        function (response) {
-                            if (response.status){
-                                $scope.selected.ayudas = response.ayudas;
-                                $scope.cancelAll();                            
-                            }
-                            Alert.notify(response.title,response.msg,response.type);
-                        }
-                    );
-                }
-            });
-    };
-    
-    $scope.cancelAll = function (withCache = true) {
+	$scope.updateAyudas = function () {
 
-        // Set everything back to its initial state
+		if (hasUncommitted())
+			Alert.notify('Aún tiene cambios sin confirmar.', 'Confirme sus cambios antes de guardar.', 'warning');
+		else
+			Alert.confirm(null, '¿Desea incluir los cambios en el histórico?')
+			.then(function (result) {
+				if (result.value || result.dismiss === 'cancel') {
+					AyudaExpediente.$service.post(
+						{
+							id: $scope.selected.id,
+							attachs: $scope.update.ayudas.attachs,
+							detachs: $scope.update.ayudas.detachs,
+							updates: $scope.update.ayudas.updates,
+							record: !!result.value
+						},
+						function (response) {
+							if (response.status) {
+								copy(response.expediente, $scope.selected);
+								$scope.resetAyudas(false);
+							}
+							Alert.notify(response.title, response.msg, response.type);
+						}
+					);
+				}
+			});
+	};
 
-        // Empty update lists
-        $scope.update.ayudas.attachs = [];
-        $scope.update.ayudas.detachs = [];
-        $scope.update.ayudas.updates = [];
+	$scope.resetAyudas = function (withCache = true) {
 
-        // Reset 'editable' and 'removed' state for all 'ayudas'
-        // for (var i = 0; i < $scope.selected.ayudas.length; i++) {
-        //     if ($scope.selected.ayudas[i].removed && !withCache) {
-        //         $scope.selected.ayudas.splice(i, 1);
-        //         i--;
-        //     }
-        //     else {
+		// Empty update lists
+		$scope.update.ayudas.attachs = [];
+		$scope.update.ayudas.detachs = [];
+		$scope.update.ayudas.updates = [];
 
-        //         if (withCache)
-        //             $scope.selected.ayudas[i] = $scope.selected.ayudas[i].cache || $scope.selected.ayudas[i];
-        //         else
-        //             delete $scope.selected.ayudas[i].cache;
+		// Reset 'editable' and 'removed' state for all 'ayudas'
+		if (withCache)
+			for (var i = 0; i < $scope.selected.ayudas.length; i++) {
+				$scope.selected.ayudas[i] = $scope.selected.ayudas[i].cache || $scope.selected.ayudas[i];
+				delete $scope.selected.ayudas[i].update;
+				delete $scope.selected.ayudas[i].removed;
+			}
+	};
 
-        //         $scope.selected.ayudas[i].editable = false;
-        //         $scope.selected.ayudas[i].changed = false;
-        //         $scope.selected.ayudas[i].removed = false;
-        //     }
-        // }
-    };
-    
 });

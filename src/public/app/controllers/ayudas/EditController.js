@@ -1,20 +1,20 @@
 
-app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente) {
+app.controller('Ayudas_EditController', function ($scope, Alert) {
 
-    $scope.remove = function(ayuda){
+    $scope.removeAsigned = function(ayuda){
         ayuda.removed = true;
         $scope.update.ayudas.detachs.push(ayuda);
     };
 
     $scope.edit = function(ayuda){
         ayuda.update = angular.copy(ayuda);
-        ayuda.cache = ayuda.cache? ayuda.cache : angular.copy(ayuda);
+        ayuda.cache = ayuda.cache || angular.copy(ayuda);
         ayuda.editable = true;
     };
 
     $scope.cancel = function (ayuda) {
         ayuda.editable = false;
-        delete ayuda.update;
+		delete ayuda.update;		
     };
 
     $scope.commit = function(ayuda){
@@ -25,7 +25,7 @@ app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente
         ayuda.changed = true;
 
         if (!find('id', ayuda.id, $scope.update.ayudas.updates))
-            $scope.update.ayudas.updates.push(ayuda.update);
+			$scope.update.ayudas.updates.push(ayuda.update);
     };
 
     $scope.revert = function (ayuda){
@@ -36,8 +36,10 @@ app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente
             // remove element from list
             $scope.update.ayudas.updates.splice(getIndex($scope.update.ayudas.updates, ayuda), 1);
             
-            // Non-referential copy of 'ayuda.cache' into 'ayuda' object itself
-            copy(ayuda.cache, ayuda);
+			// Non-referential copy of 'ayuda.cache' into 'ayuda' object itself
+			// then delete cache to prevent memory leaks
+			copy(ayuda.cache, ayuda);
+			delete ayuda.cache;
             
             // Set 'changed' state to false
             ayuda.changed = false;
@@ -51,15 +53,15 @@ app.controller('Ayudas_EditController', function ($scope, Alert, AyudaExpediente
             // Change 'removed' state to false
             ayuda.removed = false;
         }
-
-        // Same logic here...
-        else if (ayuda.added) {
-            // remove that element from list
-            $scope.update.ayudas.attachs.splice(getIndex($scope.update.ayudas.attachs, ayuda), 1);
-
-            // Change 'added' state to false
-            ayuda.added = false;
-        }
     };    
+
+	$scope.modalinit = function(){
+		$('#addAyudasModal').appendTo('body');
+	};
+
+	$scope.removeNew = function(index) {
+		// remove item
+		$scope.update.ayudas.attachs.splice(index, 1);
+	};
 
 });

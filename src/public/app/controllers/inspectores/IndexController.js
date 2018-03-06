@@ -73,10 +73,10 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 		$scope.page = page;
 
 		var params = {
-				relationship: $scope.sort.relationship,
-				order:        $scope.sort.order ? 'asc': 'desc',
-				page:         $scope.page,
-				by:           $scope.sort.by,
+			relationship: $scope.sort.relationship,
+			order:        $scope.sort.order ? 'asc': 'desc',
+			page:         $scope.page,
+			by:           $scope.sort.by,
 		};
 
 		if ($scope.filter_data.filtered){
@@ -97,13 +97,11 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 		};
 
 	$scope.show = function (obj) {
-			obj.editable               = false;
-			obj.isSelected             = true;
-			obj.persona.editable       = false;
-			$scope.selected.isSelected = obj === $scope.selected;
-		
-			copy(obj, $scope.selected);
-			showModal.show();
+		$scope.selected.isSelected = false;
+		obj.isSelected = true;
+		$scope.selected = obj;
+
+		showModal.show();
 	};
 
 	$scope.filter_activo = function () {

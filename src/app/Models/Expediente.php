@@ -14,12 +14,12 @@ class Expediente extends Model{
 	
 	protected $dates = ['fecha_eliminacion'];
 	protected $fillable = [
-		'referente_otro',
+        'referente_otro',
 		'descripcion', 
 		'fecha_desde', 
-		'fecha_hasta', 
-		'pago_inicio', 
-		'pago_final', 
+		'fecha_hasta',
+		'entrega_inicio', 
+		'entrega_final', 
 		'prioridad', 
 		'estado', 
 	];
@@ -45,26 +45,21 @@ class Expediente extends Model{
 	}
 
 	public function setFechaDesdeAttribute($value){		
-		$this->attributes['fecha_desde'] = (new \DateTime($value))->format('Y-m-d');
+        $this->attributes['fecha_desde'] = gettype($value) !== 'object' ? 
+            (new \DateTime($value))->format('Y-m-d') :
+            $value;
 	}
 
 	public function setFechaHastaAttribute($value){
-		$this->attributes['fecha_hasta'] = (new \DateTime($value))->format('Y-m-d');
-	}
-
-	public function getFechaDesdeAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
-	}
-
-	public function getFechaHastaAttribute($value){
-		return ['raw' => $value, 'formatted' => (new \DateTime($value))->format('d/m/Y')];
+        $this->attributes['fecha_hasta'] = gettype($value) !== 'object' ? 
+            (new \DateTime($value))->format('Y-m-d') :
+            $value;
 	}
 
 	//*	Getters	----------------------------//
-	public function getMeses($date1, $date2){
-		return (new \DateTime($date1))
-				->diff(new \DateTime($date2), true)
-				->m + 1;
+	public function getMeses(){
+		$diff = (new \DateTime($this->fecha_desde))->diff(new \DateTime($this->fecha_hasta), true); 
+		return ($diff->m + 1) + ($diff->y * 11);
 	}
 
 	public function getMontoTotal(){

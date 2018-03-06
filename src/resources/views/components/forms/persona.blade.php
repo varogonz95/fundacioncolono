@@ -1,7 +1,7 @@
 <!-- CEDULA -->
 <div class="form-group">
-    <label class="control-label col-md-1" for="cedula">Cédula:</label>
-    <div class="col-md-8 col-md-push-3">
+    <label class="control-label col-md-3" for="cedula">Cédula:</label>
+    <div class="col-md-8 col-md-push-1">
         <input type="text" class="form-control" name="cedula" placeholder="Formato: x0xxx0xxx" {{ isset($cedula_options) ? $cedula_options : '' }} required>
         {{ isset($cedula_help) ? $cedula_help : '' }}
     </div>

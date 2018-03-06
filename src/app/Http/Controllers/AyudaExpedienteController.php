@@ -4,88 +4,37 @@ namespace App\Http\Controllers;
 
 use \App\Models\Expediente;
 use \App\Services\AyudaExpedienteService;
+use \App\Services\HistoricoService;
 
 use DB;
 use Illuminate\Http\Request;
 
-class AyudaExpedienteController extends Controller{
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index()
-	{
-		//
-	}
+class AyudaExpedienteController extends Controller {
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id){
+	public function __invoke(Request $request, $id){
 		
 		$status = true;
-		$expediente = Expediente::find($id);
+		$expediente = Expediente::with(['ayudas', 'persona', 'referente'])->find($id);
 
 		DB::beginTransaction();
-		
-		try{
 
-			// Process attachs
-			// AyudaExpedienteService::processAttachments($expediente->ayudas(), $request['attachs']);
+		try{
+			
+			//* Create new record into Historico if record is true
+			if (filter_var($request['record'], FILTER_VALIDATE_BOOLEAN))
+				$expediente = HistoricoService::create($expediente, $expediente->toArray());
+
+			//* Process attachs
+			AyudaExpedienteService::attach($expediente->ayudas(), $request['attachs']);
 	
-			// Process detachs
+			//* Process detachs
 			AyudaExpedienteService::detach($expediente->ayudas(), $request['detachs']);
 	
-			// Process updates
+			//* Process updates
 			AyudaExpedienteService::update($expediente->ayudas(), $request['updates']);
+
+			//* Reload Ayudas
+			$expediente->load('ayudas');
 
 			// All good to commit :)
 			DB::commit();
@@ -94,28 +43,22 @@ class AyudaExpedienteController extends Controller{
 		catch(\Exception $e){
 			// Something went wrong :(
 			$status = false;
-
 			// Rollback transaction
 			DB::rollback();
+			throw $e;
 		}
+		
+		$expediente->meses      = $expediente->getMeses($expediente->fecha_desde, $expediente->fecha_hasta);
+		$expediente->montoTotal = $expediente->getMontoTotal();
 
 		return response()->json([
-			'ayudas' => $expediente->ayudas,
-			'status' => $status,
-			'title'  => $status ? '¡Operación exitosa!': 'Ocurrió un fallo.',
-			'type'   => $status ? 'success':             'error',
-			'msg'    => $status ? 'Se realizaron los cambios correctamente.': 'Es posible que los datos ingresados no sean los correctos.',
+			'expediente' => $expediente,
+			'status'     => $status,
+			'title'      => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'       => $status ? 'success' : 'error',
+			'msg'        => $status ? 'Se realizaron los cambios correctamente.' : 'Es posible que los datos ingresados no sean los correctos.',
+			'debug'        => $request->all(),
 		]);
 
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Request $request, $id){
-		return $request->all();
 	}
 }

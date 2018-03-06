@@ -4,20 +4,19 @@ namespace App\Services;
 
 class AyudaExpedienteService{
 	
-	public static function attach($ayudas, $attachs){
-		for ($i=0, $count = count($attachs['ids']); $i < $count; $i++)
+	public static function attach($ayudas, $attachs, $withPivot = false){
+		for ($i=0, $count = count($attachs); $i < $count; $i++)
             $ayudas->attach(
-                $attachs['ids'][$i],
+                $attachs[$i]['id'],
 				[
-					'detalle' => $attachs['detalles'][$i],
-					'monto'   => $attachs['montos'][$i]
+					'detalle' => $withPivot ? $attachs[$i]['pivot']['detalle'] : $attachs[$i]['detalle'],
+					'monto'   => $withPivot ? $attachs[$i]['pivot']['monto']   : $attachs[$i]['monto']
 				]
 			);
 	}
 	
 	public static function detach($ayudas, $detachs){
-		for ($i=0, $count = count($detachs); $i < $count; $i++)
-			$ayudas->detach($detachs[$i]['id']);
+		$ayudas->detach(collect($detachs)->map(function ($item) { return $item['id']; }));
 	}
 			
 			

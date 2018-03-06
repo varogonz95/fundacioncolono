@@ -1,4 +1,4 @@
-<article id="selectedpersona" class="col-md-4 col-md-offset-1 @{{ (selected.persona.editable)? 'editing' : '' }}" ng-controller="Personas_EditController">
+<article id="selectedpersona" class="col-md-4 col-md-offset-1" ng-class="{'editing': selected.persona.editable}" ng-controller="Personas_EditController">
     <header>
         <h3>
             Datos de la persona

@@ -1,11 +1,7 @@
 
-app.controller('Expedientes_IndexController', function ($scope, Expediente, Referente, Ayuda, Region, Typeahead, Alert, Modal) {
+app.controller('Expedientes_IndexController', function ($scope, Expediente, Alert, Modal) {
 
-	var showModal = Modal.init('#show_modal',{
-		style:         { 'overflow-y': 'hidden', 'bottom': '0' },
-		onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
-		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
-	});
+	var showModal = Modal.init('#show_modal',{style:{ 'overflow-y': 'hidden', 'bottom': '0', 'left': '0' }});
 
 	$scope.onlyTrashed = false;
 
@@ -13,17 +9,14 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 		property: 'cedula',
 		value: '',
 	};
-
-	$scope.formatter = Typeahead.formatter;
 	
 	$scope.expedientes = [];
 
 	$scope.filter_data = {
 		value:          '',
 		referente:      [],
-		ayuda:          [],
+		ayuda:          null,
 		filter:         null,
-		// active:         false,
 		filtered:       false,
 		one:            false,
 		estado:         $scope.estados[0],
@@ -87,6 +80,7 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 
 	$scope.all = function () {
 		$scope.filter_data.filtered = false;
+		$scope.filter_data.filter = null;
 		$scope.search.term = '';
 		$scope.index();
 	};
@@ -121,32 +115,14 @@ app.controller('Expedientes_IndexController', function ($scope, Expediente, Refe
 	};
 
 	$scope.show = function (obj) {
-		obj.editable               = false;
-		obj.isSelected             = true;
-		obj.persona.editable       = false;
-
-		$scope.selected.isSelected = obj === $scope.selected;
-
-		obj.datePickers = {
-			from: {
-				date: obj.fecha_desde.raw ? new Date(obj.fecha_desde.raw) : new Date(),
-				open: false
-			},
-			to: { 
-				date: obj.fecha_hasta.raw ? new Date(obj.fecha_hasta.raw) : new Date(),
-				open: false 
-			}
-		};
-		
+		$scope.selected.isSelected = false;
+		obj.isSelected = true;
 		$scope.selected = obj;
+
 		showModal.show();
 
 		if (obj.archivado)
-			Alert.notify('Expediente archivado', 'No se pueden realizar cambios al expediente mientras esté archivado. ', 'info',3000);
-	};
-
-	$scope.toStandardDate = function(date){
-		return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+			Alert.notify('Expediente archivado', 'No se pueden realizar cambios al expediente mientras esté archivado. ', 'info', 3000);
 	};
 
 	$scope.filter = function () {

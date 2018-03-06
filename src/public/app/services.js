@@ -1,11 +1,9 @@
 
 app.service('Typeahead', function(){
 	this.formatter = function(model, list, select, label){
-		for (var i = 0; i < list.length; i++) {
-			if (model === list[i][select]) {
+		for (var i = 0; i < list.length; i++)
+			if (model === list[i][select]) 
 				return list[i][label];
-			}
-		}
 	};
 });
 
@@ -133,10 +131,13 @@ app.service('Modal', function(){
 		return instance;
 	};
 
-	// etc...
-
-	this.getInstance = function(){
+	this.setSettings = function(settings, mergeSettings = false){
+		instance.applySettings(settings, mergeSettings);
 		return instance;
 	};
+
+	this.getSettings = function(){ return instance.getSettings(); };
+
+	this.getInstance = function() { return instance; };
 
 });
