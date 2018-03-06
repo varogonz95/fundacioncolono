@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Usuario extends Authenticatable
 {
-    use Notifiable;
+	use Notifiable;
+	use SoftDeletes;
 
     public $timestamps = false;
 
@@ -17,7 +19,9 @@ class Usuario extends Authenticatable
 
     protected $hidden = [
         'password', 'remember_token',
-    ];
+	];
+	
+	protected $dates = ['fecha_desactivacion'];
 
     public function setPasswordAttribute($value)
     {
