@@ -39,6 +39,10 @@ class Expediente extends Model{
 		return $this->belongsToMany('App\Models\Ayuda', 'ayuda_expedientes', 'expediente_fk', 'ayuda_fk')->withPivot(['detalle','monto']);
 	}
 
+	public function transacciones(){
+		return $this->hasManyThrough('App\Models\Transaccion', 'App\Models\AyudaExpediente', 'expediente_fk', 'ayuda_expediente_fk');
+	}
+
 	//* Mutators and Accessors ----------------------//
 	public function getFechaCreacionAttribute($value){
 		return (new \DateTime($value))->format('d-m-Y');

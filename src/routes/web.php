@@ -36,5 +36,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('inspectores/all','InspectoresController@all');
     Route::resource('inspectores', 'InspectoresController');
-
+	
 });
+
+Route::get('transacciones/pendientes','TransaccionController@pending');
