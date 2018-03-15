@@ -30,14 +30,15 @@
                 <li class=""><a href="#">Alianzas</a></li>
                 <li class=""><a href="#">Mantenimiento</a></li>
             </ul>
-
+            
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 
                 <li class="dropdown">
-                    {{-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-usd"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-bell"></span></a>
                     <ul class="notification dropdown-menu" role="menu">
+                        <li class="dropdown-header">(Sin implementar aún)</li>
 						<li class="notification-item">
 							<div class="notification-header bg-danger text-danger">Aviso - <b>05/02/2018</b> 10:15 PM</div>
 							<div class="notification-body">
@@ -56,13 +57,7 @@
 								<div class="text-right"><button class="btn btn-sm btn-outline btn-edit">Ver expediente</button></div>
 							</div>
 						</li>
-                    </ul> --}}
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-bell"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-						<li class="dropdown-header">(Sin implementar aún)</li>
-					</ul>
+                    </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->username }} <span class="caret"></span></a>

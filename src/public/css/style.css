@@ -13,6 +13,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 .ayudas-empty{border:2px dashed #c5c5c5; padding: 1em; text-align: center; font-size: large; border-radius: 6px; color: #666}
 
 .panel-heading {overflow: hidden;}
+.panel-controls {padding-top: 2px; border-top: thin solid #eee}
 
 .form-group .control-label{text-align: left;}
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
