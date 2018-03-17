@@ -24,6 +24,14 @@ app.factory('Ayuda', function(AppResource){
 app.factory('AyudaExpediente', function (AppResource) {
     return AppResource.extends('expedientes/:id/ayudas', { id: '@id'});
 });
+
+app.factory('Transaccion', function (AppResource) {
+    return function (optional) {
+        if (optional) return AppResource.extends('transacciones/:id' + (optional[0] === '/' ? optional : '/' + optional), { id: '@id' });
+        else return AppResource.extends('transacciones/:id', {id: '@id'});
+      };
+});
+
 app.factory('Inspector', function (AppResource) {
     return function (optional) {
       if (optional) return AppResource.extends('inspectores/:id' + (optional[0] === '/' ? optional : '/' + optional), { id: '@id' });

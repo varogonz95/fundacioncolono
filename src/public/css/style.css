@@ -14,6 +14,7 @@ hr{margin-top: .5em !important; margin-bottom: 4px !important}
 
 .panel-heading {overflow: hidden;}
 .panel-controls {padding-top: 2px; border-top: thin solid #eee}
+.panel-body .list-group {margin-bottom: 6px;}
 
 .form-group .control-label{text-align: left;}
 .form-control::-webkit-.form-control-placeholder {font-style: italic}
