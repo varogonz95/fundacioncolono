@@ -16,8 +16,8 @@ app.controller('Transacciones_MainController', function ($scope, Transaccion) {
         var collapsible = $(e.target).parent().next();
 
         if (collapsible.is(':hidden')) 
-            collapsible.slideDown();
-        else collapsible.slideUp();
+            collapsible.slideDown(300);
+        else collapsible.slideUp(300);
     };
 
     $scope.index();

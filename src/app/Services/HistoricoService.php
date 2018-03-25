@@ -14,15 +14,16 @@ class HistoricoService {
 		 * TODO a. Associate current Expediente to Historico
 		 * TODO b. Create Expediente with updated data
 		 * TODO c. Attach previous Ayudas
-		 * TODO d. Delete current Expediente
-		 * TODO e. Save new expediente
-		 * TODO f. Return new Expediente
+		 * TODO d. Attach previous Transacciones
+		 * TODO e. Delete current Expediente
+		 * TODO f. Save new expediente
+		 * TODO g. Return new Expediente
 		*/
 
 		//* a.
 		$historico = new Historico;
 		$historico->expediente()->associate($current->id);
-        $historico->save();
+		$historico->save();
 		
 		//* b.
 		// Create instance
@@ -33,17 +34,20 @@ class HistoricoService {
 		$expediente->persona()->associate($current->persona->cedula);
 		// Associate Referente
 		$expediente->referente()->associate($new['referente']['id']);
-        
-        //* e.
-        $expediente->save();
+		
+		//* e.
+		$expediente->save();
 
 		//* c.
 		AyudaExpedienteService::attach($expediente->ayudas(), $current->ayudas, true);
 
 		//* d.
-        $current->delete();
-        
-		//* f.
+		// TransaccionService::attach(...)
+
+		//* e.
+		$current->delete();
+		
+		//* g.
 		return $expediente;
 	}
 

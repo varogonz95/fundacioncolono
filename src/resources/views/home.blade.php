@@ -39,7 +39,7 @@
 							<td>@{{ t.persona.cedula }}</td>
 							<td>@{{ t.persona.nombre }}</td>
 							<td>@{{ t.persona.apellidos }}</td>
-							<td>
+							<td class="text-nowrap">
                                 <label>Prioridad</label>
                                 <span class="label" ng-class="{'label-success': t.prioridad === 1, 'label-warning': t.prioridad === 2, 'label-danger': t.prioridad === 3}">
                                     @{{

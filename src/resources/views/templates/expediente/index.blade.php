@@ -20,7 +20,7 @@
 
 @section('content')
 	<ng-controller ng-controller="Expedientes_MainController">
-		<section id="expedientes" class="col-md-12" ng-controller="Expedientes_IndexController">
+		<section id="expedientes" class="col-md-12" ng-controller="Expedientes_IndexController" style="padding-top: 2em"
 	
 			<!-- MODAL PARA MOSTRAR EL DETALLE DE CADA CASO -->
 			<!-- IMPLEMENTACION DEL COMPONENTE 'animatedModal' -->

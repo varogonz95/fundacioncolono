@@ -29,7 +29,7 @@
     @include('partials._navbar')
     
     <main class="container-fluid" style="padding-top:50px" ng-app="App" ng-cloak>
-        <div class="row" style="padding-top: 2em; padding-bottom: 1em">
+        <div class="row" style="padding-bottom: 1em">
             @yield('content')
         </div>
     </main>
