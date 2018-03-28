@@ -21,11 +21,7 @@
   <!-- DATOS DE LA PERSONA -->
   @include('templates.persona.show')
 
-
   <!-- INFORMACION DE LOS EXPEDIENTES ASIGNADOS -->
   @include('templates.visita.show')
-
-  <!-- INFORMACION DEL INSPECTOR -->
-  @include('templates.inspector.show')
 
 @endcomponent

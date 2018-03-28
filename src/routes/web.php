@@ -34,7 +34,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::resource('ayudas','AyudasController');
 
-    Route::get('inspectores/all','InspectoresController@all');
+    Route::resource('visitas', 'VisitasController');
+
+    Route::get('inspectores/all','InspectoresController@all');   
     Route::resource('inspectores', 'InspectoresController');
 
 });

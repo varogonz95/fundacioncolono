@@ -128,26 +128,22 @@ class InspectoresController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-		// return response()->json([
-		//   'status' => $status,
-		//   'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
-		//   'msg'    => $status? 'La operación finalizó correctamente.' : 'Ocurrió un fallo.',
-		// ]);
+   	   $status = Inspector::where( 'id', $id )->update( ['activo' => 0 ]);
+
+		   return response()->json([
+			'status' => $status,
+			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'   => $status ? 'success' : 'error',
+			'msg'    => $status ? 'Se desactivó esta cuenta de inspector correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+			// Count actual number of records, then divide by MAX_RECORDS
+			// this will give the total number of pages, which is also
+			// the last page index
+			'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
+		]);
 	}
 
    public function destroy($id){
-	   $status = Inspector::destroy($id) === 1;
-
-	   return response()->json([
-		'status' => $status,
-		'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
-		'type'   => $status ? 'success' : 'error',
-		'msg'    => $status ? 'Se desactivó esta cuenta de inspector correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
-		// Count actual number of records, then divide by MAX_RECORDS
-		// this will give the total number of pages, which is also
-		// the last page index
-		'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
-	]);
+   		//
    }
 
 

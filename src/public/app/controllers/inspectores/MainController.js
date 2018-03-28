@@ -4,6 +4,5 @@ app.controller('Inspectores_MainController', function($scope, Region) {
 
 	$scope.update = {
 		persona: {},
-		usuario: {},
 	};
 });

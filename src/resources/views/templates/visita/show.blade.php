@@ -1,5 +1,5 @@
-<article id="selectedexpediente" class="col-md-4 col-md-offset-1" >
-    <div  style="height:370px;width: 720px">
+<article id="selectedexpediente" class="col-md-10 col-md-offset-1 ng-scope" >
+    <div>
         <header>
             <h3>
                 Expedientes Asignados
@@ -45,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-class="{'active' : v.isSelected}" ng-repeat="visita in selected.visitas">
+                    <tr ng-class="{'active' : v.isSelected}" ng-repeat="visita in selected.visitas" ng-click="alertDelete(visita)">
                         <td ng-show="columns.cedula">@{{ visita.expediente.persona.cedula }}</td>
                         <td ng-show="columns.nombre">@{{ visita.expediente.persona.nombre }}</td>
                         <td ng-show="columns.apellidos">@{{ visita.expediente.persona.apellidos }}</td>

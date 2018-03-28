@@ -29,7 +29,6 @@
 					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedula">Cédula</label>
 					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombre">Nombre</label>
 					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.apellidos">Apellidos</label>
-					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.username">Usuario</label>
 					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.email">Correo</label>
 					<label class="checkbox-inline"><input type="checkbox" ng-model="columns.activo">Activo</label>
 				</div>
