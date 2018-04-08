@@ -1,4 +1,4 @@
-app.controller('Inspectores_IndexController', function($scope, Inspector, Region, Typeahead, Modal) {
+app.controller('Inspectores_IndexController', function($scope, Inspector, Visita, Region, Typeahead, Modal) {
 
 	var showModal = Modal.init('#show_modal',{
 			style:         {'overflow-y': 'hidden', 'bottom': '0'},
@@ -9,6 +9,9 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 	$scope.total = 1;
 	$scope.page  = 1;
 
+	$scope.totalExpediente = 1;
+	$scope.pageExpediente  = 1;
+
 	$scope.filter_data = {
 		value:     '',
 		filter:    null,
@@ -18,16 +21,32 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 	};
 
 	$scope.inspectores = [];
+	$scope.expedientes = [];
 
 	$scope.columns = {
-			ubicacion:     true,
-			email:         true,
 			cedula:        true,
 			nombre:        true,
 			apellidos:     true,
+			ubicacion:     true,
+			email:         true,
 			activo:        true,
-			observaciones: true,
-			fecha_visita:  true,
+			
+			cedulaVisita:        true,
+			nombreVisita:        true,
+			apellidosVisita:     true,
+			ubicacionVisita:     true,
+			observacionesVisita: true,
+			fecha_visitaVisita:  true,
+			removerVisita: 	 	 true, 
+	
+			cedulaAsignar:       	true,
+			nombreAsignar:        	true,
+			apellidosAsignar:     	true,
+			ubicacionAsignar:     	true,
+			estadoAsignar:     		true,
+			prioridadAsignar: 		true,
+			fecha_creacionAsignar:  true,
+			agregarAsignar: 		true, 
 	};
 
 	$scope.sort = {
@@ -93,6 +112,13 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Region
 			function (response) {
 				$scope.inspectores = response.inspectores;
 				$scope.total = response.total;
+			});
+
+		Visita.all(
+			{},
+			function (response) {
+				$scope.expedientes = response.expedientes;
+				$scope.totalExpediente = response.total;
 			});
 		};
 

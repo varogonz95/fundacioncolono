@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Visita;
+use App\Models\Expediente;
+
 use Illuminate\Http\Request;
+use DB;
 
 class VisitasController extends Controller
 {
+    const MAX_RECORDS = 16;
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +18,17 @@ class VisitasController extends Controller
      */
     public function index(Request $request){
         //
+        $pagination = Expediente::with( ['persona', 'visita'])
+        ->where('id','expediente_fk')
+        ->withTrashed()
+        ->paginate(self::MAX_RECORDS);
+          
+        $items = $pagination->items();
+
+        return response()->json([
+          'expedientes' => $items,
+          'total' => $pagination->total()
+        ]);
     }
 
     /**
@@ -34,7 +49,32 @@ class VisitasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $status = true;
+        DB::beginTransaction();
+        
+        try{
+            $visita = new Visita;
+            $visita->inspector_fk = $request['inspector_fk'];
+            $visita->expediente_fk = $request['expediente_fk'];
+            $visita->save();
+        
+            DB::commit();
+        
+        }catch(\Exception $e){
+            $status = false;
+            DB::rollback();
+            throw $e;
+        }
+
+        // Redirect and flash data with operation status
+        return redirect('expedientes')
+            ->with('status', [
+                'type'  => $status? 'success' : 'error',
+                'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
+                'msg'   => $status? 'Se ha creado el expediente correctamente.' : 
+                                    'Es posible que los datos ingresados sean incorrectos.\n'.
+                                    'Si el problema persiste, por favor contacte a soporte.',
+            ]);
     }
 
     /**

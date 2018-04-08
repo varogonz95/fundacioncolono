@@ -1,18 +1,27 @@
 app.controller('Inspectores_EditController', function ($scope, Inspector, Visita, Alert, Typeahead, Modal) {
 
-  var modal = Modal.getInstance(),
-  hasUncommitted = function () {
-      return true;
-  };
+	var modal = Modal.getInstance(),
+	hasUncommitted = function () {
+	  return true;
+	};
 
-  $scope.invalid_add = false;
+	$scope.ver = 'mostrar';
 
-  $scope.cantones = [];
-  $scope.distritos = [];
+	$scope.invalid_add = false;
 
-  $scope.edit = function (){
-      $scope.selected.editable = true;
-  };
+	$scope.cantones = [];
+	$scope.distritos = [];
+
+	$scope.edit = function (){
+	  $scope.selected.editable = true;
+	};
+
+	$scope.mostrar = function (){
+		if( $scope.ver == 'mostrar' )
+			$scope.ver = 'asignar';
+		else
+			$scope.ver = 'mostrar';
+	};
 
   	$scope.delete = function () {
 		Alert.confirm('Desactivar inspector', 'Esta operación pasará al inspector a estado inactivo.', 'warning')
@@ -57,5 +66,23 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 				);
 		});
 	};
+
+
+	$scope.asignar = function(e){
+		Visita.create(
+			{ inspector_fk: $scope.selected.id , expediente_fk: e.id },
+			function (response) {
+				if (response.status) {
+					for( var i = 0; i < $scope.expidientes.length; i++ ){
+						if( $scope.expidientes[i].id === e.id ){
+							$scope.expidientes.splice( i  , 1 );
+							break;
+						}
+					}
+				}
+				Alert.notify(response.title, response.msg, response.type);
+			}
+		);
+	}
 
 });

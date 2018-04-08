@@ -19,9 +19,13 @@
   <!-- @slot('content_classes', 'expediente-content') !-->
 
   <!-- DATOS DE LA PERSONA -->
-  @include('templates.persona.show')
-
+  <div style="display: @{{ ver == 'mostrar' ? 'block' : 'none' }}" >
+    @include('templates.persona.show')
+  </div>
   <!-- INFORMACION DE LOS EXPEDIENTES ASIGNADOS -->
   @include('templates.visita.show')
+
+  <!-- ASIGNAR EXPEDIENTES -->
+  @include('templates.visita.create')
 
 @endcomponent
