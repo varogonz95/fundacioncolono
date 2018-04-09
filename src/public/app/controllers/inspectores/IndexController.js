@@ -84,8 +84,6 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			$scope.index();
 	  };
 
-	$scope.index = function (page = 1) {
-
 	  $scope.index = function (page = 1){
 		$scope.page = page;
 

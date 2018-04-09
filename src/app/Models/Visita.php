@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Visita extends Model
 {
+	public $timestamps = false;
+
     public function expediente(){
         return $this->belongsTo('App\Models\Expediente', 'expediente_fk');
     }

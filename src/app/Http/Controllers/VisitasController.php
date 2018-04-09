@@ -18,9 +18,8 @@ class VisitasController extends Controller
      */
     public function index(Request $request){
         //
-        $pagination = Expediente::with( ['persona', 'visita'])
-        ->where('id','expediente_fk')
-        ->withTrashed()
+        $pagination = Expediente::with( ['persona'])
+        //->whereNotIn('id','expediente_fk')
         ->paginate(self::MAX_RECORDS);
           
         $items = $pagination->items();
