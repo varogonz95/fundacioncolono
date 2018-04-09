@@ -16,7 +16,7 @@
        </div>
    @endslot
 
-  <!-- @slot('content_classes', 'expediente-content') !-->
+  {{-- @slot('content_classes', 'expediente-content') --}}
 
   <!-- DATOS DE LA PERSONA -->
   <div style="display: @{{ ver == 'mostrar' ? 'block' : 'none' }}" >

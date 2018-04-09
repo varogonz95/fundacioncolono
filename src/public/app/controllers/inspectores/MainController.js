@@ -1,4 +1,4 @@
-app.controller('Inspectores_MainController', function($scope, Region) {
+app.controller('Inspectores_MainController', function ($scope, Region) {
 
 	$scope.selected = {};
 

@@ -7,7 +7,7 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 
 	$scope.ver = 'mostrar';
 
-	$scope.invalid_add = false;
+  $scope.invalid_add = false;
 
 	$scope.cantones = [];
 	$scope.distritos = [];

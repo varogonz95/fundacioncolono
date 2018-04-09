@@ -1,13 +1,13 @@
 app.controller('Inspectores_IndexController', function($scope, Inspector, Visita, Region, Typeahead, Modal) {
 
-	var showModal = Modal.init('#show_modal',{
-			style:         {'overflow-y': 'hidden', 'bottom': '0'},
-			onBeforeShow:  function () { $('body').css('overflow-y', 'hidden'); },
-			onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
+	var showModal = Modal.init('#show_modal', {
+		style: { 'overflow-y': 'hidden', 'bottom': '0' },
+		onBeforeShow: function () { $('body').css('overflow-y', 'hidden'); },
+		onBeforeClose: function () { $('body').css('overflow-y', 'auto'); },
 	});
 
 	$scope.total = 1;
-	$scope.page  = 1;
+	$scope.page = 1;
 
 	$scope.totalExpediente = 1;
 	$scope.pageExpediente  = 1;
@@ -51,22 +51,19 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 
 	$scope.sort = {
 		relationship: 'persona',
-		by:           'cedula',
-		order:        true,
+		by: 'cedula',
+		order: true,
 	};
 
+	$scope.filter_init = function () {
+		if (!$scope.filter_data.active) {
+			$scope.filter_data.active = true;
+		}
+	};
 
-	$scope.filter_init = function(){
-      if (!$scope.filter_data.active) {
-          $scope.filter_data.active = true;
-      }
-  };
-
-
-	// Not supported for Location yet
 	$scope.doSort = function (by) {
-			$scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
-			$scope.sort.by = by;
+		$scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
+		$scope.sort.by = by;
 
 			switch ($scope.sort.by) {
 					case 'cedula':
@@ -87,6 +84,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			$scope.index();
 	  };
 
+	$scope.index = function (page = 1) {
 
 	  $scope.index = function (page = 1){
 		$scope.page = page;
@@ -98,17 +96,17 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			by:           $scope.sort.by,
 		};
 
-		if ($scope.filter_data.filtered){
-				params.page = $scope.filter_data.one ? 1 : $scope.page;
-				$scope.page = params.page;
-				$scope.filter_data.one = false;
+		// if ($scope.filter_data.filtered) {
+		// 	params.page = $scope.filter_data.one ? 1 : $scope.page;
+		// 	$scope.page = params.page;
+		// 	$scope.filter_data.one = false;
 
-				if ($scope.search !== '') params.search = $scope.search;
-				params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
-		}
+		// 	if ($scope.search !== '') params.search = $scope.search;
+		// 	params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
+		// }
 
 		Inspector('all').get(
-			params,
+			null,
 			function (response) {
 				$scope.inspectores = response.inspectores;
 				$scope.total = response.total;
@@ -136,7 +134,6 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
       $scope.filter_data.filtered = true;
       $scope.index($scope.page);
 	};
-
 
 	$scope.index();
 });
