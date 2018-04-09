@@ -1,81 +1,88 @@
-app.controller('Inspectores_EditController', function ($scope, Inspector, Usuario, Alert, Typeahead, Modal) {
+app.controller('Inspectores_EditController', function ($scope, Inspector, Visita, Alert, Typeahead, Modal) {
 
-  var modal = Modal.getInstance(),
-  hasUncommitted = function () {
-      return true;
-  };
+	var modal = Modal.getInstance(),
+	hasUncommitted = function () {
+	  return true;
+	};
 
-  $scope.visible = false;
+	$scope.ver = 'mostrar';
 
   $scope.invalid_add = false;
 
-  $scope.formatter = Typeahead.formatter;
+	$scope.cantones = [];
+	$scope.distritos = [];
 
-  $scope.cantones = [];
-  $scope.distritos = [];
+	$scope.edit = function (){
+	  $scope.selected.editable = true;
+	};
 
-  $scope.edit = function (){
-      $scope.selected.editable = true;
-      $scope.update.usuario  = copy($scope.selected.usuario,['editable']);
-  };
+	$scope.mostrar = function (){
+		if( $scope.ver == 'mostrar' )
+			$scope.ver = 'asignar';
+		else
+			$scope.ver = 'mostrar';
+	};
 
-  $scope.modificarEstado = function () {
-      Alert.confirm(
-          $scope.selected.activo == 'Si' ? 'Deshabilitar' : 'Habilitar' ,
-          'Esta operación pasará al inspector a estado ' + ($scope.selected.activo == 'Si' ? 'inactivo' : 'activo'),
-          'warning'
-      )
-      .then(function(value) {
-          if (value)
-              Inspector().update(
-                {
-                  id: $scope.selected.id,
-                  estado: $scope.selected.activo,
-                },
-                  function (response) {
-                      if (response.status) {
-                          $scope.index();
-                          modal.close();
-                      }
-                      Alert.notify(response.msg, null, response.status ? 'success' : 'error');
-                  },
-                  function (error) { alert(error.message); }
-              );
-      });
-  };
+  	$scope.delete = function () {
+		Alert.confirm('Desactivar inspector', 'Esta operación pasará al inspector a estado inactivo.', 'warning')
+		.then(function (result) {
+			if ( result.value )
+				Inspector().delete(
+					{ id: $scope.selected.id },
+					function (response) {
+						if (response.status) {
+							$scope.inspectores.splice(getIndex($scope.inspectores, $scope.selected), 1);
+	                        if ($scope.page !== response.last && $scope.inspectores.length > 0) 
+	                            $scope.index($scope.page);
+	                        else if ($scope.inspectores.length === 0)
+								$scope.index($scope.page - 1);
+							modal.close(true, function () { $('body').css('overflow-y', 'auto'); });
+						}
+						Alert.notify(response.title, response.msg, response.type);
+					}
+				);
+		});
+	};
 
-  $scope.mostrarPassword = function (){
-      if($scope.visible){
-        $scope.visible = false;
-      }else{
-        $scope.visible = true;
-      }
-  };
+	$scope.alertDelete = function (v) {
+		Alert.confirm('Remover expediente asignado', 'Esta operación removerá el expidiente asignado al inspector.', 'warning')
+		.then( function (result) {
+			if ( result.value )
+				Visita.delete(
+					{ id: v.id },
+					function (response) {
+						if (response.status) {
 
-  $scope.updateUsuario = function () {
-      console.log($scope.update.usuario.email);
-      Usuario.save(
-          {
-              id: $scope.selected.usuario.id,
-              data: $scope.update.usuario,
-          },
-          function (response) {
-              if (response.status) {
-                console.log('selected.usuario');
-                console.log($scope.selected.usuario);
-                console.log('will become');
-                console.log($scope.update.usuario);
-                console.log('final data');
-                console.log(copy($scope.update.usuario, $scope.selected.usuario));
-                console.log($scope.selected.usuario);
-                console.log($scope.update.usuario);
+							for( var i = 0; i < $scope.selected.visitas.length; i++ ){
+								if( $scope.selected.visitas[i].id === v.id ){
+									$scope.selected.visitas.splice( i  , 1 );
+									break;
+								}
+							}  
+								
+						}
+						Alert.notify(response.title, response.msg, response.type);
+					}
+				);
+		});
+	};
 
-                $scope.selected.editable = false;
-              }
-              else { alert(response.msg); }
-          },
-          function (error) { alert(error.data.message); }
-      );
-  };
+
+	$scope.asignar = function(e){
+		Visita.create(
+			{ inspector_fk: $scope.selected.id , expediente_fk: e.id },
+			function (response) {
+				if (response.status) {
+					for( var i = 0; i < $scope.expidientes.length; i++ ){
+						if( $scope.expidientes[i].id === e.id ){
+							$scope.expidientes.splice( i  , 1 );
+							break;
+						}
+					}
+				}
+				Alert.notify(response.title, response.msg, response.type);
+			}
+		);
+	}
 
 });

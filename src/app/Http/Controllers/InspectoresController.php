@@ -18,40 +18,23 @@ class InspectoresController extends Controller{
 	const MAX_RECORDS = 16;
 
 	public function all(Request $request){
-	  $orderBy = [
-  			'order' => $request['order'],
-  			'by' => $request['by'],
-  		];
-
-  		$filter = [
-  			'comparator' => $request['comparator'],
-  			'property'   => $request['property'],
-  			'value'      => $request['value'],
-  		];
-
-	  $filtered = [];
-
-	  if ($this->hasEmptyValues($filter))
-			$filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
-		  ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-		  ->orderBy($request['relationship'], $orderBy['by'], $orderBy['order'])
-		  ->get();
-	  else
-		$filtered = Filter::with(Inspector::class, ['persona', 'usuario'])
-		  ->where($request['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-		  ->where('persona', $orderBy['by'], 'like', "{$request['search']}%")
-		  ->orderBy('persona', $orderBy['by'], $orderBy['order'])
-		  ->get();
-
-
-  		// Paginate , passing the filtered items and the max records per page
-  		$pagination = Filter::paginate($filtered, self::MAX_RECORDS);
-  		$items = $pagination->items();
+	  
+		$pagination = Inspector::with(['persona', 'usuario', 'visitas'])
+		->withTrashed()
+		->paginate(self::MAX_RECORDS);
+          
+		$items = $pagination->items();
+		
+        foreach ($items as $item) {
+            $item->activo = !$item->trashed();
+            foreach ($item->visitas as $visita) {
+                $visita->expediente->persona;
+            }
+        }
 
 	  return response()->json([
-		'inspectores' => $items,
-		'total'       => $pagination->total(),
-		// 'pages'       => ceil( Expediente::count()/self::MAX_RECORDS ),
+        'inspectores' => $items,
+        'total' => $pagination->total()
 	  ]);
 	}
 
@@ -144,50 +127,29 @@ class InspectoresController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id) {
+   	   $status = Inspector::where( 'id', $id )->update( ['activo' => 0 ]);
 
-      $status = true;
-
-      if($request['estado'] == 'Si'){
-        $estado = 0;
-      }else{
-        $estado = 1;
-      }
-
-       try{
-         DB::table('inspectores')
-         ->where('id', $id)
-         ->update(['activo' => $estado ]);
-       }
-      catch(\Exception $e){
-        $status = false;
-      }
-
-       return response()->json([
-         'status' => $status,
-         'title'  => $status? '¡Operación exitosa!': 'Ocurrió un fallo.',
-         'msg'    => $status? 'La operación finalizó correctamente.' : 'Ocurrió un fallo.',
-         'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
-       ]);
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+		   return response()->json([
+			'status' => $status,
+			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+			'type'   => $status ? 'success' : 'error',
+			'msg'    => $status ? 'Se desactivó esta cuenta de inspector correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+			// Count actual number of records, then divide by MAX_RECORDS
+			// this will give the total number of pages, which is also
+			// the last page index
+			'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
+		]);
+	}
 
    public function destroy($id){
-     //
+   		//
    }
 
 
     private function hasEmptyValues($array){
-
-  		foreach ($array as $item) return empty($item);
-
-  		return false;
+		foreach ($array as $item) return empty($item);
+		
+		return false;
   	}
 }

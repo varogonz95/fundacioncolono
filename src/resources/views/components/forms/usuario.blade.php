@@ -17,6 +17,6 @@
 <div class="form-group">
     <label class="control-label col-md-3" for="password">Contraseña:</label>
     <div class="col-md-8 col-md-push-1">
-        <input type="text" class="form-control" name="password" placeholder="Ingrese el nombre de usuario" ng-model="{{ $password_model }}" ng-value="{{ $password_value }}" required />
+        <input type="text" class="form-control" name="password" placeholder="Ingrese la contraseña" ng-model="{{ $password_model }}" ng-value="{{ $password_value }}" required />
     </div>
 </div>

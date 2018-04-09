@@ -13,7 +13,7 @@ class Inspector extends Model{
 
     public $timestamps = false;
     protected $table = 'inspectores';
-    private $dates = ['fecha_eliminacion'];
+    protected $dates = ['fecha_eliminacion'];
 
 
     public function persona(){
@@ -22,5 +22,9 @@ class Inspector extends Model{
 
     public function usuario(){
         return $this->belongsTo('App\Models\Usuario', 'usuario_fk');
+    }
+
+    public function visitas(){
+        return $this->hasMany('App\Models\Visita', 'inspector_fk');
     }
 }

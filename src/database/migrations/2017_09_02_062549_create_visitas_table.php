@@ -25,7 +25,7 @@ class CreateVisitasTable extends Migration
             $table->date('fecha_visita')->nullable();
             $table->date('fecha_asignado')->useCurrent();
             
-            $table->text('observaciones');
+            $table->text('observaciones')->nullable();
 
             // Soft delete for inspector
             // Documentation at: https://laravel.com/docs/5.5/eloquent#soft-deleting

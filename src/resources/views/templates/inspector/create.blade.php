@@ -17,9 +17,39 @@
 @section('content')
 	<section class="col-md-10 col-md-offset-1"  ng-controller="Inspectores_CreateController">
 		<form name="account" class="form-horizontal" action="{{ route('inspectores.store') }}" method="post" autocomplete="off">
-			{{ csrf_field() }}
+			
+			{{ csrf_field() }} {{-- PERSONA --}}
+			<fieldset class="col-md-5">
+				<legend>Detalles de la persona</legend>
+				
+				{{-- PERSONA COMPONENT --}}
+				@component('components.forms.persona')
+					@slot('cedula_help')
+						<p class="help-block">
+							<small>Reemplace las equis (x) por los números de la cédula correspondiente.</small>
+						</p>
+						<p class="help-block" ng-show="invalid">
+							<span class="text-danger">Esta cédula no es válida. Por favor, ingrese otra cédula.</span>
+						</p>
+					@endslot
 
-			{{-- USUARIO --}}
+					@slot('cedula_options')
+						ng-model="cedula"
+						ng-change="validate()"
+					@endslot
+
+					@slot('ubicacion_options')
+						ng-model="ubicacion"
+						field="ubicacion"
+						required
+					@endslot
+				@endcomponent
+
+			</fieldset>
+			
+			<div class="col-md-1 hidden-xs hidden-sm"></div>
+
+			{{ csrf_field() }} {{-- USUARIO --}}
 			<fieldset class="col-md-5">
 				<legend>Cuenta del usuario</legend>
 				{{-- IMPORT FORM COMPONENT FOR USUARIO --}}
@@ -30,19 +60,8 @@
 				</div>
 			</fieldset>
 
-			<div class="col-md-1 hidden-xs hidden-sm"></div>
 
-			{{-- PERSONA --}}
-			<fieldset class="col-md-5">
-				<legend>Detalles del inspector</legend>
-				{{-- IMPORT FORM COMPONENT FOR PERSONA --}}
-				@component('components.forms.persona', ['withOcupacionInput' => true])
-					@slot('ubicacion_options')
-						required
-						field="ubicacion"
-					@endslot
-				@endcomponent
-			 </fieldset>
+
 		</form>
 	</section>
 @endsection
