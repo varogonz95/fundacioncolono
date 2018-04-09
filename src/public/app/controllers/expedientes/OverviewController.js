@@ -28,7 +28,7 @@ app.controller('Expedientes_OverviewController', function ($scope, $filter, Expe
     $scope.delete = function () {
         Alert.confirm('Archivar expediente', 'Esta operación removerá el expediente de la lista pero no lo eliminará permanentemente.', 'warning')
         .then(function(result) {
-            if (result.value)
+            if (result.value || result.dismiss === 'cancel')
                 Expediente().delete({ id: $scope.selected.id },
                     function (response) {
                         if (response.status) {

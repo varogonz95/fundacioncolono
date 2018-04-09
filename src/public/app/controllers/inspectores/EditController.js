@@ -68,17 +68,12 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 	};
 
 
-	$scope.asignar = function(e){
+	$scope.asignar = function(e, index){
 		Visita.create(
 			{ inspector_fk: $scope.selected.id , expediente_fk: e.id },
 			function (response) {
 				if (response.status) {
-					for( var i = 0; i < $scope.expidientes.length; i++ ){
-						if( $scope.expidientes[i].id === e.id ){
-							$scope.expidientes.splice( i  , 1 );
-							break;
-						}
-					}
+					$scope.expedientes.splice( index  , 1 );
 				}
 				Alert.notify(response.title, response.msg, response.type);
 			}

@@ -110,7 +110,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 				$scope.total = response.total;
 			});
 
-		Visita.all(
+		Visita.get(
 			{},
 			function (response) {
 				$scope.expedientes = response.expedientes;

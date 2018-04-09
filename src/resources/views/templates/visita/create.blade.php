@@ -59,7 +59,7 @@
 					</td>
 					<td ng-show="columns.fecha_creacionAsignar">@{{ e.fecha_creacion }}</td>
 					<td ng-show="columns.agregarAsignar">
-						<button type="button" class="btn btn-success" ng-click="asignar(e)">Asignar</button>
+						<button type="button" class="btn btn-success" ng-click="asignar(e, $index)" >Asignar</button>
 					</td>
 				</tr>
 			</tbody>

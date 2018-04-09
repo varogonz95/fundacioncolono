@@ -47,9 +47,9 @@ $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker)
 	$referente_otro   = $referentes[0];
 	$referentes_count = count($referentes);
 	$estado           = $faker->numberBetween(0,3);
-	$tmp_meses = $faker->numberBetween(1,3);
+	$tmp_meses = $faker->numberBetween(-12, 12);
 	$fecha_desde = new \DateTime();
-	$fecha_desde->modify("+ $tmp_meses months");
+	$fecha_desde->modify(($tmp_meses >= 0 ? '+' : '') . " $tmp_meses months");
 
     return [
 		'referente_otro'    => $hasReferente ? null : ($faker->boolean? $faker->company: "{$faker->firstName} {$faker->lastname}"),
@@ -61,6 +61,6 @@ $factory->define(App\Models\Expediente::class, function (Faker\Generator $faker)
 		'entrega_inicio'    => $estado === 1 ? $faker->numberBetween(1,15) : null,
 		'entrega_final'     => $estado === 1 ? $faker->numberBetween(16,30) : null,
 		'fecha_desde'       => $estado === 1 ? $fecha_desde : null,
-		'fecha_hasta'       => $estado === 1 ? $faker->dateTimeInInterval($fecha_desde, '+ 10 months') : null,
+		'fecha_hasta'       => $estado === 1 ? $faker->dateTimeInInterval($fecha_desde, '+ 12 months') : null,
     ];
 });

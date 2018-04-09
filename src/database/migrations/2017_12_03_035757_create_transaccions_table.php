@@ -23,9 +23,9 @@ class CreateTransaccionsTable extends Migration
                   ->nullable()
                   ->default(null);
 
-            $table->decimal('monto', 8, 2);
+            $table->decimal('monto');
 
-            $table->timestamp('fecha_creacion');
+            $table->timestamp('fecha_creacion')->useCurrent();
 
             //* Define constraints -------------------------
             //*---------------------------------------------

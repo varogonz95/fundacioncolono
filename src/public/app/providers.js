@@ -58,7 +58,7 @@ app.provider('AppResource', function () {
 					},
 
 					all: function (success = function () { }, error = function () { }) {
-						return service.get(success, error);
+						return service.query(success, error);
 					},
 
 					update: function (data, success = function () { }, error = function () { }) {

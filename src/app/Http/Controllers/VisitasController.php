@@ -17,9 +17,11 @@ class VisitasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        //
-        $pagination = Expediente::with( ['persona'])
-        //->whereNotIn('id','expediente_fk')
+        $arrayExpediente = Visita::with(['expediente'])->get()->pluck('expediente.id')->all();
+
+
+        $pagination = Expediente::with( ['persona'] )
+        ->whereNotIn('id', $arrayExpediente)
         ->paginate(self::MAX_RECORDS);
           
         $items = $pagination->items();
@@ -65,15 +67,13 @@ class VisitasController extends Controller
             throw $e;
         }
 
-        // Redirect and flash data with operation status
-        return redirect('expedientes')
-            ->with('status', [
-                'type'  => $status? 'success' : 'error',
-                'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
-                'msg'   => $status? 'Se ha creado el expediente correctamente.' : 
-                                    'Es posible que los datos ingresados sean incorrectos.\n'.
-                                    'Si el problema persiste, por favor contacte a soporte.',
-            ]);
+        return response()->json([
+            'status' => $status,
+            'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+            'type'   => $status ? 'success' : 'error',
+            'msg'    => $status ? 'Se asignó el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+
+        ]);
     }
 
     /**
@@ -124,10 +124,7 @@ class VisitasController extends Controller
             'status' => $status,
             'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
             'type'   => $status ? 'success' : 'error',
-            'msg'    => $status ? 'Se archivó el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
-            // Count actual number of records, then divide by MAX_RECORDS
-            // this will give the total number of pages, which is also
-            // the last page index
+            'msg'    => $status ? 'Se removió el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
         ]);
     }
 }

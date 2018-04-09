@@ -7,7 +7,7 @@ app.controller('Expedientes_EditController', function ($scope, $filter, Expedien
 
 		$scope.update.caso.estado_selected    = find('id', $scope.update.caso.estado, $scope.estados);
 		$scope.update.caso.prioridad_selected = find('id', $scope.update.caso.prioridad, $scope.prioridades);
-		$scope.update.caso.referente_selected = !angular.equals($scope.selected.referente, $scope.referentes[0]) ? $scope.selected.referente : null;
+		$scope.update.caso.referente_selected = !angular.equals($scope.selected.referente, $scope.referentes[0]) ? $scope.selected.referente.id : null;
 		$scope.update.caso.datePickers = {
 			from: {
 				date: $scope.update.caso.fecha_desde ? new Date($scope.update.caso.fecha_desde) : new Date(),

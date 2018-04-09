@@ -15,7 +15,6 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-
 Route::middleware(['auth'])->group(function(){
     
     Route::get('expedientes/all','ExpedientesController@all');
@@ -38,5 +37,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('inspectores/all','InspectoresController@all');   
     Route::resource('inspectores', 'InspectoresController');
-
+    
+    Route::get('inspectores/all','InspectoresController@all');
+    
+    Route::get('transacciones/all','HomeController@all');    
 });
