@@ -7,10 +7,16 @@
                 <span class="glyphicon glyphicon-arrow-left"></span>
                 Ver expedientes asignados
             </button>
+            <div class="input-group" style="width: 722px; margin-top: 10px; margin-bottom: 10px">
+        	    <input class="form-control" type="text" placeholder="Buscar expediente" ng-model="search_expediente""/>
+            	<span class="input-group-addon">
+                	<span class="glyphicon glyphicon-search text-muted"></span>
+            	</span>
+        	</div>
         </h3>
     </header>
 	<!-- COLUMNAS VISIBLES -->
-	<nav class="navbar navbar-default navbar-sm col-md-8" role="navigation">
+	<nav class="navbar navbar-default navbar-sm col-md-7" role="navigation">
 				<div class="navbar-form" style="padding-top:4px">
 			<label class="checkbox-inline"><input type="checkbox" ng-model="columns.cedulaAsignar">Cédula</label>
 			<label class="checkbox-inline"><input type="checkbox" ng-model="columns.nombreAsignar">Nombre</label>
@@ -39,7 +45,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="e in expedientes" ng-click="show(e)">
+				<tr ng-repeat="e in expedientes | filter: search_expediente">
 					<td ng-show="columns.cedulaAsignar">@{{ e.persona.cedula }}</td>
 					<td ng-show="columns.nombreAsignar">@{{ e.persona.nombre }}</td>
 					<td ng-show="columns.apellidosAsignar">@{{ e.persona.apellidos }}</td>

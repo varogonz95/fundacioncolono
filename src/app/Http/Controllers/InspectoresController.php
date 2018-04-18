@@ -26,7 +26,7 @@ class InspectoresController extends Controller{
 		$items = $pagination->items();
 		
         foreach ($items as $item) {
-            $item->activo = !$item->trashed();
+            //$item->activo = !$item->trashed();
             foreach ($item->visitas as $visita) {
                 $visita->expediente->persona;
             }
@@ -127,18 +127,15 @@ class InspectoresController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-   	   $status = Inspector::where( 'id', $id )->update( ['activo' => 0 ]);
+    public function update(Request $request) {
+    	
+   	   	$status = Inspector::where( 'id', $request['id'] )->update( ['activo' => $request['activo'] == 1 ? 0 : 1  ]);
 
-		   return response()->json([
+		return response()->json([
 			'status' => $status,
 			'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
 			'type'   => $status ? 'success' : 'error',
 			'msg'    => $status ? 'Se desactivó esta cuenta de inspector correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
-			// Count actual number of records, then divide by MAX_RECORDS
-			// this will give the total number of pages, which is also
-			// the last page index
-			'last' => ceil( Inspector::count()/self::MAX_RECORDS ),
 		]);
 	}
 

@@ -20,7 +20,7 @@
 			@include('partials._search-inspector')
 	
 			<!-- COLUMNAS VISIBLES -->
-			<nav class="navbar navbar-default" style="margin-top: 1em; margin-left: 20px; width:1350px" role="navigation">
+			<nav class="navbar navbar-default" style="margin-top: 1em; margin-left: 10px;width: 1100px;" role="navigation">
 				<span class="navbar-text">
 					<b>Columnas visibles</b>
 				</span>
@@ -81,13 +81,17 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-class="{'active' : i.isSelected}" ng-repeat="i in inspectores"  ng-click="show(i)" ng-cloak>
+						<tr ng-class="{'active' : i.isSelected}" ng-repeat="i in inspectores | filter : search"  ng-click="show(i)" ng-cloak>
 							<td ng-show="columns.cedula">@{{ i.persona.cedula }}</td>
 							<td ng-show="columns.nombre">@{{ i.persona.nombre }}</td>
 							<td ng-show="columns.apellidos">@{{ i.persona.apellidos }}</td>
 							<td ng-show="columns.ubicacion" region-text path="i.persona.ubicacion"></td>
 							<td ng-show="columns.email">@{{ i.usuario.email }}</td>
-							<td ng-show="columns.activo">@{{ i.activo ? 'Sí' : 'No' }}</td>
+							<td ng-show="columns.activo">
+								<span class="label" ng-class="{'label-success': i.activo === 1, 'label-danger': i.activo === 0}">
+									@{{ i.activo == 1 ? 'Sí' : 'No' }}
+								</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>

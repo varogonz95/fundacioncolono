@@ -28,6 +28,8 @@ class CreateInspectoresTable extends Migration
             $table->foreign('usuario_fk')
                   ->references('id')->on('usuarios')
                   ->onDelete('cascade');
+
+            $table->tinyInteger('activo')->default(1);
         });
     }
 

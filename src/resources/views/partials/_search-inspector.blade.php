@@ -1,8 +1,8 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="margin-top: 20px; margin-left: 10px; width: 1100px;">
     <form class="navbar-form">
         <!-- busqueda -->
         <div class="input-group">
-            <input class="form-control" type="text" placeholder="Buscar" ng-model="search" ng-change="index()"/>
+            <input  style="width: 722px;" class="form-control" type="text" placeholder="Buscar" ng-model="search"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-search text-muted"></span>
             </span>
