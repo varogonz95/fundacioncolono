@@ -18,26 +18,28 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 		// active: false,
 		filtered: false,
 		one:      false,
+		activo:   $scope.activos[0],
 	};
 
 	$scope.inspectores = [];
 	$scope.expedientes = [];
 
 	$scope.columns = {
-			cedula:        true,
-			nombre:        true,
-			apellidos:     true,
-			ubicacion:     true,
-			email:         true,
-			activo:        true,
+			cedula:        			true,
+			nombre:        			true,
+			apellidos:     			true,
+			ubicacion:     			true,
+			email:         			true,
+			activo:        			true,
 			
-			cedulaVisita:        true,
-			nombreVisita:        true,
-			apellidosVisita:     true,
-			ubicacionVisita:     true,
-			observacionesVisita: true,
-			fecha_visitaVisita:  true,
-			removerVisita: 	 	 true, 
+			cedulaVisita:        	true,
+			nombreVisita:        	true,
+			apellidosVisita:     	true,
+			ubicacionVisita:     	true,
+			observacionesVisita: 	true,
+			fecha_visitaVisita:  	true,
+			fecha_asignadoVisita:  	true,
+			removerVisita: 	 	 	true, 
 	
 			cedulaAsignar:       	true,
 			nombreAsignar:        	true,

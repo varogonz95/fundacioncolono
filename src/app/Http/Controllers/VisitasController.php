@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Visita;
 use App\Models\Expediente;
+use App\Models\Inspector;
 
 use Illuminate\Http\Request;
 use DB;
@@ -18,7 +19,6 @@ class VisitasController extends Controller
      */
     public function index(Request $request){
         $arrayExpediente = Visita::with(['expediente'])->get()->pluck('expediente.id')->all();
-
 
         $pagination = Expediente::with( ['persona'] )
         ->whereNotIn('id', $arrayExpediente)
@@ -67,7 +67,11 @@ class VisitasController extends Controller
             throw $e;
         }
 
+        $visitas = Visita::with(['expediente.persona'])
+            ->where('inspector_fk', $request['inspector_fk'])->get();
+
         return response()->json([
+            'visitas' => $visitas,
             'status' => $status,
             'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
             'type'   => $status ? 'success' : 'error',
@@ -106,7 +110,7 @@ class VisitasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {    
         //
     }
 

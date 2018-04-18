@@ -9,9 +9,9 @@
            <button type="button" class="close pull-left close-animatedModal" title="Cerrar">&times;</button>
        </div>
        <div class="col-xs-10 text-left">
-		   <button type="button" class="btn btn-sm btn-outline" ng-class="{'btn-show': !selected.activo, 'btn-delete': selected.activo}" title="Desactivar inspector" ng-show="selected.activo" ng-click="delete()">
+		      <button type="button" class="btn btn-sm btn-outline @{{ selected.activo == 1 ? 'btn-delete' : 'btn-show'}}"ng-click="delete()">
                <span class="glyphicon"  ng-class="{'glyphicon-refresh': !selected.activo, 'glyphicon-ban-circle': selected.activo}"></span>
-               <span class="hidden-xs"> @{{ selected.activo ? 'Deshabilitar' : 'Habilitar'}} inspector</span>
+               <span class="hidden-xs"> @{{ selected.activo == 1 ? 'Deshabilitar' : 'Habilitar'}} inspector</span>
            </button>
        </div>
    @endslot

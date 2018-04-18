@@ -21,7 +21,8 @@
                         <th ng-show="columns.ubicacionVisita">Ubicación</th>
                         <th ng-show="columns.observacionesVisita">Observaciones</th>
                         <th ng-show="columns.fecha_visitaVisita">Fecha de la visita</th>
-                         <th ng-show="columns.removerVisita">Opción</th>
+                        <th ng-show="columns.fecha_asignadoVisita">Fecha asginado</th>                        
+                        <th ng-show="columns.removerVisita">Opción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,7 @@
                         <td ng-show="columns.ubicacionVisita" region-text path="visita.expediente.persona.ubicacion"></td>
                         <td ng-show="columns.observacionesVisita">@{{ visita.observaciones }}</td>
                         <td ng-show="columns.fecha_visitaVisita">@{{ visita.fecha_visita }}</td>
+                        <td ng-show="columns.fecha_asignadoVisita">@{{ visita.fecha_asignado }}</td>
                         <td ng-show="columns.removerVisita">
                             <button type="button" class="btn btn-danger" ng-click="alertDelete(visita)">Remover</button>
                         </td>

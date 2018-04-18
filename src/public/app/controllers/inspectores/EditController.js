@@ -24,11 +24,11 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 	};
 
   	$scope.delete = function () {
-		Alert.confirm('Desactivar inspector', 'Esta operación pasará al inspector a estado inactivo.', 'warning')
+  		Alert.confirm('Desactivar inspector', 'Esta operación pasará al inspector a estado inactivo.', 'warning')
 		.then(function (result) {
 			if ( result.value )
-				Inspector().delete(
-					{ id: $scope.selected.id },
+				Inspector().update(
+					{ id: $scope.selected.id, activo: $scope.selected.activo },
 					function (response) {
 						if (response.status) {
 							$scope.inspectores.splice(getIndex($scope.inspectores, $scope.selected), 1);
@@ -56,7 +56,7 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 							for( var i = 0; i < $scope.selected.visitas.length; i++ ){
 								if( $scope.selected.visitas[i].id === v.id ){
 									$scope.selected.visitas.splice( i  , 1 );
-									break;
+									i = $scope.selected.visitas.length;
 								}
 							}  
 								
@@ -73,11 +73,11 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 			{ inspector_fk: $scope.selected.id , expediente_fk: e.id },
 			function (response) {
 				if (response.status) {
-					$scope.expedientes.splice( index  , 1 );
+					$scope.expedientes.splice( index, 1 );
+					$scope.selected.visitas = response.visitas;
 				}
 				Alert.notify(response.title, response.msg, response.type);
 			}
 		);
 	}
-
 });

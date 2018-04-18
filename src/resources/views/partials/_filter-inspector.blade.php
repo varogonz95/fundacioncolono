@@ -4,7 +4,7 @@
         <div class="col-lg-2" style="width:130px">
             <div class="form-group-sm form-group">
                 <label>
-                    Prioridad
+                    Activo
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="activo">
                     <!-- PUT THIS INTO DIRECTIVE -->
                     <ngIf ng-if="filter_data.filter === 'activo'">
@@ -14,7 +14,7 @@
                         <input type="hidden" name="value" ng-value="filter_data.activo.id">
                     </ngIf>
                 </label>
-                <select class="form-control" ng-model="filter_data.activo" ng-options="p as p.name for p in activo track by p.id" style="width:100px"></select>
+                <select class="form-control" ng-model="filter_data.activo" ng-options="a as a.name for a in activos track by a.id" style="width:100px"></select>
             </div>
         </div>
 
