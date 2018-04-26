@@ -11,7 +11,7 @@ use DB;
 
 class VisitasController extends Controller
 {
-    const MAX_RECORDS = 16;
+    const MAX_RECORDS = 8;
     /**
      * Display a listing of the resource.
      *
@@ -20,15 +20,14 @@ class VisitasController extends Controller
     public function index(Request $request){
         $arrayExpediente = Visita::with(['expediente'])->get()->pluck('expediente.id')->all();
 
-        $pagination = Expediente::with( ['persona'] )
+        $expedientes = Expediente::with( ['persona'] )
         ->whereNotIn('id', $arrayExpediente)
+        ->orderBy( 'persona_fk' , 'asc' )
         ->paginate(self::MAX_RECORDS);
-          
-        $items = $pagination->items();
 
         return response()->json([
-          'expedientes' => $items,
-          'total' => $pagination->total()
+          'expedientes' => $expedientes->items(),
+          'total' => $expedientes->total()
         ]);
     }
 

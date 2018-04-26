@@ -15,7 +15,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 	$scope.filter_data = {
 		value:     '',
 		filter:    null,
-		// active: false,
+		active: false,
 		filtered: false,
 		one:      false,
 		activo:   $scope.activos[0],
@@ -51,6 +51,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			agregarAsignar: 		true, 
 	};
 
+
 	$scope.sort = {
 		relationship: 'persona',
 		by: 'cedula',
@@ -67,26 +68,26 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 		$scope.sort.order = ($scope.sort.by === by) ? !$scope.sort.order : true;
 		$scope.sort.by = by;
 
-			switch ($scope.sort.by) {
-					case 'cedula':
-					case 'nombre':
-					case 'apellidos':
-					case 'ubicacion':
-						$scope.sort.relationship = 'persona'
-						break;
-					 case 'activo':
-						 $scope.sort.relationship = 'inspector'
-					     break;
-					 case 'estado':
-						 $scope.sort.relationship = 'expediente'
-					     break;
-					default:
-						$scope.sort.relationship = 'usuario'
-			}
-			$scope.index();
+		switch ($scope.sort.by) {
+				case 'cedula':
+				case 'nombre':
+				case 'apellidos':
+				case 'ubicacion':
+					$scope.sort.relationship = 'persona'
+					break;
+				 case 'activo':
+					 $scope.sort.relationship = 'inspectores'
+				     break;
+				 case 'estado':
+					 $scope.sort.relationship = 'expediente'
+				     break;
+				default:
+					$scope.sort.relationship = 'usuario'
+		}
+		$scope.index();
 	  };
 
-	  $scope.index = function (page = 1){
+	 $scope.index = function (page = 1){
 		$scope.page = page;
 
 		var params = {
@@ -94,31 +95,24 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			order:        $scope.sort.order ? 'asc': 'desc',
 			page:         $scope.page,
 			by:           $scope.sort.by,
+			filter: 	  !$scope.filter_data.active ? '' : $scope.filter_data.activo.id,
 		};
 
-		// if ($scope.filter_data.filtered) {
-		// 	params.page = $scope.filter_data.one ? 1 : $scope.page;
-		// 	$scope.page = params.page;
-		// 	$scope.filter_data.one = false;
-
-		// 	if ($scope.search !== '') params.search = $scope.search;
-		// 	params = angular.extend(params, jQueryToJson($('#filter'), 'name'));
-		// }
-
 		Inspector('all').get(
-			null,
+			params,
 			function (response) {
 				$scope.inspectores = response.inspectores;
 				$scope.total = response.total;
-			});
+		});
 
 		Visita.get(
 			{},
 			function (response) {
 				$scope.expedientes = response.expedientes;
 				$scope.totalExpediente = response.total;
-			});
-		};
+		});
+
+	};
 
 	$scope.show = function (obj) {
 		$scope.selected.isSelected = false;
@@ -127,6 +121,7 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 
 		showModal.show();
 	};
+
 
 	$scope.filter_activo = function () {
 	  $scope.search          = '',
