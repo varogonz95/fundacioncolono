@@ -16,26 +16,37 @@ use Filter;
 class InspectoresController extends Controller{
 
 	const MAX_RECORDS = 16;
-
+	
 	public function all(Request $request){
 	  
-		$pagination = Inspector::with(['persona', 'usuario', 'visitas'])
-		->withTrashed()
-		->paginate(self::MAX_RECORDS);
-          
-		$items = $pagination->items();
-		
-        foreach ($items as $item) {
-            //$item->activo = !$item->trashed();
-            foreach ($item->visitas as $visita) {
-                $visita->expediente->persona;
-            }
-        }
+		$orderBy = [
+			'by'           => $request['by'],
+			'order'        => $request['order'],
+			'relationship' => $request['relationship']
+		];
 
-	  return response()->json([
-        'inspectores' => $items,
-        'total' => $pagination->total()
-	  ]);
+		$inspectores = Filter::with(Inspector::class, ['persona', 'usuario', 'visitas'])		
+		->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
+		->get();
+
+		if($request['filter'] != '')
+			$inspectores = $inspectores->where('activo', $request['filter']);
+
+		$pagination = Filter::paginate($inspectores, self::MAX_RECORDS);
+		$items = $pagination->items();
+
+		foreach ($items as $item) {
+		    //$item->activo = !$item->trashed();
+		    foreach ($item->visitas as $visita) {
+		        $visita->expediente->persona;
+		    }
+		}
+
+	  	return response()->json([
+        	'inspectores' => $items,
+        	'total' => $pagination->total(),
+        	'filtro' => $request['filter']
+      	]);
 	}
 
 	public function index(){
@@ -92,9 +103,9 @@ class InspectoresController extends Controller{
 		return redirect()
 			->route('inspectores.create')
 			->with('status', [
-				'type'  => $status? 'success' : 'error',
-				'title' => $status? '¡Operación exitosa!' : 'Ocurrió un error.',
-				'msg'   => $status? 'Se ha creado el expediente correctamente.':
+				'type'  => $status ? 'success' : 'error',
+				'title' => $status ? '¡Operación exitosa!' : 'Ocurrió un error.',
+				'msg'   => $status ? 'Se ha creado el inspector correctamente.':
 								   	'Es posible que los datos ingresados sean incorrectos.\n'.
 								   	'Si el problema persiste, por favor contacte a soporte.',
 			]);

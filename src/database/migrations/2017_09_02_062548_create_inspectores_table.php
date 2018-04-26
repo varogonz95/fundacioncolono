@@ -18,7 +18,6 @@ class CreateInspectoresTable extends Migration
 
             $table->char('persona_fk', 9);
             $table->unsignedInteger('usuario_fk');
-            $table->softDeletes('fecha_eliminacion');
 
             // constraints
             $table->foreign('persona_fk')
@@ -30,6 +29,8 @@ class CreateInspectoresTable extends Migration
                   ->onDelete('cascade');
 
             $table->tinyInteger('activo')->default(1);
+        
+            //$table->softDeletes('fecha_eliminacion');
         });
     }
 

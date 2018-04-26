@@ -80,4 +80,19 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 			}
 		);
 	}
+
+	$scope.indexExpediente = function (pageExpediente = 1){
+		
+		$scope.pageExpediente = pageExpediente;
+
+		Visita.get(
+			{ page: $scope.pageExpediente },
+			function (response) {
+				$scope.expedientes = response.expedientes;
+				$scope.totalExpediente = response.total;
+		});
+
+		window.alert($scope.pageExpediente);
+	};
+
 });

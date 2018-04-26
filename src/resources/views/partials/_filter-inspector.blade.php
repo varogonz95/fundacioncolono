@@ -8,7 +8,6 @@
                     <input type="radio" name="filter" ng-model="filter_data.filter" value="activo">
                     <!-- PUT THIS INTO DIRECTIVE -->
                     <ngIf ng-if="filter_data.filter === 'activo'">
-                        <input type="hidden" name="relationship" value="inspectores">
                         <input type="hidden" name="property" value="activo">
                         <input type="hidden" name="comparator" value="=">
                         <input type="hidden" name="value" ng-value="filter_data.activo.id">
@@ -26,7 +25,7 @@
                         <button class="btn-outline btn btn-show" type="submit">
                             <span class="glyphicon glyphicon-ok"></span> Filtrar
                         </button>
-                        <button class="btn-outline btn btn-none" type="button" ng-click="filter_active = false; filter_data.filter = filter_data.filtered ? filter_data.filter : null" data-toggle="collapse" data-target="#filter">Cancelar</button>
+                        <button class="btn-outline btn btn-none" type="button" ng-click="filter_data.active = false; filter_data.filter = filter_data.filtered ? filter_data.filter : null" data-toggle="collapse" data-target="#filter">Cancelar</button>
                     </ngShow>
                 </div>
             </div>

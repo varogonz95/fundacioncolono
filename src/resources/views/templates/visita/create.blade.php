@@ -65,13 +65,13 @@
 					</td>
 					<td ng-show="columns.fecha_creacionAsignar">@{{ e.fecha_creacion }}</td>
 					<td ng-show="columns.agregarAsignar">
-						<button type="button" class="btn btn-success" ng-click="asignar(e, $index)" >Asignar</button>
+						<button type="button" class="btn btn-success" ng-click="asignar(e, $indexExpediente)" >Asignar</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<div class="text-center col-md-12">
-		<ul uib-pagination total-items="totalExpediente" class="pagination-sm" ng-model="pageExpediente" items-per-page="16" ng-change="index(pageExpediente)"></ul>
+		<ul uib-pagination total-items="totalExpediente" class="pagination-sm" ng-model="pageExpediente" items-per-page="16" ng-change="indexExpediente(pageExpediente)"></ul>
 	</div>
 </article>

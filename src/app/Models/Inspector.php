@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inspector extends Model{
 
-    use SoftDeletes;
-
-    const DELETED_AT = 'fecha_eliminacion';
+    //use SoftDeletes;    
+    //const DELETED_AT = 'fecha_eliminacion';
 
     public $timestamps = false;
     protected $table = 'inspectores';
-    protected $dates = ['fecha_eliminacion'];
-
 
     public function persona(){
         return $this->belongsTo('App\Models\Persona', 'persona_fk');
