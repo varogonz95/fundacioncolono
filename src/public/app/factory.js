@@ -21,6 +21,10 @@ app.factory('Ayuda', function(AppResource){
     return AppResource.extends('ayudas/:id', {id: '@id'});
 });
 
+app.factory('Usuario', function(AppResource){
+    return AppResource.extends('usuarios/:id', {id: '@id'});
+});
+
 app.factory('AyudaExpediente', function (AppResource) {
     return AppResource.extends('expedientes/:id/ayudas', { id: '@id'});
 });
