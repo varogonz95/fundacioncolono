@@ -6,16 +6,28 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 use DB;
+use Filter;
 
 class UsuariosController extends Controller{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    const MAX_RECORDS = 16;
+
     public function index()
     {
-        //
+        
+        $usuarios = Usuario::
+        orderBy( 'username' , 'asc' )
+        ->paginate(self::MAX_RECORDS);
+
+        return response()->json([
+          'usuarios' => $usuarios->items(),
+          'total' => $usuarios->total()
+        ]);
+
+    }
+    public function verUsuarios()
+    {
+        return view('templates.usuarios.index');
     }
 
     /**
@@ -25,7 +37,7 @@ class UsuariosController extends Controller{
      */
     public function create()
     {
-        //
+        return view('templates.usuarios.index');
     }
 
     /**
@@ -36,7 +48,32 @@ class UsuariosController extends Controller{
      */
     public function store(Request $request)
     {
-        //
+        $status = true;
+        DB::beginTransaction();
+        
+        try{
+            $usuario = new Usuario;
+            $usuario->username = $request['username'];
+            $usuario->password = $request['password'];
+            $usuario->email = $request['email'];
+                
+            $usuario->save();
+        
+            DB::commit();
+        
+        }catch(\Exception $e){
+            $status = false;
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json([
+            'status' => $status,
+            'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+            'type'   => $status ? 'success' : 'error',
+            'msg'    => $status ? 'Se asignó el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+
+        ]);
     }
 
     /**
@@ -75,13 +112,19 @@ class UsuariosController extends Controller{
         DB::beginTransaction();
 
         try {
+            // $usuario = Usuario::find($id);
+            // $usuario->email    = $request['data']['email'];
+            // $usuario->username = $request['data']['username'];
+            // $usuario->password = $request['data']['password'];
+
+            // $usuario->save();
+
             $usuario = Usuario::find($id);
-            $usuario->email    = $request['data']['email'];
-            $usuario->username = $request['data']['username'];
-            $usuario->password = $request['data']['password'];
+            $usuario->email    = $request['email'];
+            $usuario->username = $request['username'];
+            $usuario->password = $request['password'];
 
-            $usuario->save();
-
+            $usuario->update();
             DB::commit();
         }
         catch (Exception $e) {
@@ -104,6 +147,14 @@ class UsuariosController extends Controller{
      */
     public function destroy($id)
     {
-        //
+        $status = Usuario::destroy($id) === 1;
+
+        return response()->json([
+            'status' => $status,
+            'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
+            'type'   => $status ? 'success' : 'error',
+            'msg'    => $status ? 'Se removió el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
+        ]);
+
     }
 }

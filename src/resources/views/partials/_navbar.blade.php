@@ -26,9 +26,27 @@
                         <li><a href="{{ route('expedientes.create') }}">Crear un nuevo caso</a></li>
                     </ul>
                 </li>
-                <li class="{{ \Request::is('inspectores*')? 'active' : '' }}"><a href="{{ route('inspectores.index') }}">Inspectores</a></li>
-                <li class=""><a href="#">Alianzas</a></li>
-                <li class=""><a href="#">Mantenimiento</a></li>
+                <li class="{{ \Request::is('inspectores*')? 'active' : '' }} dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Inspectores<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ route('inspectores.index') }}">Ver los expedientes</a></li>
+                        <li><a href="{{ route('inspectores.create') }}">Crear un nuevo caso</a></li>
+                    </ul>
+                </li>
+                <li class="{{ \Request::is('ayudas*') || \Request::is('usuarios*') ? 'active' : '' }} dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Mantenimiento<span class="caret"></span></a>
+                    <ul class="dropdown-menu multi-level" role="menu">
+                        <li><a href="{{ route('verAyudas') }}">Ayudas</a></li>
+                        <!-- <li class="dropdown-submenu">
+                            <a>Ayudas</a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ route('verAyudas') }}">Ver los ayudas</a></li>
+                                <li><a href="{{ route('ayudas.create') }}">Registrar un ayudas</a></li>       
+                            </ul>
+                        </li> -->
+                        <li><a href="{{ route('verUsuarios') }}">Usuarios</a></li>
+                    </ul>
+                </li>
             </ul>
             
             <!-- Right Side Of Navbar -->

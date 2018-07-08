@@ -2,7 +2,7 @@
     <form class="navbar-form">
         <!-- busqueda -->
         <div class="input-group">
-            <input  style="width: 722px;" class="form-control" type="text" placeholder="Buscar" ng-model="search"/>
+            <input  style="width: 500px;" class="form-control" type="text" placeholder="Buscar" ng-model="search"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-search text-muted"></span>
             </span>

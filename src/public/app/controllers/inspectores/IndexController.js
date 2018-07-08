@@ -51,7 +51,6 @@ app.controller('Inspectores_IndexController', function($scope, Inspector, Visita
 			agregarAsignar: 		true, 
 	};
 
-
 	$scope.sort = {
 		relationship: 'persona',
 		by: 'cedula',

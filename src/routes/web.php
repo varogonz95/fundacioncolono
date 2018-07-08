@@ -27,10 +27,12 @@ Route::middleware(['auth'])->group(function(){
 
     Route::resource('personas','PersonasController');
 
+    Route::get('usuarios/verUsuarios','UsuariosController@verUsuarios')->name('verUsuarios');
     Route::resource('usuarios','UsuariosController');
 
     Route::resource('referentes','ReferentesController');
 
+    Route::get('ayudas/verAyudas','AyudasController@verAyudas')->name('verAyudas');
     Route::resource('ayudas','AyudasController');
 
     Route::resource('visitas', 'VisitasController');
