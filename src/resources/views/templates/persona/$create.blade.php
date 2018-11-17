@@ -15,9 +15,10 @@
     @slot('telefonos_options')
         ng-model="persona.telefonos"
     @endslot
-
+    
     @slot('ubicacion_options')
-        ng-model="persona.ubicacion"
+        ng-model="update.persona.ubicacion"
+        field="ubicacion"
     @endslot
 
     @slot('direccion_options')

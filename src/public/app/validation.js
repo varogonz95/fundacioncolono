@@ -186,6 +186,57 @@ app.directive('telefonos', function() {
 		 
 		      	};
 	    }
-	};
-	
+	};	
+});
+
+app.directive('nxEqualEx', function() {
+    return {
+        require: 'ngModel',
+        link: function (scope, elem, attrs, model) {
+            scope.$watch(attrs.nxEqualEx, function (value) {
+                // Only compare values if the second ctrl has a value.
+                if (model.$viewValue !== undefined && model.$viewValue !== '') {
+                    model.$setValidity('nxEqualEx', value === model.$viewValue);
+                }
+            });
+            model.$parsers.push(function (value) {
+                // Mute the nxEqual error if the second ctrl is empty.
+                if (value === undefined || value === '') {
+                    model.$setValidity('nxEqualEx', true);
+                    return value;
+                }
+                var isValid = value === scope.$eval(attrs.nxEqualEx);
+                model.$setValidity('nxEqualEx', isValid);
+                return isValid ? value : undefined;
+            });
+        }
+    };
+});
+
+
+app.directive('validarUsuario', function($http, AppResource) {
+	return {
+	    require: 'ngModel',
+	    link: function(scope, elm, attrs, ctrl) {
+	      	ctrl.$validators.validarUsuario = function(modelValue, viewValue) {
+	 			
+	 			if (viewValue) {
+		        	
+		        	$estado = true;
+		        	
+		        	$http({
+				    	method : "GET",
+				        url : AppResource.getUrl()+'usuarios/' + viewValue + '/comprobar'
+				    }).then( function mySuccess(response) {				        
+				        $estado = response.data.resultado;
+				    });
+
+				    return $estado;
+		        }
+		 
+		      	return true;
+		 
+		      	};
+	    }
+	};	
 });

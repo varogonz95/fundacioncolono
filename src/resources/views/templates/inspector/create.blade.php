@@ -40,7 +40,7 @@
 				@include('partials._usuario')
 				
 				<div class="text-right" style="margin-top: 20px">
-					<button class="btn btn-primary" disabled="account.$invalid" type="submit">Crear cuenta de inspector</button>
+					<button class="btn btn-primary" ng-disabled="account.$invalid" type="submit" ng-blur="account.$setUntouched()">Crear cuenta de inspector</button>
 				</div>
 
 			</fieldset>

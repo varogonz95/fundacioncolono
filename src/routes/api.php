@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('usuariosMobile/comprobarSesion','Api\UsuariosController@comprobarSesion');
+Route::get('usuariosMobile/update','Api\UsuariosController@update');
+
+Route::get('personasMobile/update','Api\PersonasController@update');

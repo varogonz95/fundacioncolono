@@ -71,11 +71,13 @@
 									    
 									    <div class="col-sm-6">
 									        
-									        <input type="text" class="form-control" name="username" placeholder="Ingrese el nombre de usuario" ng-model="update.username" usuario required/>
+									        <input type="text" class="form-control" name="username" placeholder="Ingrese el nombre de usuario" ng-model="update.username" usuario required validar-usuario/>
 
 											<span  ng-show="modalUsuarios.username.$error.required && modalUsuarios.username.$touched" class="help-block" style="color: #E00808;"><strong>Este campo es requerido</strong></span>
 
-											<span  ng-show="!modalUsuarios.username.$error.required && modalUsuarios.username.$error.usuario && modalUsuarios.username.$touched" class="help-block" style="color: #E00808;"><strong>No se permiten carácteres especiales</strong></span>
+											<span  ng-show="!modalUsuarios.username.$error.required && modalUsuarios.username.$error.usuario && modalUsuarios.username.$touched" class="help-block" style="color: #E00808;"><strong>Nombre de usuario incorrecto</strong></span>
+
+											<span  ng-show="modalUsuarios.username.$error.validarUsuario" class="help-block" style="color: #E00808;"><strong>Ese usuario ya existe</strong></span>
 											
 									    </div>
 
@@ -92,7 +94,7 @@
 									        <span  ng-show="modalUsuarios.password.$error.required && modalUsuarios.password.$touched" class="help-block" style="color: #E00808;"><strong>Este campo es requerido</strong>
 											</span>
 
-											<span  ng-show="!modalUsuarios.password.$error.required && modalUsuarios.password.$error.contrasena && modalUsuarios.password.$touched" class="help-block" style="color: #E00808;"><strong>No se permiten carácteres especiales</strong>
+											<span  ng-show="!modalUsuarios.password.$error.required && modalUsuarios.password.$error.contrasena && modalUsuarios.password.$touched" class="help-block" style="color: #E00808;"><strong>Contraseña incorrecta</strong>
 											</span>
 
 									    </div>
@@ -110,7 +112,7 @@
 									        <span ng-show="modalUsuarios.email.$error.required && modalUsuarios.email.$touched" class="help-block" style="color: #E00808;"><strong>Este campo es requerido</strong>
 											</span>
 
-											<span ng-show="!modalUsuarios.email.$error.required && modalUsuarios.email.$error.correo && modalUsuarios.email.$touched" class="help-block" style="color: #E00808;"><strong>Debe seguir el formato de correo</strong>
+											<span ng-show="!modalUsuarios.email.$error.required && modalUsuarios.email.$error.correo && modalUsuarios.email.$touched" class="help-block" style="color: #E00808;"><strong>Correo incorrecto</strong>
 											</span>
 
 									    </div>
@@ -122,11 +124,10 @@
 				        	</div>
 
 				        	<div class="modal-footer">
-
-				          		<button type="button" class="btn-outline btn-default" ng-click="closeModal()" style="height: 30px;border-radius: 5px;" ng-blur="modalUsuario.$setUntouched();">Cancelar</button>
+				          		<button type="button" class="btn-outline btn-default" ng-click="closeModal()" style="height: 30px;border-radius: 5px;" ng-blur="modalUsuarios.$setUntouched();">Cancelar</button>
 				        		
-				        		<button type="button" ng-disabled="modalUsuario.$invalid" class="btn-outline btn-@{{ opcion == 0 ? 'show' : opcion == 1 ? 'edit' : 'delete'}}" 
-				        			ng-click="opcion === 0 ? add() : opcion === 1 ? edit() : delete()" style="height: 30px;border-radius: 5px;" ng-blur="modalUsuario.$setUntouched();">
+				          		<button type="button" ng-disabled="modalUsuarios.$invalid" class="btn-outline btn-@{{ opcion == 0 ? 'show' : opcion == 1 ? 'edit' : 'delete'}}" 
+				        			ng-click="opcion === 0 ? add() : opcion === 1 ? edit() : delete()" style="height: 30px;border-radius: 5px;" ng-blur="modalUsuarios.$setUntouched();">
 				        			@{{ opcion === 0 ? 'Agregar' : opcion === 1 ? 'Guardar cambios' : 'Aceptar' }}
 				        		</button>
 
@@ -134,7 +135,6 @@
 				      	</div>
 				    </div>
 				</div>
-
 			</form>
 
 		</section>
