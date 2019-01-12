@@ -21,3 +21,7 @@ Route::get('usuariosMobile/comprobarSesion','Api\UsuariosController@comprobarSes
 Route::get('usuariosMobile/update','Api\UsuariosController@update');
 
 Route::get('personasMobile/update','Api\PersonasController@update');
+
+Route::get('expedientesMobile/index','Api\ExpedientesController@index');
+Route::get('expedientesMobile/store','Api\ExpedientesController@store');
+
