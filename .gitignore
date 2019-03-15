@@ -1,0 +1,10 @@
+
+src/app/User\.php
+
+src/database/migrations/2014_10_12_100000_create_password_resets_table\.php
+
+src/database/migrations/2014_10_12_000000_create_users_table\.php
+
+src/resources/assets/js/components/ExampleComponent\.vue
+
+src/database/factories/UserFactory\.php
