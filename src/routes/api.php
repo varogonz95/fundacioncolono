@@ -23,5 +23,10 @@ Route::get('usuariosMobile/update','Api\UsuariosController@update');
 Route::get('personasMobile/update','Api\PersonasController@update');
 
 Route::get('expedientesMobile/index','Api\ExpedientesController@index');
-Route::get('expedientesMobile/store','Api\ExpedientesController@store');
+
+Route::get('visitasMobile/index','Api\VisitasController@index');
+Route::get('visitasMobile/store','Api\VisitasController@store');
+Route::get('visitasMobile/update','Api\VisitasController@update');
+
+Route::get('historicoMobile/index','Api\HistoricoController@index');
 

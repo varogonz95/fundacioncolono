@@ -10,7 +10,7 @@ use DB;
 
 class CasosController extends Controller{
     
-        public function index($id){
+    public function index($id){
 
         DB::beginTransaction();  
         
