@@ -20,6 +20,7 @@ class ExpedientesController extends Controller{
 
             $expedientes = Expediente::with( ['persona'] )
             ->whereNotIn('id', $arrayExpediente)
+            ->where('estado', 3)
             ->orderBy( 'persona_fk' , 'asc' )
             ->get();
             
@@ -36,34 +37,4 @@ class ExpedientesController extends Controller{
         
     }
 
-     public function store(Request $request){
-        $status = true;
-        DB::beginTransaction();
-        
-        try{
-            $visita = new Visita;
-            $visita->inspector_fk = $request['inspector_fk'];
-            $visita->expediente_fk = $request['expediente_fk'];
-            $visita->save();
-        
-            DB::commit();
-        
-        }catch(\Exception $e){
-            $status = false;
-            DB::rollback();
-            throw $e;
-        }
-
-        $visitas = Visita::with(['expediente.persona'])
-            ->where('inspector_fk', $request['inspector_fk'])->get();
-
-        return response()->json([
-            'visitas' => $visitas,
-            'status' => $status,
-            'title'  => $status ? '¡Operación exitosa!' : 'Ocurrió un fallo.',
-            'type'   => $status ? 'success' : 'error',
-            'msg'    => $status ? 'Se asignó el expediente correctamente.': 'Si el problema persiste, por favor contacte con soporte.',
-
-        ]);
-    }
 }

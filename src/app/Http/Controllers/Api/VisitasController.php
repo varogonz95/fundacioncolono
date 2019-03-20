@@ -12,70 +12,108 @@ use DB;
 
 class VisitasController extends Controller{
     
-        public function index(Request $request){
+    public function index(Request $request)
+    {
 
-        DB::beginTransaction();  
-        
-        try{
-             $search   = [
-            'value'    => $request['term'],
-            'property' => $request['termProperty'],
-            ];
+        DB::beginTransaction();
 
-            $orderBy = [
-                'by'           => $request['by'],
-                'order'        => $request['order'],
-                'relationship' => $request['orderRel']
-            ];
+        try {
 
-            $filter = [
-                'relationship' => $request['filterRel'],
-                'comparator'   => $request['comparator'],
-                'property'     => $request['property'],
-                'value'        => $request['comparator'] === 'like' ? "{$request['value']}%" : $request['value'],
-            ];
+            if($request['tipo'] == 'visita'){
 
-            $filtered = null;
+                $expedientes = Visita::with(['expediente.persona'])->get()
+                ->whereIn('inspector_fk', $request['inspector_fk'])
+                ->where('fecha_visita', '')
+                ->where('expediente.estado', 3)
+                ->all();
 
-            if ($this->hasEmptyValues($filter))
-            $filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-                        ->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
-                        ->where('persona', $search['property'], 'like', "{$search['value']}%")
-                        ->notIn(\App\Models\Historico::class, 'expediente_fk')
-                        ->orderBy($orderBy['relationship'], $orderBy['by'], $orderBy['order'])
-                        ->get();
+            }else if($request['tipo'] == 'casosSeguidos'){
 
-            else
-            $filtered = Filter::with(Expediente::class, ['persona', 'referente', 'ayudas'])
-                        ->options(function($builder) use ($request){ return filter_var($request['onlyTrashed'], FILTER_VALIDATE_BOOLEAN) ? $builder->withTrashed() : null; })
-                        ->where($filter['relationship'], $filter['property'], $filter['comparator'], $filter['value'])
-                        ->notIn(\App\Models\Historico::class, 'expediente_fk')
-                        ->where('persona', $search['property'], 'like', "{$search['value']}%")
-                        ->orderBy($request['orderRel'], $orderBy['by'], $orderBy['order'])
-                        ->get();
+                $expedientes = Visita::with(['expediente.persona'])->get()
+                ->whereIn('inspector_fk', $request['inspector_fk'])
+                ->where('fecha_visita', '<>', '')
+                ->where('expediente.estado', 3)
+                ->all();
+                
+            }else if($request['tipo'] == 'casosFinalizados'){
 
-            // Iterate over items
-            $filtered->each(function($item, $index){
-                $item->meses      = $item->getMeses();
-                $item->montoTotal = $item->getMontoTotal();
-                $item->archivado  = $item->trashed();
-            });
-            
-            // Paginate , passing the filtered items and the max records per page
-            //$pagination = Filter::paginate($filtered, self::MAX_RECORDS);
-            $items = $pagination->items();
+                $expedientes = Visita::with(['expediente.persona'])->get()
+                ->whereIn('inspector_fk', $request['inspector_fk'])
+                ->where('fecha_visita', '<>', '')
+                ->whereIn('expediente.estado', [1, 2])
+                ->all();
+
+            }
 
             DB::commit();
 
+        }
+        catch (Exception $e) {
+            DB::rollback();
+        }
+
+       return response()->json([
+          'expedientes' => $expedientes,
+        ]);
+
+    }
+
+    public function store(Request $request)
+    {
+        $status = 1;
+        DB::beginTransaction();
+
+        $expedientesAsignar = [];
+        $expedientesAsignar = json_decode($request['listaExpedientes'], true);;
+
+        try{
+
+            foreach ($expedientesAsignar as &$expediente) {
+
+                $visita = new Visita;
+                $visita->inspector_fk = $request['inspector_fk'];
+                $visita->expediente_fk = $expediente['id'];
+                $visita->save();
+
+            }
+
+            DB::commit();
+        
+        }catch(\Exception $e){
+            $status = 0;
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json([
+          'resultado' => $status,
+        ]);
+    }
+
+    public function update(Request $request){
+
+        $resultado = true;
+
+        DB::beginTransaction();
+
+        try {
+     
+            $visitas = Visita::where('id', $request['id'])->first();
+            $visitas->fecha_visita    = $request['fecha_visita'];
+            $visitas->observaciones = $request['observaciones'];
+
+            $visitas->update();
+            DB::commit();
+        
         }catch (Exception $e) {
-            
+            $resultado  = false;
             DB::rollback();
         }
 
         return response()->json([
-            'expedientes' => $items,
-            'total'       => $pagination->total(),
+            'resultado' => $resultado,
         ]);
+        
     }
 
 }

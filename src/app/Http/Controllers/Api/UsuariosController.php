@@ -36,6 +36,7 @@ class UsuariosController extends Controller{
 
         return response()->json([
           'resultado' => $resultado,
+          'inspector' => $inspector,
           'usuario' => $usuario,
           'persona' => $persona,
         ]);
