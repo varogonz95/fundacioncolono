@@ -20,7 +20,7 @@ class ExpedientesController extends Controller{
 
             $expedientes = Expediente::with( ['persona'] )
             ->whereNotIn('id', $arrayExpediente)
-            ->whereNotIn('estado', [1, 0])
+            ->where('estado', 3)
             ->orderBy( 'persona_fk' , 'asc' )
             ->get();
             

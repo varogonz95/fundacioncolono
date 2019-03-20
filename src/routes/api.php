@@ -28,5 +28,3 @@ Route::get('visitasMobile/index','Api\VisitasController@index');
 Route::get('visitasMobile/store','Api\VisitasController@store');
 Route::get('visitasMobile/update','Api\VisitasController@update');
 
-Route::get('historicoMobile/index','Api\HistoricoController@index');
-

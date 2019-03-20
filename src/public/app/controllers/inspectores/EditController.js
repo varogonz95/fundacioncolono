@@ -92,7 +92,6 @@ app.controller('Inspectores_EditController', function ($scope, Inspector, Visita
 				$scope.totalExpediente = response.total;
 		});
 
-		window.alert($scope.pageExpediente);
 	};
 
 });

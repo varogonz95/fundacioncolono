@@ -24,7 +24,7 @@ class VisitasController extends Controller{
                 $expedientes = Visita::with(['expediente.persona'])->get()
                 ->whereIn('inspector_fk', $request['inspector_fk'])
                 ->where('fecha_visita', '')
-                ->whereNotIn('expediente.estado', [1, 0])
+                ->where('expediente.estado', 3)
                 ->all();
 
             }else if($request['tipo'] == 'casosSeguidos'){
@@ -32,7 +32,7 @@ class VisitasController extends Controller{
                 $expedientes = Visita::with(['expediente.persona'])->get()
                 ->whereIn('inspector_fk', $request['inspector_fk'])
                 ->where('fecha_visita', '<>', '')
-                ->whereNotIn('expediente.estado', [1, 0])
+                ->where('expediente.estado', 3)
                 ->all();
                 
             }else if($request['tipo'] == 'casosFinalizados'){
@@ -40,7 +40,7 @@ class VisitasController extends Controller{
                 $expedientes = Visita::with(['expediente.persona'])->get()
                 ->whereIn('inspector_fk', $request['inspector_fk'])
                 ->where('fecha_visita', '<>', '')
-                ->whereIn('expediente.estado', [1, 0])
+                ->whereIn('expediente.estado', [1, 2])
                 ->all();
 
             }
